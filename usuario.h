@@ -6,8 +6,8 @@ class Usuario {
         std::string nome;
         std::string matricula;
         std::string senha;
-        vector<std::string> interesses;
-        vector<std::string> livros;        // mudar para armazenar livros...
+        std::vector<std::string> interesses;
+        std::vector<std::string> livros;        // mudar para armazenar livros...
         float debito;
         Usuario* amigos;
         int n_amigos;
