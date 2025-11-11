@@ -27,7 +27,7 @@ class Usuario {
 
         std::string getNome();
         std::string getMatricula();
-        vector<std::string> getInteresses();
+        std::vector<std::string> getInteresses();
         float getDebito();
         std::string getCookie();
         bool autenticar(std::string matricula,std::string senha);
