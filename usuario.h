@@ -1,8 +1,10 @@
+#ifndef USUARIO_H
+#define USUARIO_H
 #include <string>
 #include <vector>
 
 class Usuario {
-    private:
+    protected:
         std::string nome;
         std::string matricula;
         std::string senha;
@@ -25,14 +27,19 @@ class Usuario {
             std::string debt;
         };
 
+        Usuario();
+        Usuario(std::string matricula, std::string senha);
         std::string getNome();
         std::string getMatricula();
         std::vector<std::string> getInteresses();
         float getDebito();
         std::string getCookie();
+        std::string getEmail();
         bool autenticar(std::string matricula,std::string senha);
         void addAmigo(Usuario& amigo);
         std::vector<Livro> buscarLivros(std::string busca); 
         std::string setCookieValue();
         std::vector<Debito> searchDebito();
 };
+
+#endif

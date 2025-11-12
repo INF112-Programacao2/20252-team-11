@@ -34,6 +34,15 @@ std::string trim(const std::string& str) {
     return str.substr(first, (last - first + 1));
 }
 
+Usuario::Usuario() {
+    this->setCookieValue();
+}
+
+Usuario::Usuario(string mat, string senha) {
+    this->setCookieValue();
+    this->autenticar(mat, senha);
+}
+
 
 string Usuario::getNome() {
     return this->nome;
@@ -55,6 +64,9 @@ string Usuario::getCookie() {
     return this->cookie_value;
 }
 
+string Usuario::getEmail() {
+    return this->emailInstitucional;
+}
 
 
 void Usuario::addAmigo(Usuario& amigo) {        // talvez implementar para banco de dados depois..      (ou uma função de salvar que copia os dados de Usuário para o db..)
