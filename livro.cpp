@@ -26,10 +26,9 @@ Forum* Livro::getForum(){
 }
 void Livro::AddNaListaDeLeitores() {
     if (_leitorAtual != nullptr) {
-        // Evita duplicatas
         for (Usuario* leitor : _leitores) {
             if (leitor == _leitorAtual) {
-                return; // já está na lista
+                return; 
             }
         }
         _leitores.push_back(_leitorAtual);
