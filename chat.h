@@ -1,8 +1,8 @@
 #ifndef CHAT_H
 #define CHAT_H
 
-class Mensagem{};
-class Usuario{};
+#include "mensagem.h"
+#include "usuario.h"
 
 class Chat {
 	private:
@@ -20,5 +20,6 @@ class Chat {
 		void addMensagem(Mensagem* mensagem);
 		void addParticipante(Usuario* usuario);
 };
+
 
 #endif
