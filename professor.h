@@ -1,3 +1,5 @@
+#ifndef PROFESSOR_H
+#define PROFESSOR_H
 #include "usuario.h"
 #include <string>
 
@@ -16,3 +18,5 @@ class Professor : public Usuario {
         void addForum();
         void sendMessage();
 };
+
+#endif
