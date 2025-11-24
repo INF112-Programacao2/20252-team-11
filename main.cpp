@@ -10,6 +10,8 @@ using namespace std;
     Quase todas as funcionalidades de usuário sendo implementadas aqui, pelo menos
     aquelas que envolvem puxar dados do sistema.
 
+    compilação: g++ main.cpp usuario.cpp -o main -lcurl
+
 */
 
 
