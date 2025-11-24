@@ -8,12 +8,13 @@ class Usuario {
         std::string nome;
         std::string matricula;
         std::string senha;
-        std::vector<std::string> interesses;
+        std::vector<std::string> interesses;        // vai ser só o histórico
         std::vector<std::string> livros;        // mudar para armazenar livros...
         float debito;
         Usuario* amigos;
         int n_amigos;
         std::string emailInstitucional;
+        std::string CPF;
         std::string cookie_value;
 
     public:
@@ -29,14 +30,18 @@ class Usuario {
 
         Usuario();
         Usuario(std::string matricula, std::string senha);
+        //gets
         std::string getNome();
         std::string getMatricula();
         std::vector<std::string> getInteresses();
         float getDebito();
         std::string getCookie();
         std::string getEmail();
+        std::string getCPF();
+        // funcionalidades
         bool autenticar(std::string matricula,std::string senha);
         void addAmigo(Usuario& amigo);
+        void setInfo();     // seta o CPF e email de aluno (talvez com o professor não funcione)
         std::vector<Livro> buscarLivros(std::string busca); 
         std::string setCookieValue();
         std::vector<Debito> searchDebito();
