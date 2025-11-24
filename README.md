@@ -1,13 +1,15 @@
-# 📘 BetterPergamum
+# BetterPergamum
 
-<img width="693" height="423" alt="image" src="https://github.com/user-attachments/assets/86f99827-00af-4e03-9643-2fb5b7070d9a" />
+<p align="center">
+  <img width="693" height="423" alt="image" src="https://github.com/user-attachments/assets/86f99827-00af-4e03-9643-2fb5b7070d9a" />
+</p>
 
 
-Projeto acadêmico para a disciplina INF112 da UFV, que propõe um sistema integrado unindo funcionalidades do Pergamum (biblioteca), sistema do Restaurante Universitário (RU) e Moodle em uma única plataforma.
+Projeto acadêmico para a disciplina INF112 da UFV, que propõe um sistema integrado unindo funcionalidades do Pergamum (biblioteca) em um sistema de interação entre Usuários.
 
-O objetivo é facilitar o acesso a serviços e informações da universidade, permitindo ações como busca e renovação de livros, consulta ao cardápio e análise nutricional, e visualização de disciplinas e interações entre usuários.
+O objetivo é facilitar a comunicação e organização de estudos entre estudantes por meio de um sistema integrado com a Biblioteca da universidade. O sistema é capaz de coletar dados dos alunos e professores cadastrados e utilizar deles para a criação de grupos de estudo, unindo alunos com perfis acadêmicos semelhantes.
 
-## 👥 Integrantes do Grupo 11
+## Integrantes do Grupo 11
 
 | Nome | Matrícula |
 |------|------------|
