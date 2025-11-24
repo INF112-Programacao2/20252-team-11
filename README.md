@@ -1,7 +1,7 @@
 # BetterPergamum
 
 <p align="center">
-  <img width="693" height="423" alt="image" src="https://github.com/user-attachments/assets/86f99827-00af-4e03-9643-2fb5b7070d9a" />
+  <img width="493" height="223" alt="image" src="https://github.com/user-attachments/assets/86f99827-00af-4e03-9643-2fb5b7070d9a" />
 </p>
 
 
