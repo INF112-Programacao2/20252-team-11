@@ -5,8 +5,6 @@
 #include <ctime>
 #include <memory>
 
-class Usuario{};
-
 class Mensagem{
     private:
         std::string conteudo;
