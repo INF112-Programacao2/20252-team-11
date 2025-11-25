@@ -28,7 +28,7 @@ class Server {
 		int my_port;
 		sockaddr_in serv_addr;
 
-		std::vector <std::pair <std::string, int>> clients;
+		std::vector <Usuario> clients;
 	public:
 		Server(int port);
 		~Server();
@@ -46,3 +46,4 @@ class Server {
 };
 
 #endif //SERVER_H
+
