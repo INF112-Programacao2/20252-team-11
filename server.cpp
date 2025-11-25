@@ -243,6 +243,9 @@ void Server::interpreta_msg(const char* buff, int bytes, int fd){
 			}
 		}
 	}
+	else if (prefixo.compare("quit") ==0 ){
+		throw std::runtime_error& e;
+	}
 }
 
 char* Server::processa_msg(int fd){
@@ -295,6 +298,7 @@ void Server::close(){
 
 	exit(0);
 }
+
 
 
 
