@@ -164,7 +164,7 @@ int Server::processa_fd(int &ready){
 
 						fd_totais[num_fd].fd = cli;
 						fd_totais[num_fd++].events = POLLIN;
-						printf("Nova conexão, file descriptor %d\n", num_fd);
+						printf("Nova conexÃ£o, file descriptor %d\n", num_fd);
 
 						try{
 							this->receber_descritor(fd_totais[num_fd-1].fd);
@@ -220,7 +220,6 @@ void Server::receber_descritor(int fd){
 		std::cout << '\n';
 		std::string nome = msg;
 		clients.push_back(std::make_pair(nome, fd));
-		std::cout << clients[clients.size()-1].first << std::endl;
 		delete[] msg;
 	} catch (std::runtime_error& e){
 		throw std::runtime_error(e.what());
@@ -293,4 +292,5 @@ void Server::close(){
 
 	exit(0);
 }
+
 
