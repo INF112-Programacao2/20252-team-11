@@ -21,8 +21,14 @@ void Client::prepara_msg(){
 	int bytes_sent;
 	while(true){
 		char buff[BUFFSIZE];
+		std::string msg;
 		std::cin.getline(buff, BUFFSIZE);
-        std::string msg = "[!] " + std::string(buff);
+		if (std::string(buff).compare("quit") == 0){
+        	msg = std::string(buff);
+		}
+		else{
+	        msg = "[!] " + std::string(buff);
+		}
 		if (std::string(buff).size() != 0){
       	 	try{
 				bytes_sent = send(client_fd, msg.c_str(),msg.size(), 0);
@@ -130,3 +136,4 @@ void Client::close(){
     shutdown(client_fd, SHUT_RDWR);
     exit(0);
 }
+
