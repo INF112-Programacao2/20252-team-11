@@ -2,6 +2,7 @@
 #include "usuario.h"
 #include <string>
 #include <regex>
+#include "client.h"
 using namespace std;
 
 
@@ -18,6 +19,10 @@ using namespace std;
 int main() {
     Usuario a;
 
+    string address = "127.0.0.1";
+    string port = "12345";
+    Client client_send(address, port);
+        
     a.setCookieValue();
     std::cout << "Cookie de sessão: " << a.getCookie()<< std::endl;
     string matricula, senha;
@@ -50,6 +55,14 @@ int main() {
     }
     cout << "---------------------------------------\n";
 
+    string nome, forum;
+    cout << "Digite o nome do cliente: ";
+    getline(cin, nome);
+    cout << "Digite o forum do cliente: ";
+    cin >> forum;
+    client_send.connect_socket(nome, forum);
+    client_send.run();
+    client_send.close();
 }
 
 
