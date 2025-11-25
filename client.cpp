@@ -35,6 +35,9 @@ void Client::prepara_msg(){
 				if (bytes_sent<0){
 					throw std::runtime_error("Error in send()");
 				}
+				if (msg.compare("quit")==0){
+					throw std::runtime_error("Você saiu do chat");
+				}
 			} catch (std::runtime_error& e){
 				std::cerr << e.what() << std::endl;
 				this->close();
@@ -136,4 +139,5 @@ void Client::close(){
     shutdown(client_fd, SHUT_RDWR);
     exit(0);
 }
+
 
