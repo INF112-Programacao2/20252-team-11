@@ -216,11 +216,14 @@ int Server::processa_fd(int &ready){
 void Server::receber_descritor(int fd){
 	try{
 		std::cout << "Descritor: \n";
-		std::string matricula = std::string(processa_msg(fd));
-		std::string nome = std::string(processa_msg(fd));
+		char* msg1 = processa_msg(fd);
+		std::string matricula = std::string(msg1);
+		char* msg2 = processa_msg(fd);
+		std::string nome = std::string(msg2);
 		std::cout << '\n';
 		clients.push_back(Usuario(matricula, nome));
-		delete[] msg;
+		delete[] msg1;
+		delete[] msg2;
 	} catch (std::runtime_error& e){
 		throw std::runtime_error(e.what());
 	}
@@ -292,6 +295,7 @@ void Server::close(){
 
 	exit(0);
 }
+
 
 
 
