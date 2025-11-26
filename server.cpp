@@ -216,14 +216,14 @@ int Server::processa_fd(int &ready){
 void Server::receber_descritor(int fd){
 	try{
 		std::cout << "Descritor: \n";
-		char* msg1 = processa_msg(fd);
-		std::string matricula = std::string(msg1);
-		char* msg2 = processa_msg(fd);
-		std::string nome = std::string(msg2);
+		char* msg = processa_msg(fd);
+		int count=0;
+		for (count=0; msg[count]!='\1'; count++);
+		std::string matricula = std::string(msg).substr(0, count);
+		std::string nome = std::string(msg+matricula.size()+1);
 		std::cout << '\n';
-		clients.push_back(Usuario(matricula, nome));
-		delete[] msg1;
-		delete[] msg2;
+		clients.push_back(std::make_pair(Usuario(matricula, nome), fd));
+		delete[] msg;
 	} catch (std::runtime_error& e){
 		throw std::runtime_error(e.what());
 	}
@@ -244,7 +244,7 @@ void Server::interpreta_msg(const char* buff, int bytes, int fd){
 		}
 	}
 	else if (prefixo.compare("quit") ==0 ){
-		throw std::runtime_error& e;
+		throw std::runtime_error("Fulano saiu do chat");
 	}
 }
 

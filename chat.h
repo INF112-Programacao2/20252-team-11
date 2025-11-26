@@ -1,7 +1,7 @@
 #ifndef CHAT_H
 #define CHAT_H
 
-#include "mensagem.h"
+#include "mensagem/model/mensagem.hpp"
 #include "usuario.h"
 
 class Chat {

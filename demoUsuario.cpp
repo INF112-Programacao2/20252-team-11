@@ -41,7 +41,8 @@ int main() {
         cout << "Matrícula ou senha inválida!\n";
     cout << "\n\n-------------\nPESQUISA DE LIVROS:\n-------------\nDigite os termos para a pesquisa: ";
     string pesquisa;
-    cin >> pesquisa;
+    cin.ignore();
+    getline(std::cin, pesquisa);
     auto livros = a.buscarLivros(pesquisa);
 
     cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].nome << " \n| N.Chamada:\t"<< livros[2].numero_chamada << "\n---------------------------------------\n";
@@ -49,7 +50,7 @@ int main() {
     string nome;
     cout << "Digite o nome do cliente: ";
     getline(cin, nome);
-    client_send.connect_socket(nome, livros[2].nome);
+    client_send.connect_socket(matricula, livros[2].nome);
     client_send.run();
     client_send.close();
         

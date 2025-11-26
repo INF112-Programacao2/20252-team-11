@@ -83,7 +83,7 @@ void Client::run(){
 	}
 }
 
-void Client::connect_socket(std::string nome, std::string forum){
+void Client::connect_socket(std::string matricula, std::string forum){
 	int ret, bytes_sent;
 	try{
 		client_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -123,7 +123,7 @@ void Client::connect_socket(std::string nome, std::string forum){
 	}
 	std::cout << "Conexao estabelecida!\n";
 
-	std::string info = forum + '\0' + nome + '\0';
+	std::string info = matricula + '\1' + forum + '\0';
 	try{
 		bytes_sent = send(client_fd, info.c_str(), strlen(info.c_str()), 0);
 		if (bytes_sent<0){
