@@ -19,12 +19,12 @@ private:
 public:
     Livro(Usuario *usuario, std::string nome, Forum *forum, std::string id, std::string autor, std::vector <std::string> interesses);
     std::string getId();
-    std:: string getNome();
+    std::string getNome();
     Forum *getForum();
     Usuario *getLeitorAtual();
-    std::vector <std::string> getInteresses();
+    std::vector <std::string>& getInteresses();
     std::string getAutor();
-    void AddNaListaDeLeitores();
+    void registrarLeitorAtual();
     void setLeitorAtual(Usuario *novoleitor);
 };
 #endif

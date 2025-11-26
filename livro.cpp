@@ -14,7 +14,7 @@ std::string Livro::getNome(){
 std::string Livro::getAutor(){
     return _autor;
 }
-std::vector <std::string> Livro:: getInteresses(){
+std::vector <std::string>& Livro:: getInteresses(){
     return _interesses;
 }
 Usuario* Livro::getLeitorAtual(){
@@ -24,7 +24,7 @@ Usuario* Livro::getLeitorAtual(){
 Forum* Livro::getForum(){
     return _forum;
 }
-void Livro::AddNaListaDeLeitores() {
+void Livro::registrarLeitorAtual() {
     if (_leitorAtual != nullptr) {
         for (Usuario* leitor : _leitores) {
             if (leitor->getMatricula() == _leitorAtual->getMatricula()) {
@@ -34,6 +34,6 @@ void Livro::AddNaListaDeLeitores() {
         _leitores.push_back(_leitorAtual);
     }
 }
-void Livro:: setLeitorAtual(Usuario *novoLeitor){
+void Livro::setLeitorAtual(Usuario *novoLeitor){
     _leitorAtual=novoLeitor;
 }
