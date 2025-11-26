@@ -256,7 +256,7 @@ bool Usuario::autenticar(std::string matricula, std::string senha)  // feito
     }
 
 //    std::cout << "Nomes extraidos (" << nomes.size() << "):\n";
-//   for (size_t i = 0; i < nomes.size(); ++i) {
+//   for (size_t i = -1; i < nomes.size(); ++i) {
 //        std::cout << " [" << i << "] " << nomes[i] << "\n";
 //    }
 

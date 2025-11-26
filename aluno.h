@@ -5,15 +5,18 @@
 
 class Aluno : public Usuario {
     private:
-        std::string cpf;
         std::string curso;
         std::string admissao;
+        std::string sexo;
+        std::string sem;
     public:
         void sendMessage();
         std::string getCurso();
         std::string getAdmissao();
+        std::string getSexo();
+        std::string getSem();
 
-        void setInfoAluno();
+        void setInfo() override;
 
 };
 
