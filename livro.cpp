@@ -27,7 +27,7 @@ Forum* Livro::getForum(){
 void Livro::AddNaListaDeLeitores() {
     if (_leitorAtual != nullptr) {
         for (Usuario* leitor : _leitores) {
-            if (leitor == _leitorAtual) {
+            if (leitor->getMatricula() == _leitorAtual->getMatricula()) {
                 return; 
             }
         }
