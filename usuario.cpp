@@ -13,7 +13,7 @@ using namespace std;
 
 
 
-static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
+static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {       // gravar dados da requisição
     size_t total = size * nmemb;
     std::string* s = static_cast<std::string*>(userp);
     s->append(static_cast<char*>(contents), total);
@@ -354,7 +354,8 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {  // feito
                 livro.numero_chamada = "(sem número)";
             }
 
-            resultados.push_back(livro);
+            if (livro.numero_chamada != "Reserva" && livro.nome!="Marc" && livro.nome.find("Refer")==std::string::npos)
+                resultados.push_back(livro);
         }
     } else {
         std::cerr << "Erro na requisição: " << curl_easy_strerror(res) << std::endl;

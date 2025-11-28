@@ -41,7 +41,7 @@ class Usuario {
         // funcionalidades
         bool autenticar(std::string matricula,std::string senha);
         void addAmigo(Usuario& amigo);
-        virtual void setInfo();     // seta o CPF e email de aluno (talvez com o professor não funcione)    (isso tem que ser polimorfismo btw, implementar no Usuario e no Professor)
+        virtual void setInfo();     // polimorfismo btw, falta implementar o de professor...
         std::vector<Livro> buscarLivros(std::string busca); 
         std::string setCookieValue();
         std::vector<Debito> searchDebito();
