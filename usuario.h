@@ -2,8 +2,9 @@
 #define USUARIO_H
 #include <string>
 #include <vector>
+#include "server.h"
 
-class Usuario {
+class Usuario : public Server{
     protected:
         std::string nome;
         std::string matricula;
