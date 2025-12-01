@@ -215,8 +215,6 @@ void Server::processa_fd(int &ready){
 			}
 		}
 	}
-
-	return 0;
 }
 
 void Server::receber_descritor(int index){
