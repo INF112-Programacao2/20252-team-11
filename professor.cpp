@@ -213,7 +213,7 @@ void Professor::setInfo() {
     curl_easy_cleanup(hnd);
     curl_slist_free_all(headers);
 
-    string resposta = personalInfo("andre+gustavo");
+    string resposta = personalInfo(this->getNome());
     vector<string> campos = parseServidor(resposta);
 
     this->emailInstitucional = campos[1];
