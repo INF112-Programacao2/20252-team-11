@@ -134,6 +134,10 @@ void Client::send_msg(){
 	}
 }
 
+void Client::setForum(std::string forum){
+	this->forum = forum;
+}
+
 void Client::close(){
     shutdown(client_fd, SHUT_RDWR);
     exit(0);

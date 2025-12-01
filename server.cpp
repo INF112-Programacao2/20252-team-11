@@ -113,7 +113,7 @@ void Server::add_chat(Chat* chat){
 
 void Server::run(){
 	int ready;
-	int timeout = 5*60*1000;
+	int timeout = 30*60*1000;
 
 	while (true){
 		try{
@@ -227,9 +227,10 @@ void Server::receber_descritor(int index){
 		for (count2=count+1; msg[count2]!='\7'; count2++);
 		std::string forum = std::string(msg).substr(count, count2);
 		std::string matricula = std::string(msg).substr(count2, std::string(msg).size());
-		Usuario* user = new Client;
+		Client* user = new Client;
 		user->setNome(nome);
 		user->setMatricula(matricula);
+		user->setForum(forum);
 		clients.insert({index, user});
 		delete[] msg;
 	} catch (std::runtime_error& e){

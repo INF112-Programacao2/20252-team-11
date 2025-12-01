@@ -28,6 +28,7 @@ class Client : public Usuario {
 		int client_fd;
 		std::thread t_send;
 		std::thread t_recv;
+		std::string forum;
 	public:
 		Client();
 		~Client();
@@ -37,6 +38,7 @@ class Client : public Usuario {
 		void envia_msg(const char* buff, int bytes, int fd);
 		void send_msg();
 		void close();
+		void setForum(std::string forum);
 };
 
 #endif //CLIENT_H
