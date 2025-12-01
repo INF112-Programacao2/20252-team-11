@@ -17,7 +17,6 @@
 #include <bits/stdc++.h>
 #include <cstring>
 #include <stdexcept>
-#include <stropts.h>
 #include <algorithm>
 
 class Server {
@@ -41,7 +40,7 @@ class Server {
 		void run();
 		int getServer();
 		void listen_socket();
-		int processa_fd(int &ready);
+		void processa_fd(int &ready);
 		char* processa_msg(int index);
 		void envia_msg(const char* buff, int bytes, int fd);
 		void receber_descritor(int index);
@@ -50,4 +49,5 @@ class Server {
 };
 
 #endif //SERVER_H
+
 
