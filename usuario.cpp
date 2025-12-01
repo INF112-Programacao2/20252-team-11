@@ -1,4 +1,17 @@
 #include "usuario.h"
+#include <codecvt>
+#include <locale>
+
+std::string iso_8859_1_to_utf8(const std::string &latin1) {
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> conv_utf8;
+    std::wstring wide;
+
+    for (unsigned char c : latin1) {
+        wide += static_cast<wchar_t>(c);
+    }
+
+    return conv_utf8.to_bytes(wide);
+}
 
 using namespace std;
 
@@ -233,7 +246,7 @@ bool Usuario::autenticar(std::string matricula, std::string senha)  // feito
     }
 
     if (nomes.size() > 1) {     // seta o nome do Usuario
-        this->nome = nomes[1]; 
+        this->nome = iso_8859_1_to_utf8(nomes[1]); 
     }
 
 //    std::cout << "Nomes extraidos (" << nomes.size() << "):\n";
@@ -334,7 +347,7 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {  // feito
             } else {
                 livro.numero_chamada = "(sem número)";
             }
-
+            livro.nome = iso_8859_1_to_utf8(livro.nome);
             resultados.push_back(livro);
         }
     } else {
@@ -421,7 +434,7 @@ std::vector<Usuario::Debito> Usuario::searchDebito() {  // feito
         for (const auto& nome_sujo : nomes_sujos) {
             std::string nome_sem_tags = std::regex_replace(nome_sujo, tag_re, "");
             std::string nome_limpo = trim(nome_sem_tags);
-            
+            nome_limpo = iso_8859_1_to_utf8(nome_limpo);
             resultados.push_back({nome_limpo, "0"});
         }
 

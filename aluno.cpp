@@ -78,7 +78,7 @@ string search_personal(string nome) {
     string response;
 
     replace(nome.begin(), nome.end(), ' ', '+');
-    cout << nome << "\n";
+    //cout << nome << "\n";
 
     string corpoReq = "Consultar=Consultar&campus=1&ano=&nomeFormando=" 
                         + nome +
