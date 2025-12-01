@@ -4,35 +4,83 @@
   <img width="493" height="223" alt="image" src="https://github.com/user-attachments/assets/86f99827-00af-4e03-9643-2fb5b7070d9a" />
 </p>
 
+<div align="center">
 
-Projeto acadêmico para a disciplina INF112 da UFV, que propõe um sistema integrado unindo funcionalidades do Pergamum (biblioteca) em um sistema de interação entre Usuários.
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
+[![License](https://img.shields.io/badge/license-MIT-lightgrey)]()
+[![Language](https://img.shields.io/badge/language-C%2B%2B-blue)]()
+[![Contribuições](https://img.shields.io/badge/contributions-welcome-success)]()
 
-O objetivo é facilitar a comunicação e organização de estudos entre estudantes por meio de um sistema integrado com a Biblioteca da universidade. O sistema é capaz de coletar dados dos alunos e professores cadastrados e utilizar deles para a criação de grupos de estudo, unindo alunos com perfis acadêmicos semelhantes.
+</div>
 
-O diferencial do sistema é o uso de Engenharia Reversa para a coleta dos dados. O único input do usuário é sua matrícula e senha da biblioteca (para fins de autenticação no sistema - precisamos saber que você tem vínculo com a UFV) e o sistema fornece as informações:
+---
 
-Usuário:\
---Nome;
---email;
---CPF;
---Aluno\
-----Curso;
-----Admissão/Semestre
-----Sexo;
---Professor:\
-----Órgão;
-----Departamento;
-----Telefone;
+## Visão Geral
 
-[maior parte das informações são públicas, sujeitas a mudança caso encontrados problemas relativos à privacidade, além de nenhum dado ou credencial ser armazenado em código ou db]
+**BetterPergamum** é um projeto acadêmico desenvolvido para a disciplina **INF112** da **Universidade Federal de Viçosa (UFV)**. O sistema unifica funcionalidades inspiradas no Pergamum (sistema de bibliotecas) com mecanismos de interação entre alunos e professores, criando uma plataforma integrada e inteligente para comunicação e organização de estudos.
 
+O objetivo principal é **facilitar a conexão entre estudantes**, permitindo a formação de grupos de estudo com base em perfis acadêmicos semelhantes — tudo isso utilizando informações fornecidas pelo próprio sistema da biblioteca.
+
+---
+
+## Funcionalidades
+
+O sistema realiza autenticação segura utilizando apenas o **número de matrícula** e a **senha da biblioteca**. A partir disso, realiza engenharia reversa para coletar informações públicas, apresentando ao usuário dados como:
+
+### Informações do Usuário
+
+* **Nome**
+* **E-mail institucional**
+* **CPF**
+
+### Se o usuário for aluno:
+
+* Curso
+* Período/Admissão
+* Sexo
+
+### Se o usuário for professor:
+
+* Órgão
+* Departamento
+* Telefone
+
+> Obs.: Nenhum dado sensível ou credencial é armazenado em banco de dados ou no código. Informações são usadas apenas em memória e descartadas ao final da execução.
+
+---
+
+## Objetivo do Projeto
+
+O sistema busca:
+
+* Integrar dados acadêmicos ao processo de organização de estudos;
+* Promover grupos de estudo baseados em perfis reais de usuários;
+* Facilitar a comunicação entre alunos e professores;
+* Unir diferentes setores da universidade em uma única ferramenta acessível.
+
+---
+
+## Arquitetura Geral
+
+* Coleta de dados via engenharia reversa do Pergamum
+* Processamento interno das informações de usuários
+* Agrupamento automático por similaridade acadêmica
+* Interface simples e integrada com as funcionalidades essenciais
+
+---
 
 ## Integrantes do Grupo 11
 
-| Nome | Matrícula |
-|------|------------|
-| **Gabriel Spagnol Gomes** | 120571 |
-| **Arthur Mendes Vilela** | 120570 |
-| **Pedro Silva Francisco** | 120554 |
-| **João Vitor Miranda Marcelino** | 113477 |
-| **Marco Thullyo São Severino** | 120550 |
+| Nome                             | Matrícula |
+| -------------------------------- | --------- |
+| **Gabriel Spagnol Gomes**        | 120571    |
+| **Arthur Mendes Vilela**         | 120570    |
+| **Pedro Silva Francisco**        | 120554    |
+| **João Vitor Miranda Marcelino** | 113477    |
+| **Marco Thullyo São Severino**   | 120550    |
+
+---
+
+## Licença
+
+Distribuído sob a licença MIT. Sinta-se livre para utilizar e contribuir para o projeto.
