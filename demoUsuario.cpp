@@ -17,11 +17,10 @@ using namespace std;
 
 
 int main() {
-    Usuario a;
 
     string address = "127.0.0.1";
     string port = "12345";
-    Client client_send(address, port);
+    Client a;
         
     a.setCookieValue();
     std::cout << "Cookie de sessão: " << a.getCookie()<< std::endl;
@@ -50,9 +49,9 @@ int main() {
     string nome;
     cout << "Digite o nome do cliente: ";
     getline(cin, nome);
-    client_send.connect_socket(matricula, livros[2].nome);
-    client_send.run();
-    client_send.close();
+    a.connect_socket(address, port, nome, livros[2].nome, matricula);
+    a.run();
+    a.close();
         
     auto debitos = a.searchDebito();
 
