@@ -2,75 +2,43 @@
 // Created by pedro on 16/11/2025.
 //
 #include "client.h"
-#include <cstring>
-#include <stdexcept>
-#include <errno.h>
-#include <thread>
-#include <cstring>
 
 #define BUFFSIZE 1024
 
 
-Client::Client(std::string address, std::string port):
-    address(address), port(port), client_fd(-1){}
+Client::Client():
+   	client_fd(-1){
+	}
 
 Client::~Client(){}
-
-
-void Client::prepara_msg(){
-	int bytes_sent;
-	while(true){
-		char buff[BUFFSIZE];
-		std::string msg;
-		std::cin.getline(buff, BUFFSIZE);
-		if (std::string(buff).compare("quit") == 0){
-        	msg = std::string(buff);
-		}
-		else{
-	        msg = "[!] " + std::string(buff);
-		}
-		if (std::string(buff).size() != 0){
-      	 	try{
-				bytes_sent = send(client_fd, msg.c_str(),msg.size(), 0);
-				if (bytes_sent<0){
-					throw std::runtime_error("Error in send()");
-				}
-				if (msg.compare("quit")==0){
-					throw std::runtime_error("Você saiu do chat");
-				}
-			} catch (std::runtime_error& e){
-				std::cerr << e.what() << std::endl;
-				this->close();
-			}
-		}
-    }
-}
 
 void Client::intercepta_msg(){
 	while (true) {
     	char msg[BUFFSIZE];
+		int bytes_recv;
 		try{
-			int bytes_recv = recv(client_fd, msg, sizeof(msg), 0);
+			bytes_recv = recv(client_fd, msg, sizeof(msg), 0);
         	if (bytes_recv == 0)
-        		throw std::exception();
+        		throw std::runtime_error("Conversa encerrada");
 			if (bytes_recv < 0){
 				throw std::runtime_error("Error in recv()");
 			}
 		} catch (std::runtime_error& e){
 			std::cerr << e.what() << std::endl;
 			this->close();
-		} catch (std::exception& e){
-			continue;
 		}
 
-        std::cout << msg << std::endl;
+        for (int i=0; i<bytes_recv; i++){
+			std::cout << msg[i];
+		}
+		std::cout << std::endl;
         fflush(stdout);
     }
 }
 
 void Client::run(){
 	std::thread t1(&Client::intercepta_msg, this);
-	std::thread t2(&Client::prepara_msg, this);
+	std::thread t2(&Client::send_msg, this);
 
 	t_send = std::move(t1);
 	t_recv = std::move(t2);
@@ -83,8 +51,10 @@ void Client::run(){
 	}
 }
 
-void Client::connect_socket(std::string matricula, std::string forum){
+void Client::connect_socket(std::string address, std::string port, std::string nome, std::string forum, std::string matricula){
 	int ret, bytes_sent;
+	this->address = address;
+	this->port = port;
 	try{
 		client_fd = socket(AF_INET, SOCK_STREAM, 0);
 		if (client_fd<0){
@@ -123,7 +93,7 @@ void Client::connect_socket(std::string matricula, std::string forum){
 	}
 	std::cout << "Conexao estabelecida!\n";
 
-	std::string info = matricula + '\1' + forum + '\0';
+	std::string info = nome + '\7' + forum + '\7' + matricula + '\0';
 	try{
 		bytes_sent = send(client_fd, info.c_str(), strlen(info.c_str()), 0);
 		if (bytes_sent<0){
@@ -135,9 +105,36 @@ void Client::connect_socket(std::string matricula, std::string forum){
 	}
 }
 
+void Client::send_msg(){
+	int bytes_sent;
+	while(true){
+		char buff[BUFFSIZE];
+		std::string msg;
+		std::cin.getline(buff, BUFFSIZE);
+		if (std::string(buff).compare("quit") == 0){
+			msg = std::string(buff);
+		}
+		else{
+			msg = "[!] " + std::string(buff);
+		}
+		if (std::string(buff).size() != 0){
+			try{
+				bytes_sent = send(client_fd, msg.c_str(),msg.size(), 0);
+				if (bytes_sent<0){
+					throw std::runtime_error("Error in send()");
+				}
+				if (msg.compare("quit")==0){
+					throw std::runtime_error("Você saiu do chat");
+				}
+			} catch (std::runtime_error& e){
+				std::cerr << e.what() << std::endl;
+				this->close();
+			}
+		}
+	}
+}
+
 void Client::close(){
     shutdown(client_fd, SHUT_RDWR);
     exit(0);
 }
-
-
