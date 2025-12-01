@@ -4,7 +4,7 @@
 #include <vector>
 #include "server.h"
 
-class Usuario : public Server{
+class Usuario{
     protected:
         std::string nome;
         std::string matricula;
