@@ -31,19 +31,19 @@ O sistema realiza autenticação segura utilizando apenas o **número de matríc
 Perfil Básico do Usuário
 | Campo | Dado Fornecido |
 |---|---|
-| Nome Completo | Informação extraída do Pergamum |
-| E-mail Institucional | Informação extraída do Pergamum |
-| CPF | Informação extraída do Pergamum |
+| Nome Completo | Pergamum |
+| E-mail Institucional | Pergamum |
+| CPF | Pergamum |
 
-Se o Usuário for Aluno
+### Usuário for Aluno
 
 | Campo | Dado Acadêmico |
 |---|---|
 | Curso | Identificação do curso atual |
 | Período de Admissão | Ano/semestre de ingresso na UFV |
-| Gênero | Dado utilizado para análise de similaridade |
+| Gênero | Sistemas da UFV |
 
-Se o Usuário for Professor
+### Usuário for Professor
 
 | Campo | Dado Institucional |
 |---|---|
