@@ -10,7 +10,6 @@ class Aluno : public Usuario {
         std::string sexo;
         std::string sem;
     public:
-        void sendMessage();
         std::string getCurso();
         std::string getAdmissao();
         std::string getSexo();
