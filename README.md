@@ -29,23 +29,23 @@ O sistema realiza autenticação segura utilizando apenas o **número de matríc
 
 ### Informações do Usuário
 
-* **Nome**
-* **E-mail institucional**
-* **CPF**
+. **Nome**
+. **E-mail institucional**
+. **CPF**
 
-### Se o usuário for aluno:
+### Se o usuário for Aluno:
 
-* Curso
-* Período/Admissão
-* Sexo
+. Curso
+. Período/Admissão
+. Sexo
 
-### Se o usuário for professor:
+### Se o usuário for Professor:
 
-* Órgão
-* Departamento
-* Telefone
+. Órgão
+. Departamento
+. Telefone
 
-> Obs.: Nenhum dado sensível ou credencial é armazenado em banco de dados ou no código. Informações são usadas apenas em memória e descartadas ao final da execução.
+> [Obs.: Nenhum dado sensível ou credencial é armazenado em banco de dados ou no código. Informações são usadas apenas em memória e descartadas ao final da execução.]
 
 ---
 
