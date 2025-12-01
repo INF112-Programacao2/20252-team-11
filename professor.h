@@ -17,6 +17,7 @@ class Professor : public Usuario {
         std::string getTelefone();
         void addForum();
         void sendMessage();
+        void setInfo() override;
 };
 
 #endif
