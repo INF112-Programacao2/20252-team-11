@@ -2,7 +2,14 @@
 #define USUARIO_H
 #include <string>
 #include <vector>
-#include "server.h"
+#include <bits/stdc++.h>
+#include <curl/curl.h>
+#include <sstream>
+#include <regex>
+#include <stdexcept>
+#include <iomanip>
+#include <algorithm>
+#include <sys/socket.h>
 
 class Usuario{
     protected:
@@ -28,9 +35,7 @@ class Usuario{
             std::string nome;
             std::string debt;
         };
-
         Usuario();
-        Usuario(std::string matricula, std::string senha);
         //gets
         std::string getNome();
         std::string getMatricula();
@@ -39,10 +44,12 @@ class Usuario{
         std::string getCookie();
         std::string getEmail();
         std::string getCPF();
+        void setNome(std::string nome);
+        void setMatricula(std::string matricula);
         // funcionalidades
         bool autenticar(std::string matricula,std::string senha);
         void addAmigo(Usuario& amigo);
-        virtual void setInfo();     // polimorfismo btw, falta implementar o de professor...
+        void setInfo();     // seta o CPF e email de aluno (talvez com o professor não funcione)
         std::vector<Livro> buscarLivros(std::string busca); 
         std::string setCookieValue();
         std::vector<Debito> searchDebito();
