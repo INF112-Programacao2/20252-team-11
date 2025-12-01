@@ -29,6 +29,8 @@ O sistema realiza autenticação segura utilizando apenas o **número de matríc
 
 ## Informações do Usuário
 
+O sistema automaticamente coleta os dados para as devidas classes (tendo Fornecido matrícula e senha da BBT)
+
 ### Perfil Básico do Usuário
 | Campo | Dado Fornecido |
 |---|---|
