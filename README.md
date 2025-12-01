@@ -34,13 +34,17 @@ Perfil Básico do Usuário
 | Nome Completo | Informação extraída do Pergamum |
 | E-mail Institucional | Informação extraída do Pergamum |
 | CPF | Informação extraída do Pergamum |
+
 Se o Usuário for Aluno
+
 | Campo | Dado Acadêmico |
 |---|---|
 | Curso | Identificação do curso atual |
 | Período de Admissão | Ano/semestre de ingresso na UFV |
 | Gênero | Dado utilizado para análise de similaridade |
+
 Se o Usuário for Professor
+
 | Campo | Dado Institucional |
 |---|---|
 | Órgão | Departamento ou unidade de lotação |
