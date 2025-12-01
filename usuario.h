@@ -49,7 +49,7 @@ class Usuario{
         // funcionalidades
         bool autenticar(std::string matricula,std::string senha);
         void addAmigo(Usuario& amigo);
-        void setInfo();     // seta o CPF e email de aluno (talvez com o professor não funcione)
+        void virtual setInfo();     // seta o CPF e email de aluno (talvez com o professor não funcione)
         std::vector<Livro> buscarLivros(std::string busca); 
         std::string setCookieValue();
         std::vector<Debito> searchDebito();
