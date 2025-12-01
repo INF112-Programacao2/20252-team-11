@@ -6,7 +6,7 @@
 #define SERVER_H
 #define BUFFSIZE 1024
 
-#include "chat.h"
+#include "client.h"
 #include <sys/time.h>
 #include <sys/poll.h>
 #include <sys/ioctl.h>
@@ -15,6 +15,10 @@
 #include <sys/types.h>
 #include <vector>
 #include <bits/stdc++.h>
+#include <cstring>
+#include <stdexcept>
+#include <stropts.h>
+#include <algorithm>
 
 class Server {
 	private:
@@ -28,7 +32,7 @@ class Server {
 		int my_port;
 		sockaddr_in serv_addr;
 
-		std::vector <std::pair <Usuario, int>> clients;
+		std::map <int, Usuario*> clients;
 	public:
 		Server(int port);
 		~Server();
@@ -38,10 +42,10 @@ class Server {
 		int getServer();
 		void listen_socket();
 		int processa_fd(int &ready);
-		char* processa_msg(int cli);
+		char* processa_msg(int index);
 		void envia_msg(const char* buff, int bytes, int fd);
-		void receber_descritor(int fd);
-		void interpreta_msg(const char* buff, int bytes, int fd);
+		void receber_descritor(int index);
+		void interpreta_msg(const char* buff, int bytes, Usuario* user, int fd);
         void close();
 };
 
