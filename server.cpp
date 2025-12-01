@@ -2,10 +2,11 @@
 // Created by pedro on 13/11/2025.
 //
 #include "server.h"
-#include <cstring>
-#include <stdexcept>
-#include <stropts.h>
-#include <algorithm>
+
+class Saiu_do_chat : public std::runtime_error {
+	public:
+		Saiu_do_chat(std::string nome, std::string msg): std::runtime_error(std::string(nome + msg).c_str()){}
+};
 
 Server::Server(int my_port):
 	size_chats(2),
@@ -112,7 +113,7 @@ void Server::add_chat(Chat* chat){
 
 void Server::run(){
 	int ready;
-	int timeout = 3*60*1000;
+	int timeout = 5*60*1000;
 
 	while (true){
 		try{
@@ -128,7 +129,6 @@ void Server::run(){
 			std::cerr << e.what() << std::endl;
 			break;
 		}
-
 		try{
 			processa_fd(ready);
 		} catch (std::runtime_error& e){
@@ -141,11 +141,11 @@ void Server::run(){
 int Server::processa_fd(int &ready){
 	int cli;
 	bool diminuir_array = false;
-	for (int fd=0; fd<num_fd && ready>0; fd++){
+	for (int i=0; i<num_fd && ready>0; i++){
 		try{
-			if (fd_totais[fd].revents == POLLIN){
+			if (fd_totais[i].revents == POLLIN){
 				ready--;
-				if (fd_totais[fd].fd==server){
+				if (fd_totais[i].fd==server){
 					do{
 						try{
 							cli = accept(server, nullptr, nullptr);
@@ -164,14 +164,13 @@ int Server::processa_fd(int &ready){
 
 						fd_totais[num_fd].fd = cli;
 						fd_totais[num_fd++].events = POLLIN;
-						printf("Nova conexão, file descriptor %d\n", num_fd);
+						printf("Nova conexão, file descriptor %d\n", num_fd-1);
 
 						try{
-							this->receber_descritor(fd_totais[num_fd-1].fd);
+							this->receber_descritor(num_fd-1);
 						} catch (std::runtime_error& e){
-							std::cerr << e.what() << std::endl;
-							shutdown(fd_totais[fd].fd, SHUT_RDWR);
-							fd_totais[fd].fd = -1;
+							shutdown(fd_totais[i].fd, SHUT_RDWR);
+							fd_totais[i].fd = -1;
 							diminuir_array = true;
 							break;
 						}
@@ -179,21 +178,22 @@ int Server::processa_fd(int &ready){
 				}
 				else{
 					try{
-						char* msg = this->processa_msg(fd_totais[fd].fd);
-						this->interpreta_msg(static_cast <const char*> (msg), strlen(msg), fd_totais[fd].fd);
+						char* msg = this->processa_msg(i);
+						this->interpreta_msg(static_cast <const char*> (msg), strlen(msg), clients[i], fd_totais[i].fd);
 						delete[] msg;
 					} catch (std::runtime_error& e){
-						std::cerr << e.what() << std::endl;
-						shutdown(fd_totais[fd].fd, SHUT_RDWR);
-						fd_totais[fd].fd = -1;
+						std::cout << e.what() << std::endl;
+						shutdown(fd_totais[i].fd, SHUT_RDWR);
+						fd_totais[i].fd = -1;
 						diminuir_array = true;
 						break;
 					}
 				}
-			} else if (fd_totais[fd].revents != 0){
+			} else if (fd_totais[i].revents != 0){
 				throw std::runtime_error("Error in revents");
 			}
-		} catch(std::exception& e){
+		}
+		catch(std::exception& e){
 			throw std::runtime_error(e.what());
 			break;
 		}
@@ -205,7 +205,10 @@ int Server::processa_fd(int &ready){
 			if (fd_totais[i].fd == -1){
 				for (int j= i; j+1<num_fd; j++){
 					fd_totais[j].fd = fd_totais[j+1].fd;
+					auto aux = clients[j+1];
+					clients[j] = aux;
 				}
+				clients.erase(std::prev(clients.end()));
 				i--;
 				num_fd--;
 			}
@@ -213,29 +216,35 @@ int Server::processa_fd(int &ready){
 	}
 }
 
-void Server::receber_descritor(int fd){
+void Server::receber_descritor(int index){
 	try{
-		std::cout << "Descritor: \n";
-		char* msg = processa_msg(fd);
+		int fd = fd_totais[index].fd;
+		char* msg = processa_msg(index);
 		int count=0;
-		for (count=0; msg[count]!='\1'; count++);
-		std::string matricula = std::string(msg).substr(0, count);
-		std::string nome = std::string(msg+matricula.size()+1);
-		std::cout << '\n';
-		clients.push_back(std::make_pair(Usuario(matricula, nome), fd));
+		for (count=0; msg[count]!='\7'; count++);
+		std::string nome = std::string(msg).substr(0,count);
+		int count2;
+		for (count2=count+1; msg[count2]!='\7'; count2++);
+		std::string forum = std::string(msg).substr(count, count2);
+		std::string matricula = std::string(msg).substr(count2, std::string(msg).size());
+		Usuario* user = new Client;
+		user->setNome(nome);
+		user->setMatricula(matricula);
+		clients.insert({index, user});
 		delete[] msg;
 	} catch (std::runtime_error& e){
 		throw std::runtime_error(e.what());
 	}
 }
 
-void Server::interpreta_msg(const char* buff, int bytes, int fd){
+void Server::interpreta_msg(const char* buff, int bytes, Usuario* user, int fd){
 	std::string prefixo(buff, 4);
+	std::string msg = '[' + user->getNome() + "] " + std::string(buff + 4, strlen(buff)-1) + '\0';
 	if (prefixo.compare("[!] ") == 0){
 		for (auto i : clients){
-			if (i.second != fd){
+			if (fd_totais[i.first].fd != fd){
 				try{
-					envia_msg(buff+4, bytes, i.second);
+					envia_msg(msg.c_str(), strlen(msg.c_str()), fd_totais[i.first].fd);
 				} catch (std::runtime_error& e){
 					std::cerr << e.what() << std::endl;
 					this->close();
@@ -244,12 +253,13 @@ void Server::interpreta_msg(const char* buff, int bytes, int fd){
 		}
 	}
 	else if (prefixo.compare("quit") ==0 ){
-		throw std::runtime_error("Fulano saiu do chat");
+		throw Saiu_do_chat(user->getNome(), " saiu da conversa");
 	}
 }
 
-char* Server::processa_msg(int fd){
+char* Server::processa_msg(int index){
 	int bytes_recv, bytes_sent;
+	int fd = fd_totais[index].fd;
 	char* buffer = new char[BUFFSIZE];
 	char* msg = new char[BUFFSIZE];
 	memset(msg, '\0', BUFFSIZE);
@@ -257,7 +267,7 @@ char* Server::processa_msg(int fd){
 		bytes_recv = recv(fd, buffer, BUFFSIZE, 0);
 		if (bytes_recv<=0)
 			if ((errno != EWOULDBLOCK) || bytes_recv==0){
-				throw std::runtime_error("Connection interrupted");
+				throw Saiu_do_chat(clients[index]->getNome(), " interrompeu a conexão");
 			} else{
 				throw std::exception();
 			}
@@ -268,7 +278,7 @@ char* Server::processa_msg(int fd){
 		return msg;
 	}
 
-	std::cout << "Recibidos " << bytes_recv << " bytes, fd: " << fd << std::endl;
+	std::cout << "Recebidos " << bytes_recv << " bytes, fd: " << fd << std::endl;
 	for (int i=0; i<bytes_recv; i++){
 		std::cout << buffer[i];
 		msg[i] = buffer[i];
@@ -290,12 +300,12 @@ void Server::envia_msg(const char* buff, int bytes, int fd){
 }
 
 void Server::close(){
+	std::cout << "Server closed" << std::endl;
 	for (int fd=0; fd<num_fd; fd++){
 		if (fd_totais[fd].fd >=0 ){
 			shutdown(fd_totais[fd].fd, SHUT_RDWR);
 		}
 	}
-
 	exit(0);
 }
 
