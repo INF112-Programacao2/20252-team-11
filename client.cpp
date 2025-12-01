@@ -138,6 +138,10 @@ void Client::setForum(std::string forum){
 	this->forum = forum;
 }
 
+std::string Client::getForum(){
+	return forum;
+}
+
 void Client::close(){
     shutdown(client_fd, SHUT_RDWR);
     exit(0);

@@ -39,6 +39,7 @@ class Client : public Usuario {
 		void send_msg();
 		void close();
 		void setForum(std::string forum);
+		std::string getForum();
 };
 
 #endif //CLIENT_H
