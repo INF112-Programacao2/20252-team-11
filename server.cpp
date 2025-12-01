@@ -138,7 +138,7 @@ void Server::run(){
 	}
 }
 
-int Server::processa_fd(int &ready){
+void Server::processa_fd(int &ready){
 	int cli;
 	bool diminuir_array = false;
 	for (int i=0; i<num_fd && ready>0; i++){
@@ -308,6 +308,7 @@ void Server::close(){
 	}
 	exit(0);
 }
+
 
 
 
