@@ -9,7 +9,9 @@
 #include <stdexcept>
 #include <iomanip>  
 #include <algorithm> 
+#include <nlohmann/json.hpp>
 using namespace std;
+using json = nlohmann::json;
 
 
 // aux pra curl
@@ -42,33 +44,19 @@ string Aluno::getSem() {
     return this->sem;
 }
 
+vector<string> parse_pessoa_json(const std::string &response) {
+    auto j = json::parse(response);
+    vector<string> p;
+    if (j.is_array() && !j.empty()) {
+        auto &obj = j[0];
+        //p.push_back(obj.value("Nome", ""));
+        p.push_back(obj.value("Nome_Curso", ""));
+        p.push_back(obj.value("Ano_admissao", ""));
+        p.push_back(obj.value("Sem_admissao", ""));
+        p.push_back(obj.value("Sexo", ""));
+    }
 
-// aux pra setInfo()
-vector<string> split_sentence(string sen) {
-    // Create a stringstream object
-    stringstream ss(sen);
-    
-    string word;
-    
-    vector<string> words;
-    vector<string> separado;
-    string termo_comp;
-   
-    for (char letra : sen) {
-        termo_comp += letra;
-        if (letra=='"') {
-            separado.push_back(termo_comp);
-            termo_comp="";
-        }
-    }
-    vector<string> novo = {separado[7], separado[11], separado[23], separado[15]};
-    vector<string> novo2;
-    
-    for (string pal : novo){
-        pal.erase(std::remove(pal.begin(), pal.end(), '"'), pal.end());
-        novo2.push_back(pal);
-    }
-    return novo2;
+    return p;
 }
 
 string search_personal(string nome) {
@@ -124,8 +112,6 @@ string search_personal(string nome) {
     curl_easy_setopt(hnd, CURLOPT_WRITEDATA, &response);
 
     ret = curl_easy_perform(hnd);
-
-    vector<string> retorno = split_sentence(response);
 
     curl_easy_cleanup(hnd);
     curl_slist_free_all(headers);
@@ -224,11 +210,11 @@ void Aluno::setInfo() {       // feito
     curl_easy_cleanup(hnd);
     curl_slist_free_all(headers);
 
-    vector<string> info_nova = split_sentence(search_personal(this->nome));
+    vector<string> info_nova = parse_pessoa_json(search_personal(this->nome));
     this->curso = info_nova[0];
     this->admissao = info_nova[1];
-    this->sexo = info_nova[2];
-    this->sem = info_nova[3];
+    this->sexo = info_nova[3];
+    this->sem = info_nova[2];
 
     //cout << this->curso << " " << this->admissao << " " << this->sexo << "\n";
 }

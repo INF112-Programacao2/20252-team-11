@@ -266,7 +266,7 @@ bool Usuario::autenticar(std::string matricula, std::string senha)  // feito
 }
 
 
-std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {  // feito (arrumar ascii)
+std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {  // feito 
     CURL *curl = curl_easy_init();
     std::vector<Livro> resultados;
     std::string phpsessid = this->getCookie();
@@ -348,7 +348,8 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {  // feito
                 livro.numero_chamada = "(sem número)";
             }
             livro.nome = iso_8859_1_to_utf8(livro.nome);
-            resultados.push_back(livro);
+            if (livro.numero_chamada != "Reserva" && livro.nome != "Esta página" && livro.nome != "Todos" && livro.numero_chamada != "(sem número)" && livro.nome != "Referência" && livro.nome != "Marc")
+                resultados.push_back(livro);
         }
     } else {
         std::cerr << "Erro na requisição: " << curl_easy_strerror(res) << std::endl;

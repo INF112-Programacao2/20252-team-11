@@ -69,7 +69,7 @@ void InteracaoAluno(Aluno b) {
 
     if (autenticou) {
         b.setInfo();
-        cout << "---------------------------------------\n| Nome:\t\t" << b.getNome() << "\n" << "| Email: \t" << b.getEmail() <<"\n| CPF:\t\t" << b.getCPF() << "\n| Curso:\t"<< b.getCurso() << "\n| Admissão:\t"<< b.getAdmissao() << "\n| Sexo:\t\t" << b.getSexo() << "\n| Sem:\t\t" << b.getSem() << "\n---------------------------------------\n";
+        cout << "---------------------------------------\n| Nome:\t\t" << b.getNome() << "\n" << "| Email: \t" << b.getEmail() <<"\n| CPF:\t\t" << b.getCPF() << "\n| Curso:\t"<< b.getCurso() << "\n| Admissão:\t"<< b.getAdmissao() << "/" << b.getSem() << "\n| Sexo:\t\t" << b.getSexo() << "\n---------------------------------------\n";
     }
     else 
         cout << "Matrícula ou senha inválida!\n";
