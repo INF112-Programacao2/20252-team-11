@@ -76,64 +76,66 @@ vector<string> split_sentence(string sen) {
 
 
 string search_personal(string nome) {
-  CURLcode ret;
-  CURL *hnd;
-  struct curl_slist *headers;
-  string response;
-  replace(nome.begin(), nome.end(), ' ', '+');
-  //cout << nome << "\n";
+CURLcode ret;
+CURL *hnd;
+struct curl_slist *headers = NULL;
+string response;
 
+replace(nome.begin(), nome.end(), ' ', '+');
+cout << nome << "\n";
 
-  headers = NULL;
-  headers = curl_slist_append(headers, "Host: www2.dti.ufv.br");
-  headers = curl_slist_append(headers, "Content-Length: 77");
-  headers = curl_slist_append(headers, "Sec-Ch-Ua-Platform: \"Linux\"");
-  headers = curl_slist_append(headers, "Accept-Language: pt-BR,pt;q=0.9");
-  headers = curl_slist_append(headers, "Sec-Ch-Ua: \"Not_A Brand\";v=\"99\", \"Chromium\";v=\"142\"");
-  headers = curl_slist_append(headers, "Sec-Ch-Ua-Mobile: ?0");
-  headers = curl_slist_append(headers, "X-Requested-With: XMLHttpRequest");
-  headers = curl_slist_append(headers, "Accept: application/json, text/javascript, */*; q=0.01");
-  headers = curl_slist_append(headers, "Content-Type: application/x-www-form-urlencoded; charset=UTF-8");
-  headers = curl_slist_append(headers, "Origin: https://www2.dti.ufv.br");
-  headers = curl_slist_append(headers, "Sec-Fetch-Site: same-origin");
-  headers = curl_slist_append(headers, "Sec-Fetch-Mode: cors");
-  headers = curl_slist_append(headers, "Sec-Fetch-Dest: empty");
-  headers = curl_slist_append(headers, "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
-  headers = curl_slist_append(headers, "Priority: u=1, i");
-  headers = curl_slist_append(headers, "Cookie: _ga=GA1.1.1246351.1761589832; _ga_3GKTCB3HHS=GS2.1.s1762993719$o2$g1$t1762993745$j34$l0$h0; PHPSESSID=buuogdhfu27cc69hub5h5k21g7; _pk_id.38.7238=6dfdff2021a86bb2.1764002811.; _pk_ses.38.7238=1");
+string corpoReq = "Consultar=Consultar&campus=1&ano=&nomeFormando=" 
+                    + nome +
+                  "&codCurso=";
 
-  hnd = curl_easy_init();
-  curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
-  curl_easy_setopt(hnd, CURLOPT_URL, "https://www2.dti.ufv.br/conacweb/scripts/consultaPublicaEstudantesComVinculo.php");
-  curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
-  curl_easy_setopt(hnd, CURLOPT_POSTFIELDS, "Consultar=Consultar&campus=1&ano=&nomeFormando=Arthur+Mendes+Vilela&codCurso=");
-  curl_easy_setopt(hnd, CURLOPT_POSTFIELDSIZE_LARGE, (curl_off_t)77);
-  curl_easy_setopt(hnd, CURLOPT_HTTPHEADER, headers);
-  curl_easy_setopt(hnd, CURLOPT_REFERER, "https://www2.dti.ufv.br/conacweb/scripts/consultaPublicaEstudantesComVinculo.php");
-  curl_easy_setopt(hnd, CURLOPT_USERAGENT, "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36");
-  curl_easy_setopt(hnd, CURLOPT_MAXREDIRS, 50L);
-  curl_easy_setopt(hnd, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
-  curl_easy_setopt(hnd, CURLOPT_SSL_VERIFYPEER, 0L);
-  curl_easy_setopt(hnd, CURLOPT_SSL_VERIFYHOST, 0L);
-  curl_easy_setopt(hnd, CURLOPT_PATH_AS_IS, 1L);
-  curl_easy_setopt(hnd, CURLOPT_FTP_SKIP_PASV_IP, 1L);
-  curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);  
-  curl_easy_setopt(hnd, CURLOPT_WRITEFUNCTION, WriteCallback);
-  curl_easy_setopt(hnd, CURLOPT_WRITEDATA, &response);
+headers = curl_slist_append(headers, "Host: www2.dti.ufv.br");
+headers = curl_slist_append(headers, "Sec-Ch-Ua-Platform: \"Linux\"");
+headers = curl_slist_append(headers, "Accept-Language: pt-BR,pt;q=0.9");
+headers = curl_slist_append(headers, "Sec-Ch-Ua: \"Not_A Brand\";v=\"99\", \"Chromium\";v=\"142\"");
+headers = curl_slist_append(headers, "Sec-Ch-Ua-Mobile: ?0");
+headers = curl_slist_append(headers, "X-Requested-With: XMLHttpRequest");
+headers = curl_slist_append(headers, "Accept: application/json, text/javascript, */*; q=0.01");
+headers = curl_slist_append(headers, "Content-Type: application/x-www-form-urlencoded; charset=UTF-8");
+headers = curl_slist_append(headers, "Origin: https://www2.dti.ufv.br");
+headers = curl_slist_append(headers, "Sec-Fetch-Site: same-origin");
+headers = curl_slist_append(headers, "Sec-Fetch-Mode: cors");
+headers = curl_slist_append(headers, "Sec-Fetch-Dest: empty");
+headers = curl_slist_append(headers, "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+headers = curl_slist_append(headers, "Priority: u=1, i");
+headers = curl_slist_append(headers, "Cookie: _ga=GA1.1.1246351.1761589832; _ga_3GKTCB3HHS=GS2.1.s1762993719$o2$g1$t1762993745$j34$l0$h0; PHPSESSID=buuogdhfu27cc69hub5h5k21g7; _pk_id.38.7238=6dfdff2021a86bb2.1764002811.; _pk_ses.38.7238=1");
 
+hnd = curl_easy_init();
+curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
+curl_easy_setopt(hnd, CURLOPT_URL, "https://www2.dti.ufv.br/conacweb/scripts/consultaPublicaEstudantesComVinculo.php");
+curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
 
-  ret = curl_easy_perform(hnd);
+curl_easy_setopt(hnd, CURLOPT_POSTFIELDS, corpoReq.c_str());
+curl_easy_setopt(hnd, CURLOPT_POSTFIELDSIZE_LARGE, (curl_off_t)corpoReq.size());
 
-  //cout << response << endl;
+curl_easy_setopt(hnd, CURLOPT_HTTPHEADER, headers);
 
-  vector<string> retorno = split_sentence(response);
+curl_easy_setopt(hnd, CURLOPT_REFERER, "https://www2.dti.ufv.br/conacweb/scripts/consultaPublicaEstudantesComVinculo.php");
+curl_easy_setopt(hnd, CURLOPT_USERAGENT, "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36");
+curl_easy_setopt(hnd, CURLOPT_MAXREDIRS, 50L);
+curl_easy_setopt(hnd, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
+curl_easy_setopt(hnd, CURLOPT_SSL_VERIFYPEER, 0L);
+curl_easy_setopt(hnd, CURLOPT_SSL_VERIFYHOST, 0L);
+curl_easy_setopt(hnd, CURLOPT_PATH_AS_IS, 1L);
+curl_easy_setopt(hnd, CURLOPT_FTP_SKIP_PASV_IP, 1L);
+curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);
 
-  curl_easy_cleanup(hnd);
-  hnd = NULL;
-  curl_slist_free_all(headers);
-  headers = NULL;
+curl_easy_setopt(hnd, CURLOPT_WRITEFUNCTION, WriteCallback);
+curl_easy_setopt(hnd, CURLOPT_WRITEDATA, &response);
 
-  return response;
+ret = curl_easy_perform(hnd);
+
+vector<string> retorno = split_sentence(response);
+
+curl_easy_cleanup(hnd);
+curl_slist_free_all(headers);
+
+return response;
+
 }
 
 
