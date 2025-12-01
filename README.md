@@ -27,15 +27,16 @@ O objetivo principal é **facilitar a conexão entre estudantes**, permitindo a 
 
 O sistema realiza autenticação segura utilizando apenas o **número de matrícula** e a **senha da biblioteca**. A partir disso, realiza engenharia reversa para coletar informações públicas, apresentando ao usuário dados como:
 
-### Informações do Usuário
-Perfil Básico do Usuário
+## Informações do Usuário
+
+### Perfil Básico do Usuário
 | Campo | Dado Fornecido |
 |---|---|
 | Nome Completo | Pergamum |
 | E-mail Institucional | Pergamum |
 | CPF | Pergamum |
 
-### Usuário for Aluno
+### Usuário Aluno
 
 | Campo | Dado Acadêmico |
 |---|---|
@@ -43,7 +44,7 @@ Perfil Básico do Usuário
 | Período de Admissão | Ano/semestre de ingresso na UFV |
 | Gênero | Sistemas da UFV |
 
-### Usuário for Professor
+### Usuário Professor
 
 | Campo | Dado Institucional |
 |---|---|
