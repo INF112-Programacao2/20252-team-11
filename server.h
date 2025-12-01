@@ -18,6 +18,7 @@
 #include <cstring>
 #include <stdexcept>
 #include <algorithm>
+#include "./mensagem/database.hpp"
 
 class Server {
 	private:
@@ -25,6 +26,8 @@ class Server {
 		int num_chats;
 		int size_chats;
 
+		Database database;
+		
 		int server;
 		pollfd fd_totais[200];
 		int num_fd;

@@ -12,7 +12,8 @@ Server::Server(int my_port):
 	size_chats(2),
 	num_chats(0),
     num_fd(1),
-	my_port(my_port){
+	my_port(my_port)
+{
 	chats = new Chat*[size_chats];
 }
 
@@ -214,6 +215,8 @@ void Server::processa_fd(int &ready){
 			}
 		}
 	}
+
+	return 0;
 }
 
 void Server::receber_descritor(int index){
@@ -238,10 +241,23 @@ void Server::receber_descritor(int index){
 	}
 }
 
+std::string escapeSql(const std::string& s){
+	std::string out;
+	for (char c : s)
+		out += (c == '\'') ? "''" : std::string(1, c);
+	return out;
+};
+
 void Server::interpreta_msg(const char* buff, int bytes, Usuario* user, int fd){
-	std::string prefixo(buff, 4);
-	std::string msg = '[' + user->getNome() + "] " + std::string(buff + 4, strlen(buff)-1) + '\0';
-	if (prefixo.compare("[!] ") == 0){
+	std::string conteudo(buff);
+
+	if (!conteudo.empty() && conteudo.back() == '\n')
+		conteudo.pop_back();
+
+	std::string msg = "[" + user->getNome() + "] " + conteudo;
+
+	std::cout << conteudo << std::endl;
+	if (conteudo.rfind("[!]", 0) == 0){
 		for (auto i : clients){
 			if (fd_totais[i.first].fd != fd){
 				try{
@@ -252,8 +268,27 @@ void Server::interpreta_msg(const char* buff, int bytes, Usuario* user, int fd){
 				}
 			}
 		}
+
+		try{
+			std::cout << "Cheguei!" << std::endl;
+			std::string safe = escapeSql(msg);
+
+			database.conectar();
+			database.executarQuery("INSERT INTO mensagem (conteudo, idUsuario,idChat) VALUES ('" + safe + "'," + std::to_string(0) + "," +std::to_string(0) + "); ");
+			std::vector<std::vector<std::string>> ret = database.executarQuery("SELECT * FROM mensagem;");
+			for(std::vector<std::string> re : ret){
+				for(std::string r : re){
+					std::cout << r << std::endl;
+				}
+				std::cout << std::endl;
+			}
+			database.desconectar();
+		}catch(std::exception& e){
+			std::cerr << e.what() << std::endl;
+		}
+
 	}
-	else if (prefixo.compare("quit") ==0 ){
+	else if (conteudo.compare("quit") ==0 ){
 		throw Saiu_do_chat(user->getNome(), " saiu da conversa");
 	}
 }

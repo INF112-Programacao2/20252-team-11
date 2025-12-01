@@ -34,7 +34,7 @@ std::vector<std::vector<std::string>> Database::executarQuery(const std::string&
 
     char* msgDeErro = nullptr;
     std::vector<std::vector<std::string>> resposta;
-    int status = sqlite3_exec(this->db, query.c_str(), this->callback, &resposta, &msgDeErro);    
+    int status = sqlite3_exec(this->db, query.c_str(), Database::callback, &resposta, &msgDeErro);    
     
     if(status != SQLITE_OK){
         std::string msg = msgDeErro ? msgDeErro : "Nao foi possivel identificar o erro";

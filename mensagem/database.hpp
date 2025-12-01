@@ -9,13 +9,13 @@
 class Database{
     private:
         sqlite3* db;
-        int callback(void*, int, char**, char**);
+        static int callback(void*, int, char**, char**);
     public:
         Database();
         ~Database();
 
         bool isConnected();
-        void conectar(const std::string& nomeArquivo = "test.db");
+        void conectar(const std::string& nomeArquivo = "betterPergamum.db");
         void desconectar();
         int getLatest();
         
