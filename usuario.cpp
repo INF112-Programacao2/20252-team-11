@@ -1,19 +1,8 @@
 #include "usuario.h"
-#include <curl/curl.h>
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <vector>
-#include <regex>
-#include <cstdlib>   
-#include <stdexcept>
-#include <iomanip>  
-#include <algorithm> 
+
 using namespace std;
 
-
-
-static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {       // gravar dados da requisição
+static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     size_t total = size * nmemb;
     std::string* s = static_cast<std::string*>(userp);
     s->append(static_cast<char*>(contents), total);
@@ -34,17 +23,9 @@ std::string trim(const std::string& str) {      // limpar o html do pergamum
     return str.substr(first, (last - first + 1));
 }
 
-
-
-Usuario::Usuario() {
+Usuario::Usuario(){
     this->setCookieValue();
 }
-
-Usuario::Usuario(string mat, string senha) {
-    this->setCookieValue();
-    this->autenticar(mat, senha);
-}
-
 
 string Usuario::getNome() {
     return this->nome;
@@ -256,7 +237,7 @@ bool Usuario::autenticar(std::string matricula, std::string senha)  // feito
     }
 
 //    std::cout << "Nomes extraidos (" << nomes.size() << "):\n";
-//   for (size_t i = -1; i < nomes.size(); ++i) {
+//   for (size_t i = 0; i < nomes.size(); ++i) {
 //        std::cout << " [" << i << "] " << nomes[i] << "\n";
 //    }
 
@@ -354,8 +335,7 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {  // feito
                 livro.numero_chamada = "(sem número)";
             }
 
-            if (livro.numero_chamada != "Reserva" && livro.nome!="Marc" && livro.nome.find("Refer")==std::string::npos)
-                resultados.push_back(livro);
+            resultados.push_back(livro);
         }
     } else {
         std::cerr << "Erro na requisição: " << curl_easy_strerror(res) << std::endl;
@@ -578,6 +558,10 @@ void Usuario::setInfo() {       // feito
     curl_slist_free_all(headers);
 }
 
+void Usuario::setNome(std::string nome){
+    this->nome = nome;
+}
 
-
-
+void Usuario::setMatricula(std::string matricula){
+    this->matricula = matricula;
+}
