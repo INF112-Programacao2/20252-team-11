@@ -14,7 +14,7 @@ Server::Server(int my_port) : size_chats(2),
 							  num_fd(1),
 							  my_port(my_port)
 {
-	chats = new Chat*[size_chats];
+	chats = new Chat *[size_chats];
 }
 
 Server::~Server()
@@ -137,7 +137,7 @@ void Server::add_chat(Chat *chat)
 		{
 			chats[i] = aux[i];
 		}
-		delete [] aux;
+		delete[] aux;
 		size_chats *= 2;
 	}
 	chats[num_chats++] = chat;
@@ -148,8 +148,10 @@ void Server::run()
 	int ready;
 	int timeout = 5 * 60 * 1000;
 
-	while (true){
-		try{
+	while (true)
+	{
+		try
+		{
 			std::cout << "Esperando em poll()" << std::endl;
 			ready = poll(fd_totais, num_fd, timeout);
 			if (ready < 0)
@@ -160,29 +162,41 @@ void Server::run()
 			{
 				throw std::runtime_error("poll() timed out");
 			}
-		} catch (std::runtime_error& e){
+		}
+		catch (std::runtime_error &e)
+		{
 			std::cerr << e.what() << std::endl;
 			break;
 		}
-		try{
+		try
+		{
 			processa_fd(ready);
-		} catch (std::runtime_error& e){
+		}
+		catch (std::runtime_error &e)
+		{
 			std::cerr << e.what() << std::endl;
 			break;
 		}
 	}
 }
 
-void Server::processa_fd(int &ready){
+void Server::processa_fd(int &ready)
+{
 	int cli;
 	bool diminuir_array = false;
-	for (int i=0; i<num_fd && ready>0; i++){
-		try{
-			if (fd_totais[i].revents == POLLIN){
+	for (int i = 0; i < num_fd && ready > 0; i++)
+	{
+		try
+		{
+			if (fd_totais[i].revents == POLLIN)
+			{
 				ready--;
-				if (fd_totais[i].fd==server){
-					do{
-						try{
+				if (fd_totais[i].fd == server)
+				{
+					do
+					{
+						try
+						{
 							cli = accept(server, nullptr, nullptr);
 							if (cli < 0)
 							{
@@ -219,10 +233,12 @@ void Server::processa_fd(int &ready){
 						}
 					} while (cli != -1);
 				}
-				else{
-					try{
-						char* msg = this->processa_msg(i);
-						this->interpreta_msg(static_cast <const char*> (msg), strlen(msg), clients[i], fd_totais[i].fd);
+				else
+				{
+					try
+					{
+						char *msg = this->processa_msg(i);
+						this->interpreta_msg(static_cast<const char *>(msg), strlen(msg), clients[i], fd_totais[i].fd);
 						delete[] msg;
 					}
 					catch (std::runtime_error &e)
@@ -234,7 +250,9 @@ void Server::processa_fd(int &ready){
 						break;
 					}
 				}
-			} else if (fd_totais[i].revents != 0){
+			}
+			else if (fd_totais[i].revents != 0)
+			{
 				throw std::runtime_error("Error in revents");
 			}
 		}
@@ -245,7 +263,8 @@ void Server::processa_fd(int &ready){
 		}
 	}
 
-	if (diminuir_array){
+	if (diminuir_array)
+	{
 		diminuir_array = false;
 		for (int i = 0; i < num_fd; i++)
 		{
@@ -283,7 +302,6 @@ void Server::receber_descritor(int index)
 		Usuario *user = new Client;
 		user->setNome(nome);
 		user->setMatricula(matricula);
-		user->setForum(forum);
 		clients.insert({index, user});
 
 		Forum *f = nullptr;					 // você coloca um fórum real depois
@@ -300,10 +318,19 @@ void Server::receber_descritor(int index)
 		livro->registrarLeitorAtual();
 
 		delete[] msg;
-	} catch (std::runtime_error& e){
+	}
+	catch (std::runtime_error &e)
+	{
 		throw std::runtime_error(e.what());
 	}
 }
+
+std::string escapeSql(const std::string& s){
+	std::string out;
+	for (char c : s)
+		out += (c == '\'') ? "''" : std::string(1, c);
+	return out;
+};
 
 void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 {
@@ -326,25 +353,6 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 				}
 			}
 		}
-
-		try{
-			std::cout << "Cheguei!" << std::endl;
-			std::string safe = escapeSql(msg);
-
-			database.conectar();
-			database.executarQuery("INSERT INTO mensagem (conteudo, idUsuario,idChat) VALUES ('" + safe + "'," + std::to_string(0) + "," +std::to_string(0) + "); ");
-			std::vector<std::vector<std::string>> ret = database.executarQuery("SELECT * FROM mensagem;");
-			for(std::vector<std::string> re : ret){
-				for(std::string r : re){
-					std::cout << r << std::endl;
-				}
-				std::cout << std::endl;
-			}
-			database.desconectar();
-		}catch(std::exception& e){
-			std::cerr << e.what() << std::endl;
-		}
-
 	}
 	else if (prefixo.compare("quit") == 0)
 	{
@@ -402,15 +410,20 @@ void Server::envia_msg(const char *buff, int bytes, int fd)
 		{
 			throw std::runtime_error("Error in send()");
 		}
-	} catch (std::runtime_error& e){
+	}
+	catch (std::runtime_error &e)
+	{
 		throw std::runtime_error(e.what());
 	}
 }
 
-void Server::close(){
+void Server::close()
+{
 	std::cout << "Server closed" << std::endl;
-	for (int fd=0; fd<num_fd; fd++){
-		if (fd_totais[fd].fd >=0 ){
+	for (int fd = 0; fd < num_fd; fd++)
+	{
+		if (fd_totais[fd].fd >= 0)
+		{
 			shutdown(fd_totais[fd].fd, SHUT_RDWR);
 		}
 	}
