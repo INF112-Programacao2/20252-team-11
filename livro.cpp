@@ -1,7 +1,7 @@
 #include <iostream>
 #include "livro.h"
 
-Livro::Livro(Usuario *usuario, std::string nome, std::string id): _leitorAtual(usuario), _nome(nome),_id(id),{}
+Livro::Livro(Usuario *usuario, std::string nome, std::string id): _leitorAtual(usuario), _nome(nome),_id(id){}
 
 
 
