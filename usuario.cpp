@@ -360,6 +360,10 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {  // feito
     curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
 
+    if (resultados.size() == 0) {
+        cerr << "Nenhum resultado para a pesquisa";
+        return {{"None", "none"}};
+    }
     return resultados;
 }
 

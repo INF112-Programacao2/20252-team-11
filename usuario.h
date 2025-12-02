@@ -42,7 +42,6 @@ class Usuario{
         float getDebito();
         std::string getCookie();
         std::string getEmail();
-        std::string getCPF();
         void setNome(std::string nome);
         void setMatricula(std::string matricula);
         // funcionalidades
