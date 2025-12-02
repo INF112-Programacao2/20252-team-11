@@ -18,7 +18,8 @@
 #include <cstring>
 #include <stdexcept>
 #include <algorithm>
-#include "./mensagem/database.hpp"
+#include "livro.h"
+
 
 class Server {
 	private:
@@ -26,8 +27,6 @@ class Server {
 		int num_chats;
 		int size_chats;
 
-		Database database;
-		
 		int server;
 		pollfd fd_totais[200];
 		int num_fd;
@@ -35,6 +34,7 @@ class Server {
 		sockaddr_in serv_addr;
 
 		std::map <int, Usuario*> clients;
+		std::vector<Livro*> livros;
 	public:
 		Server(int port);
 		~Server();
