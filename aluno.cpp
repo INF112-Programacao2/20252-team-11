@@ -44,6 +44,10 @@ string Aluno::getSem() {
     return this->sem;
 }
 
+string Aluno::getCPF() {
+    return this->CPF;
+}
+
 vector<string> parse_pessoa_json(const std::string &response) {
     auto j = json::parse(response);
     vector<string> p;

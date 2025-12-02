@@ -9,7 +9,9 @@ class Aluno : public Usuario {
         std::string admissao;
         std::string sexo;
         std::string sem;
+        std::string CPF;
     public:
+        std::string getCPF();
         std::string getCurso();
         std::string getAdmissao();
         std::string getSexo();

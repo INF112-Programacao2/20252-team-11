@@ -33,7 +33,7 @@ void InteracaoUsuario(Usuario a) {
 
     if (autenticou) {
         a.setInfo();
-        cout << "---------------------------------------\n| Nome:\t\t" << a.getNome() << "\n" << "| Email: \t" << a.getEmail() <<"\n| CPF:\t\t" << a.getCPF() << "\n---------------------------------------\n";
+        cout << "---------------------------------------\n| Nome:\t\t" << a.getNome() << "\n" << "| Email: \t" << a.getEmail() << "\n---------------------------------------\n";
     }
     else 
         cout << "Matrícula ou senha inválida!\n";
@@ -99,17 +99,13 @@ void InteracaoAluno(Aluno b) {
 void InteracaoProfessor(Professor b) {
     b.setCookieValue();
     std::cout << "Cookie de sessão: " << b.getCookie()<< std::endl;
-    string matricula, senha;
-    cout << "Digite sua matricula: ";
-    cin >> matricula;
-    cout << "Digite a sua senha da BBT: ";
-    cin >> senha;
-
-    bool autenticou = b.autenticar(matricula, senha);
-
+    string nome;
+    cout << "Digite seu Nome: ";
+    getline(cin, nome);
+    bool autenticou = b.autenticar(nome);
     if (autenticou) {
         b.setInfo();
-        cout << "---------------------------------------\n| Nome:\t\t" << b.getNome() << "\n" << "| Email: \t" << b.getEmail() <<"\n| CPF:\t\t" << b.getCPF() << "\n| Orgao:\t"<< b.getOrgao() << "\n| Departamento:\t"<< b.getDep() << "\n| Telefone:\t\t" << b.getTelefone() << "\n" << "\n---------------------------------------\n";
+        cout << "---------------------------------------\n| Nome:\t\t" << b.getNome() << "\n" << "| Email: \t" << b.getEmail() << "\n| Orgao:\t"<< b.getOrgao() << "\n| Departamento:\t"<< b.getDep() << "\n| Telefone:\t\t" << b.getTelefone() << "\n" << "\n---------------------------------------\n";
     }
     else 
         cout << "Matrícula ou senha inválida!\n";
@@ -143,7 +139,9 @@ int main() {
     Professor c;
 
     cout << "Selecione no que deseja fazer login:\n0 - Usuario\n1 - Aluno\n2 - Professor\nResposta: ";
-    int resp; cin >> resp;
+    int resp; 
+    cin >> resp;
+    cin.ignore();
     switch (resp)
     {
     case 0:
@@ -158,7 +156,7 @@ int main() {
     default:
         break;
     }
-
+    return 0;
 }
 
 

@@ -22,7 +22,6 @@ class Usuario{
         Usuario* amigos;
         int n_amigos;
         std::string emailInstitucional;
-        std::string CPF;
         std::string cookie_value;
 
     public:
@@ -47,7 +46,8 @@ class Usuario{
         void setNome(std::string nome);
         void setMatricula(std::string matricula);
         // funcionalidades
-        bool autenticar(std::string matricula,std::string senha);
+        bool autenticar(std::string matricula,std::string senha);       // overload
+        bool autenticar(std::string nome);
         void addAmigo(Usuario& amigo);
         void virtual setInfo();     // seta o CPF e email de aluno (talvez com o professor não funcione)
         std::vector<Livro> buscarLivros(std::string busca); 

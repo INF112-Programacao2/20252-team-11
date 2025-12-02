@@ -1,6 +1,7 @@
 #include "usuario.h"
 #include <codecvt>
 #include <locale>
+using namespace std;
 
 std::string iso_8859_1_to_utf8(const std::string &latin1) {
     std::wstring_convert<std::codecvt_utf8<wchar_t>> conv_utf8;
@@ -12,8 +13,6 @@ std::string iso_8859_1_to_utf8(const std::string &latin1) {
 
     return conv_utf8.to_bytes(wide);
 }
-
-using namespace std;
 
 static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     size_t total = size * nmemb;
@@ -64,9 +63,6 @@ string Usuario::getEmail() {
     return this->emailInstitucional;
 }
 
-string Usuario::getCPF() {
-    return this->CPF;
-}
 
 
 void Usuario::addAmigo(Usuario& amigo) {        // talvez implementar para banco de dados depois..      (ou uma função de salvar que copia os dados de Usuário para o db..)
@@ -265,6 +261,10 @@ bool Usuario::autenticar(std::string matricula, std::string senha)  // feito
     return (!(nomes[1].find(chave_er)!=string::npos));
 }
 
+bool Usuario::autenticar(std::string nome) {
+    this->nome = nome;
+    return true;
+}
 
 std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {  // feito 
     CURL *curl = curl_easy_init();
@@ -566,7 +566,6 @@ void Usuario::setInfo() {       // feito
     }
 
     this->emailInstitucional = email;
-    this->CPF = CPF;
 
     curl_easy_cleanup(hnd);
     curl_slist_free_all(headers);
