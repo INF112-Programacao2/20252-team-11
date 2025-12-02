@@ -1,7 +1,7 @@
 #include <iostream>
 #include "livro.h"
 
-Livro::Livro(Usuario *usuario, std::string nome, Forum *forum, std::string id, std::string autor, std::vector <std::string> interesses): _leitorAtual(usuario), _nome(nome), _forum(forum),_id(id),_autor(autor), _interesses(interesses){}
+Livro::Livro(Usuario *usuario, std::string nome, std::string id): _leitorAtual(usuario), _nome(nome),_id(id),{}
 
 
 
@@ -11,19 +11,11 @@ std::string Livro::getId(){
 std::string Livro::getNome(){
     return _nome;
 }
-std::string Livro::getAutor(){
-    return _autor;
-}
-std::vector <std::string>& Livro:: getInteresses(){
-    return _interesses;
-}
+
 Usuario* Livro::getLeitorAtual(){
     return _leitorAtual;
 }
 
-Forum* Livro::getForum(){
-    return _forum;
-}
 void Livro::registrarLeitorAtual() {
     if (_leitorAtual != nullptr) {
         for (Usuario* leitor : _leitores) {
