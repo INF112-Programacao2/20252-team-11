@@ -3,6 +3,10 @@
 #include <locale>
 using namespace std;
 
+
+// funções auxiliares
+
+// converter byte-type
 std::string iso_8859_1_to_utf8(const std::string &latin1) {
     std::wstring_convert<std::codecvt_utf8<wchar_t>> conv_utf8;
     std::wstring wide;
@@ -14,6 +18,7 @@ std::string iso_8859_1_to_utf8(const std::string &latin1) {
     return conv_utf8.to_bytes(wide);
 }
 
+// gravar dados das requisições
 static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     size_t total = size * nmemb;
     std::string* s = static_cast<std::string*>(userp);
@@ -21,12 +26,14 @@ static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* use
     return total;
 }
 
+// setar cookies de ambiente 
 static std::string getenv_safe(const char* name) {
     const char* v = std::getenv(name);
     return v ? std::string(v) : std::string();
 }
 
-std::string trim(const std::string& str) {      // limpar o html do pergamum
+// limpar html
+std::string trim(const std::string& str) {
     size_t first = str.find_first_not_of(" \t\n\r\f\v");
     if (std::string::npos == first) {
         return ""; 
@@ -35,6 +42,7 @@ std::string trim(const std::string& str) {      // limpar o html do pergamum
     return str.substr(first, (last - first + 1));
 }
 
+// gets
 Usuario::Usuario(){
     this->setCookieValue();
 }
@@ -65,7 +73,7 @@ string Usuario::getEmail() {
 
 
 
-void Usuario::addAmigo(Usuario& amigo) {        // talvez implementar para banco de dados depois..      (ou uma função de salvar que copia os dados de Usuário para o db..)
+void Usuario::addAmigo(Usuario& amigo) {        // talvez implementar para banco de dados depois..
     this->n_amigos;
     Usuario* amigos_swap = new Usuario[this->n_amigos+1];
     for (int i=0;i<this->n_amigos;i++) amigos_swap[i] = this->amigos[i];
@@ -74,7 +82,7 @@ void Usuario::addAmigo(Usuario& amigo) {        // talvez implementar para banco
     this->amigos = amigos_swap;
 }
 
-std::string Usuario::setCookieValue() {   // feito
+std::string Usuario::setCookieValue() {
     CURL *curl;
     CURLcode res;
 
@@ -144,7 +152,7 @@ std::string Usuario::setCookieValue() {   // feito
     return cookie_value;
 }
 
-bool Usuario::autenticar(std::string matricula, std::string senha)  // feito
+bool Usuario::autenticar(std::string matricula, std::string senha)
 {
     std::string phpsessid = this->getCookie();
     if (phpsessid.empty()) {
@@ -266,7 +274,7 @@ bool Usuario::autenticar(std::string nome) {
     return true;
 }
 
-std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {  // feito 
+std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) { 
     CURL *curl = curl_easy_init();
     std::vector<Livro> resultados;
     std::string phpsessid = this->getCookie();
@@ -368,7 +376,7 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {  // feito
 }
 
 
-std::vector<Usuario::Debito> Usuario::searchDebito() {  // feito
+std::vector<Usuario::Debito> Usuario::searchDebito() {
     CURL *curl = curl_easy_init();
     std::vector<Debito> resultados;
     std::string phpsessid = this->getCookie();
@@ -487,7 +495,7 @@ std::vector<Usuario::Debito> Usuario::searchDebito() {  // feito
     return resultados;
 }
 
-void Usuario::setInfo() {       // feito
+void Usuario::setInfo() {
     CURLcode ret;
     CURL *hnd = curl_easy_init(); 
     // requisição
