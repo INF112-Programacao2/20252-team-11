@@ -21,7 +21,7 @@ int main() {
     string address = "127.0.0.1";
     string port = "12345";
     Client a;
-        
+/*
     a.setCookieValue();
     std::cout << "Cookie de sessão: " << a.getCookie()<< std::endl;
     string matricula, senha;
@@ -45,11 +45,11 @@ int main() {
     auto livros = a.buscarLivros(pesquisa);
 
     cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].nome << " \n| N.Chamada:\t"<< livros[2].numero_chamada << "\n---------------------------------------\n";
-
+*/
     string nome;
     cout << "Digite o nome do cliente: ";
     getline(cin, nome);
-    a.connect_socket(address, port, nome, livros[2].nome, matricula);
+    a.connect_socket(address, port, nome, "Abelardo", "123");
     a.run();
     a.close();
         
