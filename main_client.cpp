@@ -117,7 +117,7 @@ void InteracaoAluno(Aluno &b) {
                     getline(cin, nome);
 
                     //conecta ao servidor de chat
-                    cliente.connect_socket(address, port, nome, "Abelardo", "123");
+                    cliente.connect_socket(address, port, nome, livros[2].nome, matricula, livros[2].numero_chamada);
                     cliente.run();
                     cliente.close();
                 }
@@ -195,7 +195,7 @@ void InteracaoProfessor(Professor &c) {
                 string nome;
                 cout << "Digite o nome do cliente: ";
                 getline(cin, nome);
-                cliente.connect_socket(address, port, nome, "Abelardo", "123");
+                cliente.connect_socket(address, port, nome, livros[2].nome, "matricula", livros[2].numero_chamada);
                 cliente.run();
                 cliente.close();
                 }

@@ -38,7 +38,7 @@ class Client{
 	//inicia threads
 		void run();
 		void intercepta_msg();	//recebe mensagem do servidor
-		void connect_socket(std::string address, std::string port, std::string nome, std::string forum, std::string matricula);
+		void connect_socket(std::string address, std::string port, std::string nome, std::string forum, std::string matricula, std::string num_chamada);
 		void envia_msg(const char* buff, int bytes, int fd); //envia mensagem
 		void send_msg(); //le entrada do usuario e envie mensagem
 		void close();	//fecha conexao
