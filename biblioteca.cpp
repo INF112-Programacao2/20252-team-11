@@ -17,13 +17,12 @@ Biblioteca::Biblioteca() : size_chats(2), num_chats(0),
 
 Biblioteca::~Biblioteca() {
 
-    //libera memoria de todos os livros
-    for (Livro* livro : _livros) {
-        delete livro;
+	 for (Chat* chat : _chats) {
+        delete chat;
     }
-
+	
+    //libera memoria de todos os livros
     //limpa os vetores
-    _livros.clear();
     _usuarios.clear();
 }
 
@@ -98,6 +97,7 @@ void Biblioteca::add_chat(Chat *chat)
             _livros.push_back(novoLivro);    //adiciona novo livro
         }   
     }
+
 
 
 
