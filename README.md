@@ -64,7 +64,7 @@ O sistema busca tais objetivos:
 
 * Integração dos dados acadêmicos ao processo de organização de estudos;
 * Promoção dos grupos de estudo baseados em perfis reais de usuários;
-* Facilitamento da comunicação entre alunos e professores;
+* Facilitação da comunicação entre alunos e professores;
 * Otimização do processo de estudo;
 * União dos diferentes setores da universidade em uma única ferramenta acessível.
 
