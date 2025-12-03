@@ -25,7 +25,7 @@ class Usuario{
         std::string emailInstitucional;
         std::string cookie_value;
 
-    public:
+    public:   
 
         struct Livro {
             std::string nome;
@@ -50,10 +50,9 @@ class Usuario{
         bool autenticar(std::string matricula,std::string senha);       // overload
         bool autenticar(std::string nome);
         void addAmigo(Usuario& amigo);
-        void virtual setInfo();     // seta o CPF e email de aluno (talvez com o professor não funcione)
+        void virtual setInfo();
         std::vector<Livro> buscarLivros(std::string busca); 
         std::string setCookieValue();
-        std::vector<Debito> searchDebito();
 };
 
 #endif
