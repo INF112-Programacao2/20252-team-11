@@ -400,7 +400,7 @@ void Server::receber_descritor(int index)
 		clients.insert({index, user});	//Armazena no mapa
 
 		//Cria e armazena o objeto livro (relacionado ao usuario)
-		Livro *livro = new Livro(user, forum, id);
+		Livro *livro = new Livro(user, forum, std::to_string(index));
 
 		// armazena o livro
 		livros.push_back(livro);

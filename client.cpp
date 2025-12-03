@@ -65,7 +65,7 @@ void Client::run(){
 }
 
 //estabelece conexao com o servidor e envia informacoes iniciais
-void Client::connect_socket(std::string address, std::string port, std::string nome, std::string forum, std::string matricula){
+void Client::connect_socket(std::string address, std::string port, std::string nome, std::string forum, std::string matricula, std::string num_chamada){
 	int ret, bytes_sent;
 	this->address = address;
 	this->port = port;
@@ -117,7 +117,7 @@ void Client::connect_socket(std::string address, std::string port, std::string n
 	std::cout << "Conexao estabelecida!\n";
 
 	//ENVIO DE INFORMACOES INICIAIS AO SERVIDOR
-	std::string info = nome + '\7' + forum + '\7' + matricula + '\0';
+	std::string info = nome + '\7' + forum + '\7' + matricula + '\7' + num_chamada + '\0';
 	try{
 		bytes_sent = send(client_fd, info.c_str(), strlen(info.c_str()), 0);
 		if (bytes_sent<0){
