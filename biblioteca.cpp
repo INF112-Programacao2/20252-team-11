@@ -71,7 +71,11 @@ void Biblioteca::add_chat(Chat *chat)
 
     std::vector<Usuario*> Biblioteca::getUsuarios() const {
         return _usuarios;
-    }
+	}
+
+	std::vector<Chat*>Biblioteca::getChat() const {
+	return _chats;
+	}
 
     //adiciona usuario a bilblioteca, evitando duplicatas por matricula
     void Biblioteca::addUsuario(Usuario* novoUsuario) {
@@ -98,6 +102,13 @@ void Biblioteca::add_chat(Chat *chat)
         }   
     }
 
+
+	Chat* Biblioteca::getChat(int posicao) {
+		if (posicao < 0 || posicao >= (int)_chats.size()) {
+			return nullptr;
+		}
+		return _chats[posicao]
+	}
 
 
 
