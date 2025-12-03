@@ -400,13 +400,6 @@ void Server::receber_descritor(int index)
         user->setForum(forum);
 		clients.insert({index, user});	//Armazena no mapa
 
-
-		//codigo de exemplo
-		Forum *f = nullptr;					 // você coloca um fórum real depois
-		std::string id =  "xxxx";			 // só exemplo
-		std::string autor = "autor";			 // só exemplo
-		std::vector<std::string> interesses; // vazio por enquanto
-
 		//Cria e armazena o objeto livro (relacionado ao usuario)
 		Livro *livro = new Livro(user, forum, id);
 
@@ -486,8 +479,6 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 		throw Saiu_do_chat(user->getNome(), " saiu da conversa");
 	}
 }
-
-//Atencao: Outros tipos de mensagem nao tratados
 
 //===============================================
 //PROCESSAMENTO DE MENSAGENS
