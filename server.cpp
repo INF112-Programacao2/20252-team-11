@@ -4,6 +4,17 @@
 #include "server.h"
 
 //===============================================
+//CLASSE DE EXCECAO	
+//===============================================
+
+//Inicializa o servidor com configuracoes basicas
+//Cria array inicial para chats com capacidade 2
+Server::Server(int my_port) : num_fd(1),my_port(my_port) {}
+
+
+Server::~Server() {}
+
+//===============================================
 //FUNCAO AUXILIAR: ESCAPE DE STRING PARA SQL
 //===============================================
 
@@ -14,6 +25,8 @@ std::string escapeSql(const std::string& s){
 		out += (c == '\'') ? "''" : std::string(1, c);
 	return out;
 };
+
+
 
 //===============================================
 //CLASSE DE EXCECAO	
@@ -27,37 +40,6 @@ public:
 	Saiu_do_chat(std::string nome, std::string msg) : std::runtime_error(std::string(nome + msg).c_str()) {}
 };
 
-
-//===============================================
-//CLASSE DE EXCECAO	
-//===============================================
-
-//Inicializa o servidor com configuracoes basicas
-//Cria array inicial para chats com capacidade 2
-Server::Server(int my_port) : size_chats(2),
-							  num_chats(0),
-							  num_fd(1),
-							  my_port(my_port)
-{
-	chats = new Chat*[size_chats];		//Alocacao dinamica do array de chats
-}
-
-//Libera recursos alocados dinamicamente
-Server::~Server()
-{
-	delete[] chats;
-
-	for (Livro* l : livros) {
-    	delete l;
-    }
-    livros.clear();
-}
-
-//Retorna ponteiro para array de chatd
-Chat **Server::get_chats()
-{
-	return chats;
-}
 
 //Configura e inicializa socket do servidor
 //Cria socket, define opcoes, faz bind e listen na porta especificada
@@ -157,34 +139,6 @@ void Server::listen_socket()
 
 	std::cout << "Estamos online na porta: " << my_port << std::endl;
 }
-//===============================================
-//ADICAO DE CHATS
-//===============================================
-
-//Adiciona um novo chat ao servidor com realocacao dinamica do array
-//Implementa padrao de array redimensionavel
-void Server::add_chat(Chat *chat)
-{
-	if (num_chats >= size_chats)
-	{
-		Chat **aux = new Chat *[size_chats];
-		for (int i = 0; i < size_chats; i++)
-		{
-			aux[i] = chats[i];	//copia ponteiros
-		}
-		delete[] chats;		//liber array antigo
-
-		//Aloca novo array com dobro de capacidade		
-		chats = new Chat *[size_chats * 2];
-		for (int i = 0; i < size_chats; i++)
-		{
-			chats[i] = aux[i];	//restaura ponteiros
-		}
-		delete [] aux;		//libera array temporario
-		size_chats *= 2;	//atualiza capacidade
-	}
-	chats[num_chats++] = chat; //adiciona novo chat
-}
 
 
 //===============================================
@@ -195,7 +149,8 @@ void Server::add_chat(Chat *chat)
 void Server::run()
 {
 	int ready;
-	int timeout = 10 * 60 * 1000; //5 minutos em milissegundos
+	int timeout = 5 * 60 * 1000; //5 minutos em milissegundos
+
 	while (true)		//loop infinito do servidor
 	{
 		try
@@ -304,12 +259,12 @@ void Server::processa_fd(int &ready)
 							//Recupera todas as mensagens do banco
                             std::vector<std::vector<std::string>> ret = database.executarQuery("SELECT * FROM mensagem;");
 			                for(std::vector<std::string> re : ret){
-								re[1].push_back('~');
+								re[1].push_back(' ');
 				                envia_msg(re[1].c_str(), strlen(re[1].c_str()), fd_totais[num_fd-1].fd);
                                 envia_msg(re[2].c_str(), strlen(re[2].c_str()), fd_totais[num_fd-1].fd);
 			                }
 			                database.desconectar();
-							std::string msg = "Você está online~~";
+							std::string msg = "~Você está online~";
 							envia_msg(msg.c_str(), msg.size(), fd_totais[num_fd-1].fd);
 		                }catch(std::exception& e){
 			                std::cerr << e.what() << std::endl;
@@ -393,14 +348,14 @@ void Server::receber_descritor(int index)
 		std::string matricula = std::string(msg).substr(count2, std::string(msg).size());
 
 		//Cria e configura objeto do cliente
-		Usuario *user = new Aluno;
+		Usuario *user = new Client;
 		user->setNome(nome);
 		user->setMatricula(matricula);
         user->setForum(forum);
 		clients.insert({index, user});	//Armazena no mapa
 
 		//Cria e armazena o objeto livro (relacionado ao usuario)
-		Livro *livro = new Livro(user, forum, std::to_string(index));
+		Livro *livro = new Livro(user, forum, id);
 
 		// armazena o livro
 		livros.push_back(livro);
@@ -439,18 +394,11 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 	//formata mensagem : "[Nome] mensagem"
 	std::string msg = '[' + user->getNome() + "] " + conteudo.substr(4);
 	std::string dataHora = getCurrentDateTime();
-    dataHora.push_back('~');
 
 	//CASO 1:MENSAGEM DE BROADCAST
 	if (prefixo.compare("[!] ") == 0)
 	{	
-		//Armazena mensagem no banco de dados
-        std::string safe = escapeSql(msg);
 
-        Database database;
-		database.conectar();
-		database.executarQuery("INSERT INTO mensagem (conteudo, idUsuario,idChat) VALUES ('" + safe + "'," + std::to_string(0) + "," +std::to_string(0) + "); ");
-		database.desconectar();
 		//envia para todos os clientes exceto o remetente
 		for (auto i : clients)
 		{
@@ -458,8 +406,17 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 			{
 				try
 				{
+					dataHora.push_back('\n');
 					envia_msg(dataHora.c_str(), dataHora.size(), fd_totais[i.first].fd);	//envia timestamps
 					envia_msg(msg.c_str(), strlen(msg.c_str()), fd_totais[i.first].fd);		//envia mensagens
+
+					//Armazena mensagem no banco de dados
+                    std::string safe = escapeSql(msg);
+					
+                    Database database;
+			        database.conectar();
+			        database.executarQuery("INSERT INTO mensagem (conteudo, idUsuario,idChat) VALUES ('" + safe + "'," + std::to_string(0) + "," +std::to_string(0) + "); ");
+					database.desconectar();
 				}
 				catch (std::exception &e)
 				{
