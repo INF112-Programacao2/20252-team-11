@@ -16,6 +16,7 @@ class Usuario{
         std::string nome;
         std::string matricula;
         std::string senha;
+        std::string forum;
         std::vector<std::string> interesses;        // vai ser só o histórico
         std::vector<std::string> livros;        // mudar para armazenar livros...
         float debito;
@@ -44,6 +45,7 @@ class Usuario{
         std::string getEmail();
         void setNome(std::string nome);
         void setMatricula(std::string matricula);
+        void setForum(std::string forum);
         // funcionalidades
         bool autenticar(std::string matricula,std::string senha);       // overload
         bool autenticar(std::string nome);

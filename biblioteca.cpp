@@ -13,11 +13,11 @@ Biblioteca::~Biblioteca() {
 
 }
 
-    std::vector<Livro*>& Biblioteca::getLivros() const {
+    std::vector<Livro*> Biblioteca::getLivros() const {
         return _livros;
     }
 
-    std::vector<Usuario*>& Biblioteca::getUsuarios() const {
+    std::vector<Usuario*> Biblioteca::getUsuarios() const {
         return _usuarios;
     }
 

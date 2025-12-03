@@ -19,8 +19,8 @@ class Biblioteca {
     Biblioteca();
     ~Biblioteca();
 
-    std::vector<Livro*>& getLivros() const;
-    std::vector<Usuario*>& getUsuarios() const;
+    std::vector<Livro*> getLivros() const;
+    std::vector<Usuario*> getUsuarios() const;
 
 
     void addUsuario(Usuario* novoUsuario);

@@ -470,3 +470,7 @@ void Usuario::setNome(std::string nome){
 void Usuario::setMatricula(std::string matricula){
     this->matricula = matricula;
 }
+
+void Usuario::setForum(std::string forum){
+    this->forum = forum;
+}
