@@ -30,6 +30,21 @@ Chat::~Chat(){
 	delete[] participantes;	//libera array
 }
 
+Livro& Chat::getLivro() {
+	livro = novoLivro
+}
+
+
+
+
+
+
+
+
+
+
+
+
 //retorna array de mensagens
 Mensagem** Chat::getMensagens(){
 	return mensagens;
@@ -87,4 +102,6 @@ void Chat::addParticipante(Usuario* usuario){
 	}
 	participantes[num_participantes++] = usuario;	//adiciona participante
 
+
 }
+
