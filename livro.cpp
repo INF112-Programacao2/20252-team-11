@@ -2,7 +2,7 @@
 #include "livro.h"
 
 //Construtor 
-Livro::Livro(Usuario *usuario, std::string nome, std::string id): _leitorAtual(usuario), _nome(nome),_id(id){}
+Livro::Livro(std::string nome, std::string id): _nome(nome),_id(id){}
 
 //Cada get retorna seu dado correspondente
 std::string Livro::getId(){
@@ -12,27 +12,10 @@ std::string Livro::getNome(){
     return _nome;
 }
 
-Usuario* Livro::getLeitorAtual(){
-    return _leitorAtual;
+void Livro::setId(std::string id) {
+    this->_id = id;
 }
 
-//Adiciona leitor atual ao vetor de leitores historicos
-//Evita duplicatas verificando matricula
-void Livro::registrarLeitorAtual() {
-    
-    if (_leitorAtual != nullptr) {    //verifica se ha leitor atual
-        //percorre leitores existentes para evitar duplicacao
-        
-        for (Usuario* leitor : _leitores) {
-            if (leitor->getMatricula() == _leitorAtual->getMatricula()) {
-                return; //leitor ja registrado, nao faz nada
-            }
-        }
-        _leitores.push_back(_leitorAtual); //Adiciona novo leitor ao historico
-    }
+void Livro::setNome(std::string nome) {
+    this->_nome = nome;
 }
-//define novo leitor atual(substitui o anterior)
-void Livro::setLeitorAtual(Usuario *novoLeitor){
-    _leitorAtual=novoLeitor;
-}
-

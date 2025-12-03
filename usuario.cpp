@@ -314,12 +314,10 @@ bool Usuario::autenticar(std::string matricula, std::string senha)
 //Busca livros no sistema pergamum por titulo/autor/palavra-chave
 //Retorna vetor de estruturas Livro com nome e numero de chamada
 //Lanca excecao se nenhum resultado for encontrado
-std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) { 
+std::vector<Livro> Usuario::buscarLivros(std::string _nome) { 
     CURL *curl = curl_easy_init();
     std::vector<Livro> resultados;
     std::string phpsessid = this->getCookie();
-
-    if (!curl) return resultados;
 
     std::string response;
     struct curl_slist *headers = NULL;
@@ -395,22 +393,22 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {
         //Para cada titulo encontrado, procura o numero de chamada correspondente
         for (auto it = titulos_begin; it != titulos_end; ++it) {
             std::smatch title_match = *it;
-            Livro livro;
-            livro.nome = std::regex_replace(title_match[1].str(), std::regex("\\s+"), " ");
+            Livro livro("", "");
+            livro.setNome( std::regex_replace(title_match[1].str(), std::regex("\\s+"), " "));
 
             //Procura o numero de chamada apos o titulo
             auto start_search_it = title_match.suffix().first;
             
             std::smatch match_num;
             if (std::regex_search(start_search_it, response_clean.cend(), match_num, numero_regex)) {
-                livro.numero_chamada = std::regex_replace(match_num[1].str(), std::regex("\\s+"), " ");
+                livro.setId(std::regex_replace(match_num[1].str(), std::regex("\\s+"), " "));
             } else {
-                livro.numero_chamada = "(sem número)";
+                livro.getId() = "(sem número)";
             }
 
             //Converte para UTF-8 e filtra resultados indesejados
-            livro.nome = iso_8859_1_to_utf8(livro.nome);
-            if (livro.numero_chamada != "Reserva" && livro.nome != "Esta página" && livro.nome != "Todos" && livro.numero_chamada != "(sem número)" && livro.nome != "Referência" && livro.nome != "Marc")
+            livro.setNome(iso_8859_1_to_utf8(livro.getNome()));
+            if (livro.getId() != "Reserva" && livro.getNome() != "Esta página" && livro.getNome() != "Todos" && livro.getId() != "(sem número)" && livro.getNome() != "Referência" && livro.getNome() != "Marc")
                 resultados.push_back(livro);
         }
     } else {
