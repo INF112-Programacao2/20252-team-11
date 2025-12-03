@@ -4,9 +4,12 @@
 using namespace std;
 
 
-// funções auxiliares
+//===================================================================
+//FUNCOES AUXILIARES
+//===================================================================
 
-// converter byte-type
+//Conversao de strings ISO para UTF-8
+//Necessario porque o pergamum retorna os textos em latin1
 std::string iso_8859_1_to_utf8(const std::string &latin1) {
     std::wstring_convert<std::codecvt_utf8<wchar_t>> conv_utf8;
     std::wstring wide;
@@ -18,7 +21,8 @@ std::string iso_8859_1_to_utf8(const std::string &latin1) {
     return conv_utf8.to_bytes(wide);
 }
 
-// gravar dados das requisições
+// Callback para escrita de dados recebidos pelo cURL
+//Concatena os dados recebidos em uma string
 static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     size_t total = size * nmemb;
     std::string* s = static_cast<std::string*>(userp);
@@ -26,13 +30,16 @@ static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* use
     return total;
 }
 
-// setar cookies de ambiente 
+//seta cookies de ambiente 
+//funcao segura para ler variaveis de ambiente 
+//retorna string vazia se a variavel nao existir 
 static std::string getenv_safe(const char* name) {
     const char* v = std::getenv(name);
     return v ? std::string(v) : std::string();
 }
 
-// limpar html
+//limpa html
+//remove espacos em branco do inicio e fim de uma string
 std::string trim(const std::string& str) {
     size_t first = str.find_first_not_of(" \t\n\r\f\v");
     if (std::string::npos == first) {
@@ -42,11 +49,13 @@ std::string trim(const std::string& str) {
     return str.substr(first, (last - first + 1));
 }
 
-// gets
+//Construtor padrao da classe Usuario
+//Inicializa cookie_value automaticamente
 Usuario::Usuario(){
     this->setCookieValue();
 }
 
+//Os gets retornam seus respectivos valores
 string Usuario::getNome() {
     return this->nome;
 }
@@ -71,8 +80,12 @@ string Usuario::getEmail() {
     return this->emailInstitucional;
 }
 
+//===================================================================
+//METODOS DE COOKIE
+//===================================================================
 
 
+//Adiciona um amigo ao array de amigos do usuario
 void Usuario::addAmigo(Usuario& amigo) {        // talvez implementar para banco de dados depois..
     this->n_amigos;
     Usuario* amigos_swap = new Usuario[this->n_amigos+1];
@@ -82,6 +95,9 @@ void Usuario::addAmigo(Usuario& amigo) {        // talvez implementar para banco
     this->amigos = amigos_swap;
 }
 
+//Obtem um cookie de sessao do sistema pergamum
+//Faz uma requisicao inicial para capturar cookie de sessao
+//Retorna o valor do cookie para uso em autenticacoes futuras
 std::string Usuario::setCookieValue() {
     CURL *curl;
     CURLcode res;
@@ -90,6 +106,8 @@ std::string Usuario::setCookieValue() {
 
     curl = curl_easy_init();
     if (curl) {
+
+        //Configura headers para simular navegador
         struct curl_slist *headers = NULL;
         headers = curl_slist_append(headers, "Host: pergamum.ufv.br");
         headers = curl_slist_append(headers, "Upgrade-Insecure-Requests: 1");
@@ -97,15 +115,18 @@ std::string Usuario::setCookieValue() {
         headers = curl_slist_append(headers, "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36");
         headers = curl_slist_append(headers, "Accept-Language: pt-BR,pt;q=0.9,en;q=0.8");
 
+        //Configuracoes de requisicao cURL
         curl_easy_setopt(curl, CURLOPT_URL, "https://pergamum.ufv.br/biblioteca/index.php");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 
+        //Configura gerenciamento de cookies
         curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "");
         curl_easy_setopt(curl, CURLOPT_COOKIEJAR, "");
 
+        //Callback vazio (nao precisa de corpo da resposta)
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, +[](void*, size_t size, size_t nmemb, void*) {
             return size * nmemb;
         });
@@ -113,6 +134,7 @@ std::string Usuario::setCookieValue() {
         res = curl_easy_perform(curl);
 
         if (res == CURLE_OK) {
+            //Extrai os cookies da resposta
             struct curl_slist *cookies;
             struct curl_slist *nc;
             res = curl_easy_getinfo(curl, CURLINFO_COOKIELIST, &cookies);
@@ -121,18 +143,20 @@ std::string Usuario::setCookieValue() {
                 for (nc = cookies; nc; nc = nc->next) {
                     std::string line = nc->data;
 
+                    //Procura  especificamente pelo cookie PHPSESSID
                     if (line.find("PHPSESSID") != std::string::npos) {
                         std::stringstream ss(line);
                         std::string field;
                         std::vector<std::string> parts;
 
+                        //parseia os campos do cookie
                         while (std::getline(ss, field, '\t')) {
                             parts.push_back(field);
                         }
 
                         if (!parts.empty()) {
                             //std::cout << parts.back() << std::endl; 
-                            cookie_value = parts.back();
+                            cookie_value = parts.back();    //ultimo campo eh o valor do cookie
                         }
                     }
                 }
@@ -144,6 +168,7 @@ std::string Usuario::setCookieValue() {
             std::cerr << "Erro na requisição: " << curl_easy_strerror(res) << "\n";
         }
 
+        //Limpeza dos recursos cURL
         curl_easy_cleanup(curl);
         curl_slist_free_all(headers);
     }
@@ -151,14 +176,22 @@ std::string Usuario::setCookieValue() {
     this->cookie_value = cookie_value;
     return cookie_value;
 }
+//===================================================================
+//METODOS DE AUTENTICACAO
+//===================================================================
 
+//Autentica o usuario no pergamum usando matricula e senha
+//Faz login e extrai o nome do usuario via HTML
+//Retorna true se a autenticacao for bem sucedida. False caso contrario
 bool Usuario::autenticar(std::string matricula, std::string senha)
 {
+    //Verifica se ha cookie de sessao disponivel
     std::string phpsessid = this->getCookie();
     if (phpsessid.empty()) {
         throw std::runtime_error("No Cookie Value (PHPSESSID) value provided, should use Usuario.setCookieValue() first.");
     }
 
+    //Constroi cookie header com variaveis de ambiente para analytics
     std::ostringstream cookie_ss;
     cookie_ss << "_ga=GA1.1.2037255739.1755903321; ";
     cookie_ss << "_ga_3GKTCB3HHS=GS2.1.s1755903320" << getenv_safe("o1").c_str() << getenv_safe("g0").c_str()
@@ -177,10 +210,11 @@ bool Usuario::autenticar(std::string matricula, std::string senha)
 
     std::string cookie_header_value = cookie_ss.str();
 
+    //Inicializacao do cURL
     CURL* curl = nullptr;
     CURLcode res;
     std::string response;
-
+    
     curl_global_init(CURL_GLOBAL_DEFAULT);
     curl = curl_easy_init();
     if (!curl) {
@@ -188,6 +222,7 @@ bool Usuario::autenticar(std::string matricula, std::string senha)
         throw std::runtime_error("curl_easy_init failed");
     }
 
+    // Headers HTTP detalhados para simular navegador 
     struct curl_slist* headers = nullptr;
     headers = curl_slist_append(headers, "Host: pergamum.ufv.br");
     headers = curl_slist_append(headers, "Cache-Control: max-age=0");
@@ -206,9 +241,11 @@ bool Usuario::autenticar(std::string matricula, std::string senha)
     headers = curl_slist_append(headers, "Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7");
     headers = curl_slist_append(headers, "Content-Type: application/x-www-form-urlencoded");
 
+    //Escapa caracteres especiais para URL encoding
     char* esc_matricula = curl_easy_escape(curl, matricula.c_str(), (int)matricula.size());
     char* esc_senha     = curl_easy_escape(curl, senha.c_str(), (int)senha.size());
 
+    //Constroi corpo de requisicao POST com credenciais
     std::ostringstream post_ss;
     post_ss << "flag=index.php"
             << "&login=" << (esc_matricula ? esc_matricula : "")
@@ -221,6 +258,7 @@ bool Usuario::autenticar(std::string matricula, std::string senha)
     if (esc_matricula) curl_free(esc_matricula);
     if (esc_senha) curl_free(esc_senha);
 
+    //Configuracoes da requisicao cURL
     curl_easy_setopt(curl, CURLOPT_URL, "https://pergamum.ufv.br/biblioteca_s/php/login_usu.php");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_fields.c_str());
@@ -232,6 +270,7 @@ bool Usuario::autenticar(std::string matricula, std::string senha)
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 
+    //Executa a requisicao
     res = curl_easy_perform(curl);
     if (res != CURLE_OK) {
         std::string err = curl_easy_strerror(res);
@@ -240,7 +279,9 @@ bool Usuario::autenticar(std::string matricula, std::string senha)
         curl_global_cleanup();
         throw std::runtime_error(std::string("curl_easy_perform failed: ") + err);
     }
-
+    
+    //Extrai o nome do usuario da resposta HTML usando regex
+    //Procura por tags que geralmente contem o mome no pergamum
     std::regex rgx("<strong>(.*?)</strong>", std::regex::icase);
     std::sregex_iterator it(response.begin(), response.end(), rgx);
     std::sregex_iterator end;
@@ -249,31 +290,42 @@ bool Usuario::autenticar(std::string matricula, std::string senha)
         nomes.push_back((*it)[1].str());
     }
 
+    //Se encontrou pelo menos 2 tags strong, assume que o segundo eh o nome
     if (nomes.size() > 1) {     // seta o nome do Usuario
-        this->nome = iso_8859_1_to_utf8(nomes[1]); 
-    }
+        this->nome = iso_8859_1_to_utf8(nomes[1]);  //Converte de latin1 para UTF-8
+    }    
 
 //    std::cout << "Nomes extraidos (" << nomes.size() << "):\n";
 //   for (size_t i = 0; i < nomes.size(); ++i) {
 //        std::cout << " [" << i << "] " << nomes[i] << "\n";
 //    }
 
+    //Limpeza dos recursos cURL
     curl_slist_free_all(headers);
     curl_easy_cleanup(curl);
     curl_global_cleanup();
 
-    //std::cout << nomes[1];
+    //Logica de autenticacao = verifica se a resposta contem "Edi"
     bool autenticou=true;
     string chave_er = "Edi";
 
+    // retorna true se NAO encontrar "Edi" no nome (indicando sucesso)
     return (!(nomes[1].find(chave_er)!=string::npos));
 }
 
+//Overload simplificado de autenticacao - define o nome
 bool Usuario::autenticar(std::string nome) {
     this->nome = nome;
     return true;
 }
 
+//===================================================================
+//BUSCA DE LIVROS
+//===================================================================
+
+//Busca livros no sistema pergamum por titulo/autor/palavra-chave
+//Retorna vetor de estruturas Livro com nome e numero de chamada
+//Lanca excecao se nenhum resultado for encontrado
 std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) { 
     CURL *curl = curl_easy_init();
     std::vector<Livro> resultados;
@@ -284,6 +336,7 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {
     std::string response;
     struct curl_slist *headers = NULL;
 
+    //Headers para requisicao AJAX ao pergamum
     headers = curl_slist_append(headers, "Host: www.pergamum.ufv.br");
     headers = curl_slist_append(headers, "sec-ch-ua-platform: \"Windows\"");
     headers = curl_slist_append(headers, "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36");
@@ -296,6 +349,7 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {
     headers = curl_slist_append(headers, "Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7");
     headers = curl_slist_append(headers, "Content-Type: application/x-www-form-urlencoded");
 
+    //Cookie header com sessao
     std::string cookie =
         "_ga=GA1.1.2037255739.1755903321; "
         "_ga_3GKTCB3HHS=GS2.1.s1755903320;"
@@ -305,6 +359,7 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {
         "PHPSESSID=" + phpsessid;
     curl_easy_setopt(curl, CURLOPT_COOKIE, cookie.c_str());
 
+    //URL encode do termo de busca
     char *escaped_nome_ptr = curl_easy_escape(curl, _nome.c_str(), _nome.length());
     if (!escaped_nome_ptr) {
         std::cerr << "Erro ao fazer URL-encode do nome." << std::endl;
@@ -314,10 +369,12 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {
     std::string escaped_nome(escaped_nome_ptr);
     curl_free(escaped_nome_ptr); 
 
+    //Constroi corpo requisicao POST com parametros de busca
     std::string data = 
         "rs=ajax_resultados&rst=&rsrnd=1756848921468&rsargs[]=20&rsargs[]=0&rsargs[]=1&rsargs[]=" + escaped_nome +
         "&rsargs[]=&rsargs[]=%2C&rsargs[]=indice&rsargs[]=&rsargs[]=&rsargs[]=&rsargs[]=&rsargs[]=1&rsargs[]=&rsargs[]=&rsargs[]=obra&rsargs[]=68b738dbdeeaf&rsargs[]=&rsargs[]=&rsargs[]=&rsargs[]=";
 
+    //Configuracoes da requisicao cURL
     curl_easy_setopt(curl, CURLOPT_URL, "https://www.pergamum.ufv.br/biblioteca/index.php");
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
@@ -326,27 +383,34 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 
+    //Executa a requisicao
     CURLcode res = curl_easy_perform(curl);
 
     if (res == CURLE_OK) {
+
+        //Limpa a resposta HTML: remove escapes, new lines, espacos extras
         std::string response_clean = response;
         response_clean = std::regex_replace(response_clean, std::regex("\\\\r\\\\n"), " ");
         response_clean = std::regex_replace(response_clean, std::regex("\\\\'"), "'");
         response_clean = std::regex_replace(response_clean, std::regex("&nbsp;"), " ");
         response_clean = std::regex_replace(response_clean, std::regex("\\s+"), " ");
-        
-        std::regex titulo_regex("<a[^>]*class=['\"]?link_azul['\"]?[^>]*>(.*?)</a>", std::regex::icase);
-        std::regex numero_regex("<a[^>]*class=['\"]?link_reserva['\"]?[^>]*>(.*?)</a>", std::regex::icase);
 
+        //regex para encontrar titulos dos livros 
+        std::regex titulo_regex("<a[^>]*class=['\"]?link_azul['\"]?[^>]*>(.*?)</a>", std::regex::icase);
+
+        //regex para encontrar numeros de chamadas
+        std::regex numero_regex("<a[^>]*class=['\"]?link_reserva['\"]?[^>]*>(.*?)</a>", std::regex::icase);
+    
         auto titulos_begin = std::sregex_iterator(response_clean.begin(), response_clean.end(), titulo_regex);
         auto titulos_end = std::sregex_iterator();
 
-
+        //Para cada titulo encontrado, procura o numero de chamada correspondente
         for (auto it = titulos_begin; it != titulos_end; ++it) {
             std::smatch title_match = *it;
             Livro livro;
             livro.nome = std::regex_replace(title_match[1].str(), std::regex("\\s+"), " ");
 
+            //Procura o numero de chamada apos o titulo
             auto start_search_it = title_match.suffix().first;
             
             std::smatch match_num;
@@ -355,6 +419,8 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {
             } else {
                 livro.numero_chamada = "(sem número)";
             }
+
+            //Converte para UTF-8 e filtra resultados indesejados
             livro.nome = iso_8859_1_to_utf8(livro.nome);
             if (livro.numero_chamada != "Reserva" && livro.nome != "Esta página" && livro.nome != "Todos" && livro.numero_chamada != "(sem número)" && livro.nome != "Referência" && livro.nome != "Marc")
                 resultados.push_back(livro);
@@ -365,20 +431,28 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {
 
     //cout << response << endl;
 
+    //Limpeza dos recursos indesejados
     curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
 
+    //Lanca excecao se nenhum livro for encontrado
     if (resultados.size() == 0) {
         throw std::length_error("No results for the search!\n");
     }
     return resultados;
 }
 
+//===================================================================
+//METODO SETINFO
+//===================================================================
 
+//Obtem informacoes pessoais do usuario do sistema pergamum
+//Acessa a pagina de dados pessoais e extrai CPF e EMAIL    
 void Usuario::setInfo() {
     CURLcode ret;
     CURL *hnd = curl_easy_init(); 
-    // requisição
+    
+    //Variaveis para requisicao
     struct curl_slist *headers;
     std::string html_body;
     std::string phpsessid = this->getCookie(); 
@@ -388,7 +462,8 @@ void Usuario::setInfo() {
         std::cerr << "Erro: curl_easy_init() falhou." << std::endl;
         return; 
     }
-
+    
+    //Headers para simular navegador Chrome no Linu
     headers = NULL;
     headers = curl_slist_append(headers, "Host: pergamum.ufv.br");
     headers = curl_slist_append(headers, "Sec-Ch-Ua: \"Not_A Brand\";v=\"99\", \"Chromium\";v=\"142\"");
@@ -406,7 +481,8 @@ void Usuario::setInfo() {
     headers = curl_slist_append(headers, "Connection: keep-alive");
     
     curl_easy_setopt(hnd, CURLOPT_COOKIE, cookie_header_value.c_str()); 
-
+        
+    //Configuracoes avancadas do cURL
     curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
     curl_easy_setopt(hnd, CURLOPT_URL, "https://pergamum.ufv.br/biblioteca_s/meu_pergamum/dados_pessoais.php");
     curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
@@ -421,9 +497,11 @@ void Usuario::setInfo() {
     curl_easy_setopt(hnd, CURLOPT_FTP_SKIP_PASV_IP, 1L);
     curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);
 
+    //Callback para capturar resposta
     curl_easy_setopt(hnd, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(hnd, CURLOPT_WRITEDATA, &html_body);
 
+    //Executa a requisicao
     ret = curl_easy_perform(hnd);
 
     if (ret != CURLE_OK) {
@@ -434,7 +512,8 @@ void Usuario::setInfo() {
     }
     
 
-    // extração de dados..
+    //Extracao de dados usando regex
+    //Busca CPF no HTML (campo txtCPF)
     std::regex cpf_regex("name=\"txtCPF\"[\\s\\S]*?value=\"([0-9]+)\"");
     std::smatch cpf_match;
     std::string CPF;
@@ -446,7 +525,8 @@ void Usuario::setInfo() {
         std::cerr << "Atenção: CPF não encontrado. O HTML retornado foi provavelmente a página de login." << std::endl;
         CPF = "CPF Não Encontrado";
     }
-
+    
+    //Busca email no HTML (campo txtEmail)
     std::regex email_regex("name=\"txtEmail\"[\\s\\S]*?value=\"(.*?)\"");
     std::smatch email_match;
 
@@ -457,12 +537,20 @@ void Usuario::setInfo() {
         email = "Email Não Encontrado";
     }
 
+    //Armazena o email institucional do objeto
     this->emailInstitucional = email;
 
+    //Limpeza dos recursos cURL
     curl_easy_cleanup(hnd);
     curl_slist_free_all(headers);
 }
 
+//===================================================================
+//SETTERS SIMPLES
+//===================================================================
+
+
+//Cada setter define sua respectiva variavel. setNome define nome, set Matricula define matricula e setForum define forum.
 void Usuario::setNome(std::string nome){
     this->nome = nome;
 }
