@@ -2,7 +2,6 @@
 #define CHAT_H
 
 #include "mensagem/model/mensagem.hpp"
-#include "usuario.h"
 
 //classe chat
 class Chat {
