@@ -195,8 +195,7 @@ void Server::add_chat(Chat *chat)
 void Server::run()
 {
 	int ready;
-	int timeout = 5 * 60 * 1000; //5 minutos em milissegundos
-
+	int timeout = 10 * 60 * 1000; //5 minutos em milissegundos
 	while (true)		//loop infinito do servidor
 	{
 		try
@@ -305,12 +304,12 @@ void Server::processa_fd(int &ready)
 							//Recupera todas as mensagens do banco
                             std::vector<std::vector<std::string>> ret = database.executarQuery("SELECT * FROM mensagem;");
 			                for(std::vector<std::string> re : ret){
-								re[1].push_back(' ');
+								re[1].push_back('~');
 				                envia_msg(re[1].c_str(), strlen(re[1].c_str()), fd_totais[num_fd-1].fd);
                                 envia_msg(re[2].c_str(), strlen(re[2].c_str()), fd_totais[num_fd-1].fd);
 			                }
 			                database.desconectar();
-							std::string msg = "~Você está online~";
+							std::string msg = "Você está online~~";
 							envia_msg(msg.c_str(), msg.size(), fd_totais[num_fd-1].fd);
 		                }catch(std::exception& e){
 			                std::cerr << e.what() << std::endl;
@@ -447,11 +446,18 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 	//formata mensagem : "[Nome] mensagem"
 	std::string msg = '[' + user->getNome() + "] " + conteudo.substr(4);
 	std::string dataHora = getCurrentDateTime();
+    dataHora.push_back('~');
 
 	//CASO 1:MENSAGEM DE BROADCAST
 	if (prefixo.compare("[!] ") == 0)
 	{	
+		//Armazena mensagem no banco de dados
+        std::string safe = escapeSql(msg);
 
+        Database database;
+		database.conectar();
+		database.executarQuery("INSERT INTO mensagem (conteudo, idUsuario,idChat) VALUES ('" + safe + "'," + std::to_string(0) + "," +std::to_string(0) + "); ");
+		database.desconectar();
 		//envia para todos os clientes exceto o remetente
 		for (auto i : clients)
 		{
@@ -459,17 +465,8 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 			{
 				try
 				{
-					dataHora.push_back('\n');
 					envia_msg(dataHora.c_str(), dataHora.size(), fd_totais[i.first].fd);	//envia timestamps
 					envia_msg(msg.c_str(), strlen(msg.c_str()), fd_totais[i.first].fd);		//envia mensagens
-
-					//Armazena mensagem no banco de dados
-                    std::string safe = escapeSql(msg);
-					
-                    Database database;
-			        database.conectar();
-			        database.executarQuery("INSERT INTO mensagem (conteudo, idUsuario,idChat) VALUES ('" + safe + "'," + std::to_string(0) + "," +std::to_string(0) + "); ");
-					database.desconectar();
 				}
 				catch (std::exception &e)
 				{
