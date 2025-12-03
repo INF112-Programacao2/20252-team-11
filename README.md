@@ -60,12 +60,13 @@ O sistema automaticamente coleta os dados para as devidas classes (tendo Forneci
 
 ## Objetivo do Projeto
 
-O sistema busca:
+O sistema busca tais objetivos:
 
-* Integrar dados acadêmicos ao processo de organização de estudos;
-* Promover grupos de estudo baseados em perfis reais de usuários;
-* Facilitar a comunicação entre alunos e professores;
-* Unir diferentes setores da universidade em uma única ferramenta acessível.
+* Integração dos dados acadêmicos ao processo de organização de estudos;
+* Promoção dos grupos de estudo baseados em perfis reais de usuários;
+* Facilitamento da comunicação entre alunos e professores;
+* Otimização do processo de estudo;
+* União dos diferentes setores da universidade em uma única ferramenta acessível.
 
 ---
 
