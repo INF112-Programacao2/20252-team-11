@@ -15,8 +15,6 @@ DEMO = demo
 CLIENT_SRCS = main_client.cpp client.cpp usuario.cpp aluno.cpp professor.cpp \
               biblioteca.cpp livro.cpp chat.cpp forum.cpp grupo.cpp
 SERVER_SRCS = main_server.cpp server.cpp
-BUSCA_SRCS = busca_livros.cpp livro.cpp
-DEMO_SRCS = demoInfo.cpp demoUsuario.cpp
 
 # ==============================================
 # REGRAS PRINCIPAIS
