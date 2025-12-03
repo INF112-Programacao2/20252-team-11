@@ -30,18 +30,14 @@ Chat::~Chat(){
 	delete[] participantes;	//libera array
 }
 
+//Retorna uma referencia ao livro
 Livro& Chat::getLivro() {
-	livro = novoLivro
+	return livro;
 }
 
-
-
-
-
-
-
-
-
+void Chat::setLivro(const Livro& novoLivro) {
+livro = novoLivro; //usa operador de atribuicao
+}
 
 
 
@@ -104,4 +100,5 @@ void Chat::addParticipante(Usuario* usuario){
 
 
 }
+
 
