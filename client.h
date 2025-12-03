@@ -17,7 +17,7 @@
 #include <netdb.h>
 #include "chat.h"
 
-class Client : public Usuario {
+class Client{
 	private:
 		std::string address;
 		std::string port;

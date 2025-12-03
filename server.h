@@ -25,6 +25,7 @@
 #include "forum.h"
 #include <ctime>
 #include <sstream>
+#include "aluno.h"
 
 //Classe server
 class Server {

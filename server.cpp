@@ -393,7 +393,7 @@ void Server::receber_descritor(int index)
 		std::string matricula = std::string(msg).substr(count2, std::string(msg).size());
 
 		//Cria e configura objeto do cliente
-		Usuario *user = new Client;
+		Usuario *user = new Aluno;
 		user->setNome(nome);
 		user->setMatricula(matricula);
         user->setForum(forum);
