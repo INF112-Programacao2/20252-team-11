@@ -17,7 +17,7 @@
 #include <netdb.h>
 #include "chat.h"
 
-class Client : public Usuario { //Classe cliente herda de Usuario
+class Client{
 	private:
 //atributos privados
 		std::string address; 	//endereco ip do servidor

@@ -53,7 +53,7 @@ int main() {
     a.run();
     a.close();
         
-    auto debitos = a.searchDebito();
+   /* auto debitos = a.searchDebito();
 
     cout << "\n\nDÉBITOS DO USUÁRIO:\nTotal de debitos no momento: " << debitos[0].debt << "\n\nHISTÓRICO DE DÉBITOS:\n---------------------------------------\n";
 
@@ -61,7 +61,7 @@ int main() {
         cout << "| Debt:\t" << debito.nome << "\n|\tValor:\t" << debito.debt << "\n";
     }
     cout << "---------------------------------------\n";
-
+*/
 }
 
 
