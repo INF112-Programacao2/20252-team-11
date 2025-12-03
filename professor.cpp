@@ -92,14 +92,6 @@ vector<string> parseServidor(string texto)
     return resultado;
 }
 
-bool Professor::autenticar(std::string nome, std::string senha) {
-    this->nome = nome;
-    this->setInfo();
-    if (this->getDep() == senha)
-        return true;
-    else return false;
-}
-
 //METODO SETINFO
 
 //Obtem informacoes do professor do sistema da UFV
@@ -172,6 +164,7 @@ void Professor::setInfo() {
     this->telefone = campos[3];
     this->departamento = campos[5];
 }
+
 void Professor::InteracaoUsuario() {
     //Implementacao do fluxo interativo para professor
     //autenticacao simplificada para professores (nome)
