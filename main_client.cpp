@@ -10,42 +10,57 @@
 #include "client.h"
 using namespace std;
 
+//A funcao InteracaoUsuario tem o proposito de proporcionar fluxo interativo para usuarios genericos
 void InteracaoUsuario(Usuario a) {
+    
+    //Obtem cookie de sessao do sistema pergamum
     a.setCookieValue();
     std::cout << "Cookie de sessão: " << a.getCookie()<< std::endl;
+
+    //Socilita credenciais de sessao
     string matricula, senha;
     cout << "Digite sua matricula: ";
     cin >> matricula;
     cout << "Digite a sua senha da BBT: ";
     cin >> senha;
 
+    //Tenta autenticar no sistema pergamum
     bool autenticou = a.autenticar(matricula, senha);
 
     if (autenticou) {
-        a.setInfo();
+        a.setInfo();    //obtem informacoes adicionais ao usuario
     }
     else 
         cout << "Matrícula ou senha inválida!\n";
+
+    //loop principal do menu interativo
     while(true){  
         int escolha;
         cout<<"Escolha a função que você deseja executar:\n1 - Pesquisa de livros\n2 - Visualizar perfil\n3 - Encerrar programa\n";
         cin>>escolha;
+
+        //OPCAO 1: BUSCA DE LIVROS
         if (escolha==1){
             cout << "\n\n-------------\nPESQUISA DE LIVROS:\n-------------\nDigite os termos para a pesquisa: ";
             string pesquisa;
             cin >> pesquisa;
             try {
+                //Busca livros no sistema
                 auto livros = a.buscarLivros(pesquisa);
                 cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].nome << " \n| N.Chamada:\t"<< livros[2].numero_chamada << "\n---------------------------------------\n";
                 }
             catch (exception&  e) {
-                cerr << e.what() << endl;;
+                cerr << e.what() << endl;;    //exibe werro se busca falhar
             }
         }
+
+        //OPCAO 2: VISUALIZAR PERFIL
+        //exibe informacoes basicas do usuario
         if(escolha==2){
             cout << "---------------------------------------\n| Nome:\t\t" << a.getNome() << "\n" << "| Email: \t" << a.getEmail() <<"\n| CPF:\t\t" << "\n---------------------------------------\n";
 
         }
+        //OPCAO 3: ENCERRAR PROGRAMA
         if (escolha==3){
             exit(0);
         }
@@ -53,7 +68,10 @@ void InteracaoUsuario(Usuario a) {
     }
 }
 
+//FLUXO INTERATIVO PARA ALUNOS
 void InteracaoAluno(Aluno b) {
+
+    //configuracao inicial parecida com usuario
     b.setCookieValue();
     std::cout << "Cookie de sessão: " << b.getCookie()<< std::endl;
     string matricula, senha;
@@ -65,14 +83,18 @@ void InteracaoAluno(Aluno b) {
     bool autenticou = b.autenticar(matricula, senha);
 
     if (autenticou) {
-        b.setInfo();
+        b.setInfo();    //obtem informacoes especificas de aluno
     }
     else 
         cout << "Matrícula ou senha inválida!\n";
+
+    //Loop principal do menu para alunos
     while(true){  
         int escolha;
         cout<<"Escolha a função que você deseja executar:\n1 - Pesquisa de livros\n2 - Consultar o débito\n3 - Visualizar perfil\n4 - Encerrar programa\n";
         cin>>escolha;
+
+        //OPCAO 1: PESQUISA DE LIVROS(com opcao de acessar o forum)
         if (escolha==1){
             cout << "\n\n-------------\nPESQUISA DE LIVROS:\n-------------\nDigite os termos para a pesquisa: ";
             string pesquisa;
@@ -80,6 +102,8 @@ void InteracaoAluno(Aluno b) {
             try {
                 auto livros = b.buscarLivros(pesquisa);
                 cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].nome << " \n| N.Chamada:\t"<< livros[2].numero_chamada << "\n---------------------------------------\n";
+
+                //oferece opcao de conectar ao servidor de char do livro
                 cout <<"\n\nDeseja acessar o forum do livro?\n\t->Se sim, digite 1.\t\t->Se não, digite qualquer outro número. ";
                 cin>>escolha;
                 if(escolha=1){
@@ -89,6 +113,8 @@ void InteracaoAluno(Aluno b) {
                     string nome;
                     cout << "Digite o nome do cliente: ";
                     getline(cin, nome);
+
+                    //conecta ao servidor de chat
                     cliente.connect_socket(address, port, nome, "Abelardo", "123");
                     cliente.run();
                     cliente.close();
@@ -98,20 +124,27 @@ void InteracaoAluno(Aluno b) {
                 cerr << e.what() << endl;;
             }
         }
+
+        //OPCAO 2: CONSULTA DE DEBITOS
         if(escolha==2){
+            //busca debitos do aluno no sistema
             auto debitos = b.searchDebito();
 
             cout << "\n\nDÉBITOS DO USUÁRIO:\nTotal de debitos no momento: " << debitos[0].debt << "\n\nHISTÓRICO DE DÉBITOS:\n---------------------------------------\n";
 
+            //lista todos os debitos
             for (Usuario::Debito debito : debitos) {
                 cout << "| Debt:\t" << debito.nome << "\n|\tValor:\t" << debito.debt << "\n";
             }
             cout << "---------------------------------------\n";
         }
+        //OPCAO 3: VISUALIZAR PERFIL COMPLETO
         if(escolha==3){
+            //exibe todas as informacoes do aluno
             cout << "---------------------------------------\n| Nome:\t\t" << b.getNome() << "\n" << "| Email: \t" << b.getEmail() <<"\n| CPF:\t\t" << b.getCPF() << "\n| Curso:\t"<< b.getCurso() << "\n| Admissão:\t"<< b.getAdmissao() << "/" << b.getSem() << "\n| Sexo:\t\t" << b.getSexo() << "\n---------------------------------------\n";
 
         }
+        //OPCAO 4: ENCERRAR PROGRAMA
         if (escolha==4){
             exit(0);
         }
@@ -119,7 +152,10 @@ void InteracaoAluno(Aluno b) {
     }
 }
 
+//FLUXO INTERATIVO DO PROFESSOR
 void InteracaoProfessor(Professor c) {
+
+    //autenticacao simplificada para professores (nome)
     c.setCookieValue();
     std::cout << "Cookie de sessão: " << c.getCookie()<< std::endl;
     string nome;
@@ -127,18 +163,24 @@ void InteracaoProfessor(Professor c) {
     getline(cin, nome);
     bool autenticou = c.autenticar(nome);
     if (autenticou) {
-        c.setInfo();
+        c.setInfo(); //busca informacoes do professor
     }
+
+    //loop principal do menu p/ professores
     while(true){
         int escolha;
         cout<<"Escolha a funcão você deseja executar:\n1 - Pesquisa de livros\n2 - Visualizar perfil\n3 - Encerrar programa\n";
         cin>>escolha;
+
+        //OPCAO 1: PESQUISA DE LIVROS
         if(escolha==1){
             cout << "\n\n-------------\nPESQUISA DE LIVROS:\n-------------\nDigite os termos para a pesquisa: ";
             string pesquisa;
             cin >> pesquisa;
             auto livros = c.buscarLivros(pesquisa);
             cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].nome << " \n| N.Chamada:\t"<< livros[2].numero_chamada << "\n---------------------------------------\n";
+            
+            //opcao de se conectar ao servidor de chat
             cout <<"\n\nDeseja acessar o forum do livro?\nSe sim, digite 1,Caso contrario, digite qualquer outro número: ";
             cin>>escolha;
             if(escolha=1){
@@ -153,25 +195,34 @@ void InteracaoProfessor(Professor c) {
                 cliente.close();
                 }
         }
+
+        //OPCAO 2: VISUALIZAR PERFIL PESSOAL
         if(escolha==2){
             cout << "---------------------------------------\n| Nome:\t\t" << c.getNome() << "\n" << "| Email: \t" << c.getEmail() << "\n| Orgao:\t"<< c.getOrgao() << "\n| Departamento:\t"<< c.getDep() << "\n| Telefone:\t\t" << c.getTelefone() << "\n" << "\n---------------------------------------\n";
         }
+
+        //OPCAO 3: ENCERRAR
         if(escolha==3){
             exit(0);
         }
     }
 }
 
-
+//main - ponto de entrada principal do cliente
 int main() {
+
+    //instancias de cada tipo de usuario
     Usuario a;
     Aluno b;
     Professor c;
 
+    //menu de selecao do tipo de usuario
     cout << "Selecione no que deseja fazer login:\n0 - Usuario\n1 - Aluno\n2 - Professor\nResposta: ";
     int resp; 
     cin >> resp;
     cin.ignore();
+
+    //roteia para a funcao interativa correspondente
     switch (resp)
     {
         case 0:
