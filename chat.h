@@ -13,6 +13,7 @@ class Chat {
 		int num_mensagens;           // numero atual de mensagens
 		int size_mensagens;          // capacidade do array mensagens
 		int size_participantes;      // capacidade do array participantes
+		Livro livro;
 
 	public:
 	//construtor e destrutor
@@ -23,8 +24,12 @@ class Chat {
 		Usuario** getParticipantes();		//retorna array de participantes
 		void addMensagem(Mensagem* mensagem);	//adiciona mensagem
 		void addParticipante(Usuario* usuario);	//adiciona participante
+
+		Livro& getLivro();
+		void setLivro(const Livro& novoLivro)
 };
 
 
 #endif
+
 
