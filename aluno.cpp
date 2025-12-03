@@ -553,6 +553,90 @@ std::vector<Usuario::Debito> Aluno::searchDebito() {
 
     return resultados;    //retorna vetor de debitos
 }
+void Aluno :: InteracaoUsuario(){
+
+    //configuracao inicial parecida com usuario
+    setCookieValue();
+    std::cout << "Cookie de sessão: " << getCookie()<< std::endl;
+    string matricula, senha;
+    cout << "Digite sua matricula: ";
+    cin >> matricula;
+    cout << "Digite a sua senha da BBT: ";
+    cin >> senha;
+
+    bool autenticou = autenticar(matricula, senha);
+
+    if (autenticou) {
+        setInfo();    //obtem informacoes especificas de aluno
+    }
+    else 
+        cout << "Matrícula ou senha inválida!\n";
+
+
+    //Loop principal do menu para alunos
+    while(true){  
+        int escolha;
+        cout<<"Escolha a função que você deseja executar:\n1 - Pesquisa de livros\n2 - Consultar o débito\n3 - Visualizar perfil\n4 - Encerrar programa\nResposta: ";
+        cin>>escolha;
+
+        //OPCAO 1: PESQUISA DE LIVROS(com opcao de acessar o forum)
+        if (escolha==1){
+            cout << "\n\n-------------\nPESQUISA DE LIVROS:\n-------------\nDigite os termos para a pesquisa: ";
+            string pesquisa;
+            cin >> pesquisa;
+            try {
+                auto livros = buscarLivros(pesquisa);
+                cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].nome << " \n| N.Chamada:\t"<< livros[2].numero_chamada << "\n---------------------------------------\n";
+
+                //oferece opcao de conectar ao servidor de char do livro
+                cout <<"\n\nDeseja acessar o forum do livro?\n\t->Se sim, digite 1.\t\t->Se não, digite qualquer outro número. ";
+                cin>>escolha;
+                if(escolha=1){
+                    string address = "127.0.0.1";
+                    string port = "12345";
+                    Client cliente;
+                    string nome;
+                    cout << "Digite o nome do cliente: ";
+                    getline(cin, nome);
+
+                    //conecta ao servidor de chat
+                    cliente.connect_socket(address, port, nome, "Abelardo", "123");
+                    cliente.run();
+                    cliente.close();
+                }
+            }
+            catch (exception&  e) {
+                cerr << e.what() << endl;;
+            }
+        }
+
+        //OPCAO 2: CONSULTA DE DEBITOS
+        if(escolha==2){
+            //busca debitos do aluno no sistema
+            auto debitos = searchDebito();
+
+            cout << "\n\nDÉBITOS DO USUÁRIO:\nTotal de debitos no momento: " << debitos[0].debt << "\n\nHISTÓRICO DE DÉBITOS:\n---------------------------------------\n";
+
+            //lista todos os debitos
+            for (Usuario::Debito debito : debitos) {
+                cout << "| Debt:\t" << debito.nome << "\n|\tValor:\t" << debito.debt << "\n";
+            }
+            cout << "---------------------------------------\n";
+        }
+        //OPCAO 3: VISUALIZAR PERFIL COMPLETO
+        if(escolha==3){
+            //exibe todas as informacoes do aluno
+            cout << "---------------------------------------\n| Nome:\t\t" << getNome() << "\n" << "| Email: \t" << getEmail() <<"\n| CPF:\t\t" << getCPF() << "\n| Curso:\t"<< getCurso() << "\n| Admissão:\t"<< getAdmissao() << "/" << getSem() << "\n| Sexo:\t\t" << getSexo() << "\n---------------------------------------\n";
+
+        }
+        //OPCAO 4: ENCERRAR PROGRAMA
+        if (escolha==4){
+            exit(0);
+        }
+
+    }
+}
+
 
 
 

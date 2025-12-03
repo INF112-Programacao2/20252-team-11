@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <sys/socket.h>
 
+
 class Usuario{
     protected:
         std::string nome;                        //nome do usuario
@@ -60,7 +61,7 @@ class Usuario{
         void virtual setInfo();                                    // Define informacoes do usuario (metodo virtual)
         std::vector<Livro> buscarLivros(std::string busca);       // Busca livros baseado em string de busca
         std::string setCookieValue();                             // Define e retorna valor do cookie
-
+        void virtual InteracaoUsuario();                        // Fluxo interativo do usuario
 };
 
 #endif

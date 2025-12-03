@@ -92,14 +92,6 @@ vector<string> parseServidor(string texto)
     return resultado;
 }
 
-bool Professor::autenticar(std::string nome, std::string senha) {
-    this->nome = nome;
-    this->setInfo();
-    if (this->getDep() == senha)
-        return true;
-    else return false;
-}
-
 //METODO SETINFO
 
 //Obtem informacoes do professor do sistema da UFV
@@ -173,3 +165,60 @@ void Professor::setInfo() {
     this->departamento = campos[5];
 }
 
+void Professor::InteracaoUsuario() {
+    //Implementacao do fluxo interativo para professor
+    //autenticacao simplificada para professores (nome)
+    setCookieValue();
+    std::cout << "Cookie de sessão: " << getCookie()<< std::endl;
+    string nome, dep;
+    cout << "Digite seu Nome: ";
+    getline(cin, nome);
+    cout << "Digite a sigla do seu Departamento (ex: DMA, DPI): ";
+    cin.ignore();
+    getline(cin, dep);
+    bool autenticou = autenticar(nome, dep);
+    if (autenticou) {
+        setInfo(); //busca informacoes do professor
+    }
+
+    //loop principal do menu p/ professores
+    while(true){
+        int escolha;
+        cout<<"Escolha a funcão você deseja executar:\n1 - Pesquisa de livros\n2 - Visualizar perfil\n3 - Encerrar programa\nResposta: ";
+        cin>>escolha;
+
+        //OPCAO 1: PESQUISA DE LIVROS
+        if(escolha==1){
+            cout << "\n\n-------------\nPESQUISA DE LIVROS:\n-------------\nDigite os termos para a pesquisa: ";
+            string pesquisa;
+            cin >> pesquisa;
+            auto livros = buscarLivros(pesquisa);
+            cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].nome << " \n| N.Chamada:\t"<< livros[2].numero_chamada << "\n---------------------------------------\n";
+            
+            //opcao de se conectar ao servidor de chat
+            cout <<"\n\nDeseja acessar o forum do livro?\nSe sim, digite 1,Caso contrario, digite qualquer outro número: ";
+            cin>>escolha;
+            if(escolha=1){
+                string address = "127.0.0.1";
+                string port = "12345";
+                Client cliente;
+                string nome;
+                cout << "Digite o nome do cliente: ";
+                getline(cin, nome);
+                cliente.connect_socket(address, port, nome, "Abelardo", "123");
+                cliente.run();
+                cliente.close();
+                }
+        }
+
+        //OPCAO 2: VISUALIZAR PERFIL PESSOAL
+        if(escolha==2){
+            cout << "---------------------------------------\n| Nome:\t\t" << getNome() << "\n" << "| Email: \t" << getEmail() << "\n| Orgao:\t"<< getOrgao() << "\n| Departamento:\t"<< getDep() << "\n| Telefone:\t" << getTelefone() << "\n" << "\n---------------------------------------\n";
+        }
+
+        //OPCAO 3: ENCERRAR
+        if(escolha==3){
+            exit(0);
+        }
+    }
+}

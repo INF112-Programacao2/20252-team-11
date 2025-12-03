@@ -17,7 +17,7 @@
 
 ## Visão Geral
 
-**BetterPergamum** é um projeto acadêmico desenvolvido para a disciplina **INF112** da **Universidade Federal de Viçosa (UFV)**. O sistema unifica funcionalidades inspiradas no Pergamum (sistema de bibliotecas) com mecanismos de interação entre alunos e professores, criando uma plataforma integrada e inteligente para comunicação e organização de estudos.
+**BetterPergamum** é um projeto acadêmico desenvolvido para a disciplina **INF112** da **Universidade Federal de Viçosa (UFV)**, ministrada pelo professor Julio Cesar Soares dos Reis. O sistema unifica funcionalidades inspiradas no Pergamum (sistema de bibliotecas) com mecanismos de interação entre alunos e professores, criando uma plataforma integrada e inteligente para comunicação e organização de estudos.
 
 O objetivo principal é **facilitar a conexão entre estudantes**, permitindo a formação de grupos de estudo com base em perfis acadêmicos semelhantes — tudo isso utilizando informações fornecidas pelo próprio sistema da biblioteca.
 

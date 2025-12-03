@@ -11,6 +11,8 @@
 using namespace std;
 
 //A funcao InteracaoUsuario tem o proposito de proporcionar fluxo interativo para usuarios genericos
+<<<<<<< HEAD
+=======
 void InteracaoUsuario(Usuario &a) {
     
     //Obtem cookie de sessao do sistema pergamum
@@ -115,7 +117,7 @@ void InteracaoAluno(Aluno &b) {
                     getline(cin, nome);
 
                     //conecta ao servidor de chat
-                    cliente.connect_socket(address, port, nome, "Abelardo", "123");
+                    cliente.connect_socket(address, port, nome, livros[2].nome, matricula, livros[2].numero_chamada);
                     cliente.run();
                     cliente.close();
                 }
@@ -193,7 +195,7 @@ void InteracaoProfessor(Professor &c) {
                 string nome;
                 cout << "Digite o nome do cliente: ";
                 getline(cin, nome);
-                cliente.connect_socket(address, port, nome, "Abelardo", "123");
+                cliente.connect_socket(address, port, nome, livros[2].nome, "matricula", livros[2].numero_chamada);
                 cliente.run();
                 cliente.close();
                 }
@@ -210,6 +212,7 @@ void InteracaoProfessor(Professor &c) {
         }
     }
 }
+>>>>>>> 7bb4ef69cb85e6b79a0919f7c2be0b05445affe7
 
 //main - ponto de entrada principal do cliente
 int main() {
@@ -237,11 +240,15 @@ int main() {
     }
 
     // Roteamento CORRETO
+<<<<<<< HEAD
+        user->InteracaoUsuario();
+=======
     if (tipo == 1)
         InteracaoAluno(*(Aluno*)user);
 
     else if (tipo == 2)
         InteracaoProfessor(*(Professor*)user);
+>>>>>>> 7bb4ef69cb85e6b79a0919f7c2be0b05445affe7
 
     delete user;
     return 0;

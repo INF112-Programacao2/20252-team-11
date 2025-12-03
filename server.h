@@ -25,16 +25,10 @@
 #include "forum.h"
 #include <ctime>
 #include <sstream>
-#include "aluno.h"
 
 //Classe server
 class Server {
 	private:
-
-		//Gerenciamento do chat
-		Chat** chats;		//Array dinamico de ponteiros para Chat
-		int num_chats;		//Numero atual de chats ativos		
-		int size_chats;		//Capacidade total do array chats
 
 		//Socket do servidor
 		int server;					// Descritor de socket do servidor
@@ -51,10 +45,6 @@ class Server {
 		//Constutor e destrutor
 		Server(int port);
 		~Server();
-
-		//Getters e manipulacao do chat
-		Chat** get_chats();
-		void add_chat(Chat* chat);
 
 		void run();		//inicia o loop do servidor
 
@@ -73,6 +63,7 @@ class Server {
 };
 
 #endif //SERVER_H
+
 
 
 

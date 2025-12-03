@@ -20,7 +20,7 @@ using namespace std;
 */
 
 
-void InteracaoUsuario(Usuario a) {
+void InteracaoUsuario(Aluno a) {
     a.setCookieValue();
     std::cout << "Cookie de sessão: " << a.getCookie()<< std::endl;
     string matricula, senha;
