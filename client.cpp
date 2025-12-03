@@ -29,9 +29,12 @@ void Client::intercepta_msg(){
 		}
 
         for (int i=0; i<bytes_recv; i++){
+			if (msg[i] == '~'){
+				std::cout << '\n';
+				continue;
+			}
 			std::cout << msg[i];
 		}
-		std::cout << std::endl;
         fflush(stdout);
     }
 }
@@ -115,7 +118,7 @@ void Client::send_msg(){
 			msg = std::string(buff);
 		}
 		else{
-			msg = "[!] " + std::string(buff);
+			msg = "[!] " + std::string(buff) + "~~";
 		}
 		if (std::string(buff).size() != 0){
 			try{

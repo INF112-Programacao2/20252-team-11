@@ -26,6 +26,26 @@ static std::string getenv_safe(const char* name) {
     return v ? std::string(v) : std::string();
 }
 
+// limpar html
+std::string trim2(const std::string& str) {
+    size_t first = str.find_first_not_of(" \t\n\r\f\v");
+    if (std::string::npos == first) {
+        return ""; 
+    }
+    size_t last = str.find_last_not_of(" \t\n\r\f\v");
+    return str.substr(first, (last - first + 1));
+}
+
+std::string iso_8859_1_to_utf8_2(const std::string &latin1) {
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> conv_utf8;
+    std::wstring wide;
+
+    for (unsigned char c : latin1) {
+        wide += static_cast<wchar_t>(c);
+    }
+
+    return conv_utf8.to_bytes(wide);
+}
 
 // gets
 string Aluno::getCurso() {
@@ -222,6 +242,126 @@ void Aluno::setInfo() {       // feito
 
     //cout << this->curso << " " << this->admissao << " " << this->sexo << "\n";
 }
+
+std::vector<Usuario::Debito> Aluno::searchDebito() {
+    CURL *curl = curl_easy_init();
+    std::vector<Debito> resultados;
+    std::string phpsessid = this->getCookie();
+
+    if (!curl) return resultados;
+
+    std::string response;
+    struct curl_slist *headers = NULL;
+
+    headers = curl_slist_append(headers, "Host: pergamum.ufv.br");
+    headers = curl_slist_append(headers, "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0");
+    headers = curl_slist_append(headers, "Accept: */*");
+    headers = curl_slist_append(headers, "Origin: https://pergamum.ufv.br");
+    headers = curl_slist_append(headers, "Sec-Fetch-Site: same-origin");
+    headers = curl_slist_append(headers, "Sec-Fetch-Mode: cors");
+    headers = curl_slist_append(headers, "Sec-Fetch-Dest: empty");
+    headers = curl_slist_append(headers, "Referer: https://pergamum.ufv.br/biblioteca_s/meu_pergamum/emp_debito.php");
+    headers = curl_slist_append(headers, "Accept-Language: pt-BR,pt;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+    headers = curl_slist_append(headers, "Content-Type: application/x-www-form-urlencoded");
+
+    std::string cookie = "PHPSESSID=" + phpsessid;
+    curl_easy_setopt(curl, CURLOPT_COOKIE, cookie.c_str());
+
+    std::string data = "rs=ajax_mostra_tabela&rst=&rsrnd=1757165872989&rsargs[]=06/09/2024&rsargs[]=06/09/2025";
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
+
+    curl_easy_setopt(curl, CURLOPT_URL, "https://pergamum.ufv.br/biblioteca_s/meu_pergamum/emp_debito.php");
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+    
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+
+    CURLcode res = curl_easy_perform(curl);
+
+    if (res == CURLE_OK) {
+        std::string response_clean = response;
+        response_clean = std::regex_replace(response_clean, std::regex("\\\\r\\\\n"), " "); 
+        response_clean = std::regex_replace(response_clean, std::regex("\\\\'"), "'");    
+        response_clean = std::regex_replace(response_clean, std::regex("&nbsp;"), " ");
+
+        std::regex nome_regex("class='box_azul_left'>(.*?)</td>", std::regex::icase);
+        std::regex multa_regex("class='box_magenta_c'>(.*?)</td>", std::regex::icase);
+        std::regex tag_re("<.*?>"); 
+
+        std::vector<std::string> nomes_sujos;
+        auto nomes_begin = std::sregex_iterator(response_clean.begin(), response_clean.end(), nome_regex);
+        auto nomes_end = std::sregex_iterator();
+        for (auto it = nomes_begin; it != nomes_end; ++it) {
+            nomes_sujos.push_back((*it)[1].str());
+        }
+
+        std::vector<std::string> multas;
+        auto multas_begin = std::sregex_iterator(response_clean.begin(), response_clean.end(), multa_regex);
+        auto multas_end = std::sregex_iterator();
+        for (auto it = multas_begin; it != multas_end; ++it) {
+            multas.push_back((*it)[1].str());
+        }
+
+        if (!nomes_sujos.empty()) {
+            nomes_sujos.erase(nomes_sujos.begin());
+        }
+        if (!multas.empty()) {
+            multas.erase(multas.begin());
+        }
+
+        for (const auto& nome_sujo : nomes_sujos) {
+            std::string nome_sem_tags = std::regex_replace(nome_sujo, tag_re, "");
+            std::string nome_limpo = trim2(nome_sem_tags);
+            nome_limpo = iso_8859_1_to_utf8_2(nome_limpo);
+            resultados.push_back({nome_limpo, "0"});
+        }
+
+        size_t counter = 0;
+        for (const auto& preco : multas) {
+            if (counter < resultados.size()) {
+                resultados[counter].debt = trim2(preco); 
+            }
+            counter++;
+        }
+
+        double total_debt = 0.0;
+        std::regex remove_prefix("R\\$\\s*"); 
+
+        for (const auto& d : resultados) {
+            std::string numeric_str = d.debt;
+            
+            numeric_str = std::regex_replace(numeric_str, remove_prefix, "");
+            numeric_str = trim2(numeric_str); 
+            std::replace(numeric_str.begin(), numeric_str.end(), ',', '.');
+
+            try {
+                total_debt += std::stod(numeric_str);
+            } catch (const std::exception& e) {
+            }
+        }
+
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(2) << total_debt;
+        std::string total_str = ss.str();
+        
+        std::replace(total_str.begin(), total_str.end(), '.', ',');
+        total_str = "R$ " + total_str;
+
+        resultados.insert(resultados.begin(), {"Total", total_str});
+   
+    } else {
+        std::cerr << "Erro na requisição: " << curl_easy_strerror(res) << std::endl;
+    }
+
+    
+    curl_easy_cleanup(curl);
+    curl_slist_free_all(headers);
+
+    return resultados;
+}
+
 
 
 

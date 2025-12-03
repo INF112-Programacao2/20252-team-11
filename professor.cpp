@@ -26,7 +26,7 @@ string Professor::getTelefone() {
     return this->telefone;
 }
 
-// aux pra setInfo()
+
 vector<string> parseServidor(string texto)
 {
     for (char &c : texto)
@@ -68,60 +68,6 @@ vector<string> parseServidor(string texto)
 //    for (string u : resultado) cout << u << "\n";
 
     return resultado;
-}
-
-string personalInfo(string nome)
-{
-    CURLcode ret;
-    CURL *hnd;
-    struct curl_slist *headers = NULL;
-    string response;
-
-    replace(nome.begin(), nome.end(), ' ', '+');
-    //cout << nome << "\n";
-
-    string corpoReq = "funcao=consultarPorNome&nomeServidor=" + nome + "&cargo=";
-
-    headers = curl_slist_append(headers, "Host: www2.dti.ufv.br");
-    headers = curl_slist_append(headers, "Sec-Ch-Ua-Platform: \"Linux\"");
-    headers = curl_slist_append(headers, "Accept-Language: pt-BR,pt;q=0.9");
-    headers = curl_slist_append(headers, "Sec-Ch-Ua: \"Not_A Brand\";v=\"99\", \"Chromium\";v=\"142\"");
-    headers = curl_slist_append(headers, "Sec-Ch-Ua-Mobile: ?0");
-    headers = curl_slist_append(headers, "X-Requested-With: XMLHttpRequest");
-    headers = curl_slist_append(headers, "Accept: */*");
-    headers = curl_slist_append(headers, "Content-Type: application/x-www-form-urlencoded; charset=UTF-8");
-    headers = curl_slist_append(headers, "Origin: https://www2.dti.ufv.br");
-    headers = curl_slist_append(headers, "Sec-Fetch-Site: same-origin");
-    headers = curl_slist_append(headers, "Sec-Fetch-Mode: cors");
-    headers = curl_slist_append(headers, "Sec-Fetch-Dest: empty");
-    headers = curl_slist_append(headers, "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
-    headers = curl_slist_append(headers, "Priority: u=1, i");
-
-    hnd = curl_easy_init();
-    curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
-    curl_easy_setopt(hnd, CURLOPT_URL, "https://www2.dti.ufv.br/consulta_catalogo_telefonico/scripts/main_db.php");
-    curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
-    curl_easy_setopt(hnd, CURLOPT_POSTFIELDS, corpoReq.c_str());
-    curl_easy_setopt(hnd, CURLOPT_POSTFIELDSIZE_LARGE, (curl_off_t)corpoReq.size());
-
-    curl_easy_setopt(hnd, CURLOPT_HTTPHEADER, headers);
-    curl_easy_setopt(hnd, CURLOPT_REFERER, "https://www2.dti.ufv.br/consulta_catalogo_telefonico/scripts/main.php");
-    curl_easy_setopt(hnd, CURLOPT_USERAGENT, "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36");
-    curl_easy_setopt(hnd, CURLOPT_MAXREDIRS, 50L);
-    curl_easy_setopt(hnd, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
-    curl_easy_setopt(hnd, CURLOPT_SSL_VERIFYPEER, 0L);
-    curl_easy_setopt(hnd, CURLOPT_SSL_VERIFYHOST, 0L);
-
-    curl_easy_setopt(hnd, CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(hnd, CURLOPT_WRITEDATA, &response);
-
-    ret = curl_easy_perform(hnd);
-
-    //cout << "Resposta do servidor:\n" << response << "\n";
-
-    curl_easy_cleanup(hnd);
-    curl_slist_free_all(headers);
-    return response;
 }
 
 void Professor::setInfo() {
@@ -183,6 +129,4 @@ void Professor::setInfo() {
     this->telefone = campos[3];
     this->departamento = campos[5];
 }
-
-
 

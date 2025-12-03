@@ -3,6 +3,13 @@
 //
 #include "server.h"
 
+std::string escapeSql(const std::string& s){
+	std::string out;
+	for (char c : s)
+		out += (c == '\'') ? "''" : std::string(1, c);
+	return out;
+};
+
 class Saiu_do_chat : public std::runtime_error
 {
 public:
@@ -228,6 +235,21 @@ void Server::processa_fd(int &ready)
 							diminuir_array = true;
 							break;
 						}
+		                try{
+                            Database database;
+			                database.conectar();
+                            std::vector<std::vector<std::string>> ret = database.executarQuery("SELECT * FROM mensagem;");
+			                for(std::vector<std::string> re : ret){
+								re[1].push_back(' ');
+				                envia_msg(re[1].c_str(), strlen(re[1].c_str()), fd_totais[num_fd-1].fd);
+                                envia_msg(re[2].c_str(), strlen(re[2].c_str()), fd_totais[num_fd-1].fd);
+			                }
+			                database.desconectar();
+							std::string msg = "~Você está online~";
+							envia_msg(msg.c_str(), msg.size(), fd_totais[num_fd-1].fd);
+		                }catch(std::exception& e){
+			                std::cerr << e.what() << std::endl;
+		                }
 					} while (cli != -1);
 				}
 				else
@@ -304,7 +326,7 @@ void Server::receber_descritor(int index)
 		std::string autor = "autor";			 // só exemplo
 		std::vector<std::string> interesses; // vazio por enquanto
 
-		Livro *livro = new Livro(user, forum, f, id, autor, interesses);
+		Livro *livro = new Livro(user, forum, id);
 
 		// armazena o livro
 		livros.push_back(livro);
@@ -318,17 +340,23 @@ void Server::receber_descritor(int index)
 	}
 }
 
-std::string escapeSql(const std::string& s){
-	std::string out;
-	for (char c : s)
-		out += (c == '\'') ? "''" : std::string(1, c);
-	return out;
-};
+std::string getCurrentDateTime() {
+    auto t = std::time(nullptr);
+    auto now = std::localtime(&t);
+    std::ostringstream oss;
+    oss << std::put_time(now, "%Y-%m-%d %H:%M:%S");
+    return oss.str();
+}
 
 void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 {
+    std::string conteudo(buff);
+    if (!conteudo.empty() && conteudo.back() == '\n'){
+		conteudo.pop_back();
+    }
 	std::string prefixo(buff, 4);
-	std::string msg = '[' + user->getNome() + "] " + std::string(buff + 4, strlen(buff) - 1) + '\0';
+	std::string msg = '[' + user->getNome() + "] " + conteudo.substr(4);
+	std::string dataHora = getCurrentDateTime();
 	if (prefixo.compare("[!] ") == 0)
 	{
 		for (auto i : clients)
@@ -337,34 +365,22 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 			{
 				try
 				{
+					dataHora.push_back('\n');
+					envia_msg(dataHora.c_str(), dataHora.size(), fd_totais[i.first].fd);
 					envia_msg(msg.c_str(), strlen(msg.c_str()), fd_totais[i.first].fd);
+                    std::string safe = escapeSql(msg);
+                    Database database;
+			        database.conectar();
+			        database.executarQuery("INSERT INTO mensagem (conteudo, idUsuario,idChat) VALUES ('" + safe + "'," + std::to_string(0) + "," +std::to_string(0) + "); ");
+					database.desconectar();
 				}
-				catch (std::runtime_error &e)
+				catch (std::exception &e)
 				{
 					std::cerr << e.what() << std::endl;
 					this->close();
 				}
 			}
 		}
-
-		try{
-			std::cout << "Cheguei!" << std::endl;
-			std::string safe = escapeSql(msg);
-
-			database.conectar();
-			database.executarQuery("INSERT INTO mensagem (conteudo, idUsuario,idChat) VALUES ('" + safe + "'," + std::to_string(0) + "," +std::to_string(0) + "); ");
-			std::vector<std::vector<std::string>> ret = database.executarQuery("SELECT * FROM mensagem;");
-			for(std::vector<std::string> re : ret){
-				for(std::string r : re){
-					std::cout << r << std::endl;
-				}
-				std::cout << std::endl;
-			}
-			database.desconectar();
-		}catch(std::exception& e){
-			std::cerr << e.what() << std::endl;
-		}
-
 	}
 	else if (prefixo.compare("quit") == 0)
 	{
