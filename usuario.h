@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <sys/socket.h>
+class Client{}; // Forward declaration
 
 
 class Usuario{
@@ -18,7 +19,7 @@ class Usuario{
         std::string nome;                        //nome do usuario
         std::string matricula;                   //matricula do usuario
         std::string senha;                       //senha do usuario
-        std::string forum;                       //forum associado ao usuario  
+        int chatId;                                //chat 
         std::vector<std::string> interesses;      //historico de interesses
         std::vector<std::string> livros;        //lista de livros
         float debito;                            //debito do usuario
@@ -49,11 +50,13 @@ class Usuario{
         float getDebito();
         std::string getCookie();
         std::string getEmail();
+        int getChatId();
 
         //Os sets definem seus respectivos valores. setNome define nome, assim por conseguinte...
         void setNome(std::string nome);
         void setMatricula(std::string matricula);
-        void setForum(std::string forum);
+        void setchatId(int id);
+
 
         //Funcionalidades
         bool virtual autenticar(std::string matricula,std::string senha);  // Autenticacao com matricula e senha (overload)

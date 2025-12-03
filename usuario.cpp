@@ -76,10 +76,13 @@ string Usuario::getCookie() {
     return this->cookie_value;
 }
 
+
 string Usuario::getEmail() {
     return this->emailInstitucional;
 }
-
+int Usuario::getChatId() {
+    return this->chatId;
+}
 //===================================================================
 //METODOS DE COOKIE
 //===================================================================
@@ -544,10 +547,11 @@ void Usuario::setNome(std::string nome){
 void Usuario::setMatricula(std::string matricula){
     this->matricula = matricula;
 }
-
-void Usuario::setForum(std::string forum){
-    this->forum = forum;
+void Usuario::setchatId(int id){
+    this->chatId = id;
 }
+
+
 void Usuario::InteracaoUsuario(){
     //implementado nas classes filhas
 }
