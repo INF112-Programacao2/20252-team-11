@@ -10,7 +10,6 @@
 #include <iomanip>  
 #include <algorithm> 
 #include "json.hpp"
-#include "client.h"
 using namespace std;
 using json = nlohmann::json;
 
@@ -587,7 +586,7 @@ void Aluno :: InteracaoUsuario(){
             cin >> pesquisa;
             try {
                 auto livros = buscarLivros(pesquisa);
-                cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].getNome() << " \n| N.Chamada:\t"<< livros[2].getId() << "\n---------------------------------------\n";
+                cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].nome << " \n| N.Chamada:\t"<< livros[2].numero_chamada << "\n---------------------------------------\n";
 
                 //oferece opcao de conectar ao servidor de char do livro
                 cout <<"\n\nDeseja acessar o forum do livro?\n\t->Se sim, digite 1.\t\t->Se não, digite qualquer outro número. ";
