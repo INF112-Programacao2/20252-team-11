@@ -26,10 +26,11 @@ class Chat {
 		void addParticipante(Usuario* usuario);	//adiciona participante
 
 		Livro& getLivro();
-		void setLivro(const Livro& novoLivro)
+		void setLivro(const Livro& novoLivro);
 };
 
 
 #endif
+
 
 
