@@ -2,6 +2,7 @@
 #include "livro.h"
 
 //Construtor 
+Livro::Livro(){}
 Livro::Livro(std::string nome, std::string id): _nome(nome),_id(id){}
 
 //Cada get retorna seu dado correspondente
