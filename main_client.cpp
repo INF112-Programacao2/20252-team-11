@@ -198,7 +198,7 @@ void InteracaoProfessor(Professor c) {
 
         //OPCAO 2: VISUALIZAR PERFIL PESSOAL
         if(escolha==2){
-            cout << "---------------------------------------\n| Nome:\t\t" << c.getNome() << "\n" << "| Email: \t" << c.getEmail() << "\n| Orgao:\t"<< c.getOrgao() << "\n| Departamento:\t"<< c.getDep() << "\n| Telefone:\t\t" << c.getTelefone() << "\n" << "\n---------------------------------------\n";
+            cout << "---------------------------------------\n| Nome:\t\t" << c.getNome() << "\n" << "| Email: \t" << c.getEmail() << "\n| Orgao:\t"<< c.getOrgao() << "\n| Departamento:\t"<< c.getDep() << "\n| Telefone:\t" << c.getTelefone() << "\n" << "\n---------------------------------------\n";
         }
 
         //OPCAO 3: ENCERRAR
