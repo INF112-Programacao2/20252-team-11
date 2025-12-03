@@ -307,12 +307,6 @@ bool Usuario::autenticar(std::string matricula, std::string senha)
     return (!(nomes[1].find(chave_er)!=string::npos));
 }
 
-//Overload simplificado de autenticacao - define o nome
-bool Usuario::autenticar(std::string nome) {
-    this->nome = nome;
-    return true;
-}
-
 //===================================================================
 //BUSCA DE LIVROS
 //===================================================================

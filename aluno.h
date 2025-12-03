@@ -24,6 +24,7 @@ class Aluno : public Usuario { //Aluno herda de usuario
 
         //override do metodo virtual da classe base
         void setInfo() override;
+        bool autenticar(std::string matricula, std::string senha) override;
 
 };
 

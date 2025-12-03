@@ -55,8 +55,7 @@ class Usuario{
         void setForum(std::string forum);
 
         //Funcionalidades
-        bool autenticar(std::string matricula,std::string senha);  // Autenticacao com matricula e senha (overload)
-        bool autenticar(std::string nome);                         // Autenticacao apenas com nome (overload)
+        bool virtual autenticar(std::string matricula,std::string senha);  // Autenticacao com matricula e senha (overload)
         void addAmigo(Usuario& amigo);                             // Adiciona amigo
         void virtual setInfo();                                    // Define informacoes do usuario (metodo virtual)
         std::vector<Livro> buscarLivros(std::string busca);       // Busca livros baseado em string de busca

@@ -105,6 +105,137 @@ vector<string> parse_pessoa_json(const std::string &response) {
 //BUSCA DE DADOS PESSOAIS NA API UFV
 //=====================================
 
+bool Aluno::autenticar(std::string matricula, std::string senha)
+{
+    //Verifica se ha cookie de sessao disponivel
+    std::string phpsessid = this->getCookie();
+    if (phpsessid.empty()) {
+        throw std::runtime_error("No Cookie Value (PHPSESSID) value provided, should use Usuario.setCookieValue() first.");
+    }
+
+    //Constroi cookie header com variaveis de ambiente para analytics
+    std::ostringstream cookie_ss;
+    cookie_ss << "_ga=GA1.1.2037255739.1755903321; ";
+    cookie_ss << "_ga_3GKTCB3HHS=GS2.1.s1755903320" << getenv_safe("o1").c_str() << getenv_safe("g0").c_str()
+              << getenv_safe("t1755903320").c_str() << getenv_safe("j60").c_str() << getenv_safe("l0").c_str()
+              << getenv_safe("h0").c_str() << "; ";
+    cookie_ss << "_ga_V5B0KG5WW5=GS2.1.s1756825688" << getenv_safe("o1").c_str() << getenv_safe("g1").c_str()
+              << getenv_safe("t1756825845").c_str() << getenv_safe("j60").c_str() << getenv_safe("l0").c_str()
+              << getenv_safe("h0").c_str() << "; ";
+    cookie_ss << "PHPSESSID=" << phpsessid << "; ";
+    cookie_ss << "_ga_KLR8GVHKBC=GS2.1.s1756844283" << getenv_safe("o1").c_str() << getenv_safe("g1").c_str()
+              << getenv_safe("t1756844343").c_str() << getenv_safe("j60").c_str() << getenv_safe("l0").c_str()
+              << getenv_safe("h0").c_str() << "; ";
+    cookie_ss << "_ga_7H6KMW913P=GS2.1.s1756847215" << getenv_safe("o2").c_str() << getenv_safe("g1").c_str()
+              << getenv_safe("t1756848763").c_str() << getenv_safe("j60").c_str() << getenv_safe("l0").c_str()
+              << getenv_safe("h0").c_str() << ";";
+
+    std::string cookie_header_value = cookie_ss.str();
+
+    //Inicializacao do cURL
+    CURL* curl = nullptr;
+    CURLcode res;
+    std::string response;
+    
+    curl_global_init(CURL_GLOBAL_DEFAULT);
+    curl = curl_easy_init();
+    if (!curl) {
+        curl_global_cleanup();
+        throw std::runtime_error("curl_easy_init failed");
+    }
+
+    // Headers HTTP detalhados para simular navegador 
+    struct curl_slist* headers = nullptr;
+    headers = curl_slist_append(headers, "Host: pergamum.ufv.br");
+    headers = curl_slist_append(headers, "Cache-Control: max-age=0");
+    headers = curl_slist_append(headers, "sec-ch-ua: \"Not;A=Brand\";v=\"99\", \"Google Chrome\";v=\"139\", \"Chromium\";v=\"139\"");
+    headers = curl_slist_append(headers, "sec-ch-ua-mobile: ?0");
+    headers = curl_slist_append(headers, "sec-ch-ua-platform: \"Windows\"");
+    headers = curl_slist_append(headers, "Origin: https://pergamum.ufv.br");
+    headers = curl_slist_append(headers, "Upgrade-Insecure-Requests: 1");
+    headers = curl_slist_append(headers, "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36");
+    headers = curl_slist_append(headers, "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+    headers = curl_slist_append(headers, "Sec-Fetch-Site: same-origin");
+    headers = curl_slist_append(headers, "Sec-Fetch-Mode: navigate");
+    headers = curl_slist_append(headers, "Sec-Fetch-User: ?1");
+    headers = curl_slist_append(headers, "Sec-Fetch-Dest: document");
+    headers = curl_slist_append(headers, "Referer: https://pergamum.ufv.br/biblioteca_s/php/login_usu.php?flag=index.php");
+    headers = curl_slist_append(headers, "Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7");
+    headers = curl_slist_append(headers, "Content-Type: application/x-www-form-urlencoded");
+
+    //Escapa caracteres especiais para URL encoding
+    char* esc_matricula = curl_easy_escape(curl, matricula.c_str(), (int)matricula.size());
+    char* esc_senha     = curl_easy_escape(curl, senha.c_str(), (int)senha.size());
+
+    //Constroi corpo de requisicao POST com credenciais
+    std::ostringstream post_ss;
+    post_ss << "flag=index.php"
+            << "&login=" << (esc_matricula ? esc_matricula : "")
+            << "&password=" << (esc_senha ? esc_senha : "")
+            << "&button=Acessar"
+            << "&numero_mestre=&ifsp_categ=&lab_com_solicitacao=";
+
+    std::string post_fields = post_ss.str();
+
+    if (esc_matricula) curl_free(esc_matricula);
+    if (esc_senha) curl_free(esc_senha);
+
+    //Configuracoes da requisicao cURL
+    curl_easy_setopt(curl, CURLOPT_URL, "https://pergamum.ufv.br/biblioteca_s/php/login_usu.php");
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_fields.c_str());
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, (long)post_fields.size());
+    curl_easy_setopt(curl, CURLOPT_COOKIE, cookie_header_value.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+
+    //Executa a requisicao
+    res = curl_easy_perform(curl);
+    if (res != CURLE_OK) {
+        std::string err = curl_easy_strerror(res);
+        curl_slist_free_all(headers);
+        curl_easy_cleanup(curl);
+        curl_global_cleanup();
+        throw std::runtime_error(std::string("curl_easy_perform failed: ") + err);
+    }
+    
+    //Extrai o nome do usuario da resposta HTML usando regex
+    //Procura por tags que geralmente contem o mome no pergamum
+    std::regex rgx("<strong>(.*?)</strong>", std::regex::icase);
+    std::sregex_iterator it(response.begin(), response.end(), rgx);
+    std::sregex_iterator end;
+    std::vector<std::string> nomes;
+    for (; it != end; ++it) {
+        nomes.push_back((*it)[1].str());
+    }
+
+    //Se encontrou pelo menos 2 tags strong, assume que o segundo eh o nome
+    if (nomes.size() > 1) {     // seta o nome do Usuario
+        this->nome = iso_8859_1_to_utf8_2(nomes[1]);  //Converte de latin1 para UTF-8
+    }    
+
+//    std::cout << "Nomes extraidos (" << nomes.size() << "):\n";
+//   for (size_t i = 0; i < nomes.size(); ++i) {
+//        std::cout << " [" << i << "] " << nomes[i] << "\n";
+//    }
+
+    //Limpeza dos recursos cURL
+    curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
+    curl_global_cleanup();
+
+    //Logica de autenticacao = verifica se a resposta contem "Edi"
+    bool autenticou=true;
+    string chave_er = "Edi";
+
+    // retorna true se NAO encontrar "Edi" no nome (indicando sucesso)
+    return (!(nomes[1].find(chave_er)!=string::npos));
+}
+
+
 //Consulta API publica de estudantes da ufv para obter informacoes academicas
 string search_personal(string nome) {
     CURLcode ret;
