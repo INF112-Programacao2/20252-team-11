@@ -423,8 +423,6 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {
         std::cerr << "Erro na requisição: " << curl_easy_strerror(res) << std::endl;
     }
 
-    //cout << response << endl;
-
     //Limpeza dos recursos indesejados
     curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
