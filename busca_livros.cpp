@@ -17,11 +17,11 @@ int main(int argc, char* argv[]) {
     getline(cin, busca);    //le toda a linha
 
     //realiza busca de livros usando o metodo buscarLivros da classe Usuario
-    vector<Usuario::Livro> livros = a.buscarLivros(busca);
+    vector<Livro> livros = a.buscarLivros(busca);
 
     //exibe resultados
    for (auto livro : livros) {
-        cout << "\n---------------------------------------\n| Nome:\t\t" << livro.nome << " \n| N.Chamada:\t"<< livro.numero_chamada << "\n---------------------------------------\n";
+        cout << "\n---------------------------------------\n| Nome:\t\t" << livro.getNome() << " \n| N.Chamada:\t"<< livro.getId() << "\n---------------------------------------\n";
     }
     
     return 0;
