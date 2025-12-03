@@ -200,7 +200,7 @@ void Professor::InteracaoUsuario() {
             string pesquisa;
             cin >> pesquisa;
             auto livros = buscarLivros(pesquisa);
-            cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].getNome() << " \n| N.Chamada:\t"<< livros[2].getId() << "\n---------------------------------------\n";
+            cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].nome << " \n| N.Chamada:\t"<< livros[2].numero_chamada << "\n---------------------------------------\n";
             
             //opcao de se conectar ao servidor de chat
             cout <<"\n\nDeseja acessar o forum do livro?\nSe sim, digite 1,Caso contrario, digite qualquer outro número: ";
