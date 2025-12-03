@@ -235,6 +235,21 @@ void Server::run()
 //Processa descritores de socket que estao prontos para I/O
 //Aceita novas conexoes ou processa mensagens de clientes existentes
 
+void Server::mostrar_antigas_msg(std::string num_chamada, int fd){
+	Database database;
+	database.conectar();
+	//Recupera todas as mensagens do banco
+	std::vector<std::vector<std::string>> ret = database.executarQuery("SELECT conteudo, data FROM mensagem WHERE numChamado = '"+ num_chamada + "';");
+	for(std::vector<std::string> re : ret){
+		re[0].push_back('~');
+		envia_msg(re[0].c_str(), re[0].size(), fd);
+        envia_msg(re[1].c_str(), re[1].size(), fd);
+	}
+	database.desconectar();
+	std::string msg = "Você está online~~";
+	envia_msg(msg.c_str(), msg.size(), fd);
+}
+
 void Server::processa_fd(int &ready)
 {
 	int cli;
@@ -298,19 +313,7 @@ void Server::processa_fd(int &ready)
 
 						//ENVIA HISTORICO DE MENSAGENS DO BANCO DE DADOS	
 		                try{
-                            Database database;
-			                database.conectar();
-							
-							//Recupera todas as mensagens do banco
-                            std::vector<std::vector<std::string>> ret = database.executarQuery("SELECT * FROM mensagem;");
-			                for(std::vector<std::string> re : ret){
-								re[1].push_back('~');
-				                envia_msg(re[1].c_str(), strlen(re[1].c_str()), fd_totais[num_fd-1].fd);
-                                envia_msg(re[2].c_str(), strlen(re[2].c_str()), fd_totais[num_fd-1].fd);
-			                }
-			                database.desconectar();
-							std::string msg = "Você está online~~";
-							envia_msg(msg.c_str(), msg.size(), fd_totais[num_fd-1].fd);
+                            mostrar_antigas_msg(@, fd);
 		                }catch(std::exception& e){
 			                std::cerr << e.what() << std::endl;
 		                }
@@ -445,11 +448,12 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 	if (prefixo.compare("[!] ") == 0)
 	{	
 		//Armazena mensagem no banco de dados
-        std::string safe = escapeSql(msg);
+        std::string safeMsg = escapeSql(msg);
+		std::string safeNumChamado = escapeSql(user->getChat().getLivro().getId());
 
         Database database;
 		database.conectar();
-		database.executarQuery("INSERT INTO mensagem (conteudo, idUsuario,idChat) VALUES ('" + safe + "'," + std::to_string(0) + "," +std::to_string(0) + "); ");
+		database.executarQuery("INSERT INTO mensagem (conteudo, numChamado) VALUES ('" + safeMsg + "','" + safeNumChamado + "'); ");
 		database.desconectar();
 		//envia para todos os clientes exceto o remetente
 		for (auto i : clients)

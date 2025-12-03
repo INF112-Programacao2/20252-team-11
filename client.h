@@ -15,7 +15,6 @@
 #include <errno.h>
 #include <thread>
 #include <netdb.h>
-#include "chat.h"
 
 class Client{
 	private:
