@@ -4,6 +4,8 @@
 
 #ifndef SERVER_H
 #define SERVER_H
+
+//Define o tamanho do buffer para leitura/escrita de sockets
 #define BUFFSIZE 1024
 
 #include "client.h"
@@ -24,36 +26,51 @@
 #include <ctime>
 #include <sstream>
 
+//Classe server
 class Server {
 	private:
-		Chat** chats;
-		int num_chats;
-		int size_chats;
 
-		int server;
-		pollfd fd_totais[200];
-		int num_fd;
-		int my_port;
-		sockaddr_in serv_addr;
+		//Gerenciamento do chat
+		Chat** chats;		//Array dinamico de ponteiros para Chat
+		int num_chats;		//Numero atual de chats ativos		
+		int size_chats;		//Capacidade total do array chats
 
+		//Socket do servidor
+		int server;					// Descritor de socket do servidor
+		pollfd fd_totais[200];		// Array de estruturas pollfd para multiplexacao
+		int num_fd;					//Numero de descritores monitorados
+		int my_port;				//Porta na qual o servidor escuta
+		sockaddr_in serv_addr;		//Estrutura de endereco do servidor
+
+		//Gerenciamento de clientes e dados
 		std::map <int, Usuario*> clients;
 		std::vector<Livro*> livros;
+
 	public:
+		//Constutor e destrutor
 		Server(int port);
 		~Server();
+
+		//Getters e manipulacao do chat
 		Chat** get_chats();
 		void add_chat(Chat* chat);
-		void run();
-		int getServer();
-		void listen_socket();
-		void processa_fd(int &ready);
-		char* processa_msg(int index);
-		void envia_msg(const char* buff, int bytes, int fd);
-		void receber_descritor(int index);
-		void interpreta_msg(const char* buff, int bytes, Usuario* user, int fd);
-        void close();
+
+		void run();		//inicia o loop do servidor
+
+		//gerenciamento do socket
+		int getServer();               // retorna o descritor de socket do servidor
+		void listen_socket();          // coloca o socket em modo de escuta (listen)
+		void processa_fd(int &ready);  // processa descritores prontos retornados por poll()
+		char* processa_msg(int index); // processa mensagem recebida de um cliente especifico
+
+		//comunicacao
+		void envia_msg(const char* buff, int bytes, int fd);	//envia mensagem para cliente
+		void receber_descritor(int index);						//aceita nova conexao de cliente
+		void interpreta_msg(const char* buff, int bytes, Usuario* user, int fd);	//interpreta e processa mensagem recebida
+        void close();	//fecha os ervidor
 };
 
 #endif //SERVER_H
+
 
 
