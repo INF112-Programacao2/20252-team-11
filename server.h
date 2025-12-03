@@ -19,7 +19,10 @@
 #include <stdexcept>
 #include <algorithm>
 #include "livro.h"
-
+#include "mensagem/database.hpp"
+#include "forum.h"
+#include <ctime>
+#include <sstream>
 
 class Server {
 	private:
