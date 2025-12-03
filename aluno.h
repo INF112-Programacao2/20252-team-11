@@ -16,6 +16,7 @@ class Aluno : public Usuario {
         std::string getAdmissao();
         std::string getSexo();
         std::string getSem();
+        std::vector<Debito> searchDebito();        
 
         void setInfo() override;
 
