@@ -11,7 +11,7 @@
 using namespace std;
 
 //A funcao InteracaoUsuario tem o proposito de proporcionar fluxo interativo para usuarios genericos
-void InteracaoUsuario(Usuario a) {
+void InteracaoUsuario(Usuario &a) {
     
     //Obtem cookie de sessao do sistema pergamum
     a.setCookieValue();
@@ -69,7 +69,7 @@ void InteracaoUsuario(Usuario a) {
 }
 
 //FLUXO INTERATIVO PARA ALUNOS
-void InteracaoAluno(Aluno b) {
+void InteracaoAluno(Aluno &b) {
 
     //configuracao inicial parecida com usuario
     b.setCookieValue();
@@ -91,7 +91,7 @@ void InteracaoAluno(Aluno b) {
     //Loop principal do menu para alunos
     while(true){  
         int escolha;
-        cout<<"Escolha a função que você deseja executar:\n1 - Pesquisa de livros\n2 - Consultar o débito\n3 - Visualizar perfil\n4 - Encerrar programa\n";
+        cout<<"Escolha a função que você deseja executar:\n1 - Pesquisa de livros\n2 - Consultar o débito\n3 - Visualizar perfil\n4 - Encerrar programa\nResposta: ";
         cin>>escolha;
 
         //OPCAO 1: PESQUISA DE LIVROS(com opcao de acessar o forum)
@@ -153,7 +153,7 @@ void InteracaoAluno(Aluno b) {
 }
 
 //FLUXO INTERATIVO DO PROFESSOR
-void InteracaoProfessor(Professor c) {
+void InteracaoProfessor(Professor &c) {
 
     //autenticacao simplificada para professores (nome)
     c.setCookieValue();
@@ -172,7 +172,7 @@ void InteracaoProfessor(Professor c) {
     //loop principal do menu p/ professores
     while(true){
         int escolha;
-        cout<<"Escolha a funcão você deseja executar:\n1 - Pesquisa de livros\n2 - Visualizar perfil\n3 - Encerrar programa\n";
+        cout<<"Escolha a funcão você deseja executar:\n1 - Pesquisa de livros\n2 - Visualizar perfil\n3 - Encerrar programa\nResposta: ";
         cin>>escolha;
 
         //OPCAO 1: PESQUISA DE LIVROS
@@ -214,32 +214,37 @@ void InteracaoProfessor(Professor c) {
 //main - ponto de entrada principal do cliente
 int main() {
 
-    //instancias de cada tipo de usuario
-    Usuario a;
-    Aluno b;
-    Professor c;
-
-    //menu de selecao do tipo de usuario
-    cout << "Selecione no que deseja fazer login:\n0 - Usuario\n1 - Aluno\n2 - Professor\nResposta: ";
-    int resp; 
-    cin >> resp;
-    cin.ignore();
-
-    //roteia para a funcao interativa correspondente
-    switch (resp)
-    {
-        case 0:
-            InteracaoUsuario(a);
+    //cria usuario generico
+    Usuario *user=nullptr;
+    int tipo;
+    while (true) {   
+        
+        cout<<"-------SEJA BEM VINDO AO BETTER PERGAMUM-------\nVoce é:\n1 - Aluno\n2 - Professor\nResposta: ";
+        cin>> tipo;
+        cin.ignore();
+        cout<< "---------------------------------------\n\n\n";
+        if(tipo==1){
+            user = new Aluno();
             break;
-        case 1:
-            InteracaoAluno(b);
+        }
+        else if(tipo==2){
+            user = new Professor();
             break;
-        case 2:
-            InteracaoProfessor(c);
-            break;
-        default:
-            break;
+        }
+        else {
+            cout << "Opção inválida!\nSelecione novamente.\n";
+        }
     }
 
+    // Roteamento CORRETO
+    if (tipo == 1)
+        InteracaoAluno(*(Aluno*)user);
+
+    else if (tipo == 2)
+        InteracaoProfessor(*(Professor*)user);
+
+    delete user;
     return 0;
 }
+
+//faser interacao como interface em usuario
