@@ -548,3 +548,6 @@ void Usuario::setMatricula(std::string matricula){
 void Usuario::setForum(std::string forum){
     this->forum = forum;
 }
+void Usuario::InteracaoUsuario(){
+    //implementado nas classes filhas
+}
