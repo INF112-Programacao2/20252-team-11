@@ -14,6 +14,7 @@ private:
 public:
 
 //construtor
+    Livro();
     Livro(std::string nome, std::string id);
 
 //getters para atrivutos basicos
