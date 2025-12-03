@@ -90,6 +90,69 @@ O sistema busca:
 
 ---
 
+
+Estrutura do projeto no momento:
+
+```
+.
+├── aluno.cpp
+├── aluno.h
+├── betterPergamum.db
+├── biblioteca.cpp
+├── biblioteca.h
+├── busca
+├── busca_livros.cpp
+├── chat.cpp
+├── chat.h
+├── client.cpp
+├── client.h
+├── demoInfo.cpp
+├── demoUsuario.cpp
+├── Documentacao
+│   └── Diagrama de Classes.pdf
+├── forum.cpp
+├── forum.h
+├── grupo.cpp
+├── grupo.h
+├── LICENSE.md
+├── livro.cpp
+├── livro.h
+├── main
+├── main_server.cpp
+├── Makefile
+├── mensagem
+│   ├── controller
+│   │   ├── database.zip
+│   │   ├── mensagemController.cpp
+│   │   └── mensagemController.hpp
+│   ├── database.cpp
+│   ├── database.hpp
+│   └── model
+│       ├── mensagem.cpp
+│       └── mensagem.hpp
+├── primeiro
+├── professor.cpp
+├── professor.h
+├── README.md
+├── segundo
+├── server.cpp
+├── server.h
+├── teste
+├── usuario.cpp
+└── usuario.h
+```
+Dependencias:
+
+-lcurl 
+-pthread 
+-lsqlite3
+
+```
+sudo apt install libcurl4-openssl-dev
+sudo apt install build-essential
+sudo apt install libsqlite3-dev
+```
+
 ## Licença
 
 Distribuído sob a licença MIT. Sinta-se livre para utilizar e contribuir para o projeto.
