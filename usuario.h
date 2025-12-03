@@ -1,5 +1,6 @@
 #ifndef USUARIO_H
 #define USUARIO_H
+
 #include <string>
 #include <vector>
 #include <bits/stdc++.h>
@@ -13,46 +14,54 @@
 
 class Usuario{
     protected:
-        std::string nome;
-        std::string matricula;
-        std::string senha;
-        std::string forum;
-        std::vector<std::string> interesses;        // vai ser só o histórico
-        std::vector<std::string> livros;        // mudar para armazenar livros...
-        float debito;
-        Usuario* amigos;
-        int n_amigos;
-        std::string emailInstitucional;
-        std::string cookie_value;
+        std::string nome;                        //nome do usuario
+        std::string matricula;                   //matricula do usuario
+        std::string senha;                       //senha do usuario
+        std::string forum;                       //forum associado ao usuario  
+        std::vector<std::string> interesses;      //historico de interesses
+        std::vector<std::string> livros;        //mudar para armazenar livros...
+        float debito;                            //debito do usuario
+        Usuario* amigos;                        //ponteiro para array de amigos
 
-    public:   
+        int n_amigos;                            //contador de amigos
+        std::string emailInstitucional;          // e-mail da UFV
+        std::string cookie_value;                //valor do cookie para cada sessao
 
+    public: 
+
+        //estrutura do livro (nome e numero de chamada)
         struct Livro {
             std::string nome;
             std::string numero_chamada;
         };
+
+        //estrutura do debito (nome associado ao debito e valor)
         struct Debito {
             std::string nome;
             std::string debt;
         };
         Usuario();
-        //gets
+        //Os gets retornam seus respectivos valores. getNome retorna nome, getMatricula retorn matricula, e assim sucessivamente...
         std::string getNome();
         std::string getMatricula();
         std::vector<std::string> getInteresses();
         float getDebito();
         std::string getCookie();
         std::string getEmail();
+
+        //Os sets definem seus respectivos valores. setNome define nome, assim por conseguinte...
         void setNome(std::string nome);
         void setMatricula(std::string matricula);
         void setForum(std::string forum);
-        // funcionalidades
-        bool autenticar(std::string matricula,std::string senha);       // overload
-        bool autenticar(std::string nome);
-        void addAmigo(Usuario& amigo);
-        void virtual setInfo();
-        std::vector<Livro> buscarLivros(std::string busca); 
-        std::string setCookieValue();
+
+        //Funcionalidades
+        bool autenticar(std::string matricula,std::string senha);  // Autenticacao com matricula e senha (overload)
+        bool autenticar(std::string nome);                         // Autenticacao apenas com nome (overload)
+        void addAmigo(Usuario& amigo);                             // Adiciona amigo
+        void virtual setInfo();                                    // Define informacoes do usuario (metodo virtual)
+        std::vector<Livro> buscarLivros(std::string busca);       // Busca livros baseado em string de busca
+        std::string setCookieValue();                             // Define e retorna valor do cookie
+
 };
 
 #endif
