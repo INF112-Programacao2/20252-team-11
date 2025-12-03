@@ -13,20 +13,25 @@
 using namespace std;
 using json = nlohmann::json;
 
+//======================================
+//FUNCOES AUXILIARES
+//=====================================
 
-// aux pra curl
+//Callback para escrita de dados do cURL
 static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     size_t total = size * nmemb;
     std::string* s = static_cast<std::string*>(userp);
     s->append(static_cast<char*>(contents), total);
     return total;
 }
+
+//funcao para ler variaveis de ambiente
 static std::string getenv_safe(const char* name) {
     const char* v = std::getenv(name);
     return v ? std::string(v) : std::string();
 }
 
-// limpar html
+//remove espacos em branco do inicio e fim
 std::string trim2(const std::string& str) {
     size_t first = str.find_first_not_of(" \t\n\r\f\v");
     if (std::string::npos == first) {
@@ -36,6 +41,7 @@ std::string trim2(const std::string& str) {
     return str.substr(first, (last - first + 1));
 }
 
+//conversao de ISO-8858-1 para UTF-8
 std::string iso_8859_1_to_utf8_2(const std::string &latin1) {
     std::wstring_convert<std::codecvt_utf8<wchar_t>> conv_utf8;
     std::wstring wide;
@@ -47,7 +53,11 @@ std::string iso_8859_1_to_utf8_2(const std::string &latin1) {
     return conv_utf8.to_bytes(wide);
 }
 
-// gets
+//======================================
+//GETS
+//=====================================
+
+//Retornam seus respectivos valores. Ex: getCurso retorna curso, getSexo retorna sexo, e assim sucessivamente
 string Aluno::getCurso() {
     return this->curso;
 }
@@ -68,12 +78,20 @@ string Aluno::getCPF() {
     return this->CPF;
 }
 
+//======================================
+//FUNCAO DE PARSING DE JSON PARA DADOS PESSOAIS
+//=====================================
+
+//analisa resposta JSON da API de estudantes da UFV
+//extrai informacoes academicas do aluno
 vector<string> parse_pessoa_json(const std::string &response) {
-    auto j = json::parse(response);
+    auto j = json::parse(response); //parse do JSON
     vector<string> p;
-    if (j.is_array() && !j.empty()) {
-        auto &obj = j[0];
-        //p.push_back(obj.value("Nome", ""));
+    
+    if (j.is_array() && !j.empty()) { //verifica se eh array nao vazio
+        auto &obj = j[0];    //pega primeiro objeto (assume unico resultado)
+
+        //extrai campos especificos com valores default
         p.push_back(obj.value("Nome_Curso", ""));
         p.push_back(obj.value("Ano_admissao", ""));
         p.push_back(obj.value("Sem_admissao", ""));
@@ -83,19 +101,26 @@ vector<string> parse_pessoa_json(const std::string &response) {
     return p;
 }
 
+//======================================
+//BUSCA DE DADOS PESSOAIS NA API UFV
+//=====================================
+
+//Consulta API publica de estudantes da ufv para obter informacoes academicas
 string search_personal(string nome) {
     CURLcode ret;
     CURL *hnd;
     struct curl_slist *headers = NULL;
     string response;
 
+    //prepara para URL enconding (substitui espacos por +)
     replace(nome.begin(), nome.end(), ' ', '+');
-    //cout << nome << "\n";
 
+    //constroi corpo da requisicao POST
     string corpoReq = "Consultar=Consultar&campus=1&ano=&nomeFormando=" 
                         + nome +
                     "&codCurso=";
 
+    //configura headers HTTP para simular navegador
     headers = curl_slist_append(headers, "Host: www2.dti.ufv.br");
     headers = curl_slist_append(headers, "Sec-Ch-Ua-Platform: \"Linux\"");
     headers = curl_slist_append(headers, "Accept-Language: pt-BR,pt;q=0.9");
@@ -112,6 +137,7 @@ string search_personal(string nome) {
     headers = curl_slist_append(headers, "Priority: u=1, i");
     headers = curl_slist_append(headers, "Cookie: _ga=GA1.1.1246351.1761589832; _ga_3GKTCB3HHS=GS2.1.s1762993719$o2$g1$t1762993745$j34$l0$h0; PHPSESSID=buuogdhfu27cc69hub5h5k21g7; _pk_id.38.7238=6dfdff2021a86bb2.1764002811.; _pk_ses.38.7238=1");
 
+    //inicializa e configura cURL
     hnd = curl_easy_init();
     curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
     curl_easy_setopt(hnd, CURLOPT_URL, "https://www2.dti.ufv.br/conacweb/scripts/consultaPublicaEstudantesComVinculo.php");
@@ -131,21 +157,31 @@ string search_personal(string nome) {
     curl_easy_setopt(hnd, CURLOPT_PATH_AS_IS, 1L);
     curl_easy_setopt(hnd, CURLOPT_FTP_SKIP_PASV_IP, 1L);
     curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);
-
+    
+    //Callback para recuperar resposta
     curl_easy_setopt(hnd, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(hnd, CURLOPT_WRITEDATA, &response);
 
+    //executa requisicao
     ret = curl_easy_perform(hnd);
 
+    //limpeza de recursos
     curl_easy_cleanup(hnd);
     curl_slist_free_all(headers);
 
-    return response;
+    return response;    //retorna resposta JSON
 }
 
 
+//======================================
+//IMPLEMENTACAO DO METODO SETINFO
+//=====================================
 
-void Aluno::setInfo() {       // feito
+//Override do metodo virtual da classe base
+//Obtem informacoes pessoais e academicas do aluno
+void Aluno::setInfo() {   
+
+    //Obtem informacoes do pergamum (herdada de usuario)
     CURLcode ret;
     CURL *hnd = curl_easy_init(); 
     
@@ -160,6 +196,7 @@ void Aluno::setInfo() {       // feito
         return; 
     }
 
+    //configura headers para simular navegador
     headers = NULL;
     headers = curl_slist_append(headers, "Host: pergamum.ufv.br");
     headers = curl_slist_append(headers, "Sec-Ch-Ua: \"Not_A Brand\";v=\"99\", \"Chromium\";v=\"142\"");
@@ -178,6 +215,7 @@ void Aluno::setInfo() {       // feito
     
     curl_easy_setopt(hnd, CURLOPT_COOKIE, cookie_header_value.c_str()); 
 
+    //configuracoes da requisicao cURL
     curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
     curl_easy_setopt(hnd, CURLOPT_URL, "https://pergamum.ufv.br/biblioteca_s/meu_pergamum/dados_pessoais.php");
     curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
@@ -204,8 +242,7 @@ void Aluno::setInfo() {       // feito
         return; 
     }
     
-
-    // extração de dados..
+    //Extrai cpf e email do html do pergamum
     std::regex cpf_regex("name=\"txtCPF\"[\\s\\S]*?value=\"([0-9]+)\"");
     std::smatch cpf_match;
     std::string CPF;
@@ -231,18 +268,25 @@ void Aluno::setInfo() {       // feito
     this->emailInstitucional = email;
     this->CPF = CPF;
 
+    //limpeza recursos
     curl_easy_cleanup(hnd);
     curl_slist_free_all(headers);
 
+    //Obtem informacoes academicas da API UV 
     vector<string> info_nova = parse_pessoa_json(search_personal(this->nome));
+
+    //dados
     this->curso = info_nova[0];
     this->admissao = info_nova[1];
     this->sexo = info_nova[3];
     this->sem = info_nova[2];
-
-    //cout << this->curso << " " << this->admissao << " " << this->sexo << "\n";
 }
 
+//======================================
+//IMPLEMENTACAO DO METODO SEARCHDEBITO
+//=====================================
+
+//busca debitos/multas do aluno no sistema pergamum
 std::vector<Usuario::Debito> Aluno::searchDebito() {
     CURL *curl = curl_easy_init();
     std::vector<Debito> resultados;
@@ -253,6 +297,7 @@ std::vector<Usuario::Debito> Aluno::searchDebito() {
     std::string response;
     struct curl_slist *headers = NULL;
 
+    //configura headers para requisicao AJAX
     headers = curl_slist_append(headers, "Host: pergamum.ufv.br");
     headers = curl_slist_append(headers, "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0");
     headers = curl_slist_append(headers, "Accept: */*");
@@ -263,10 +308,11 @@ std::vector<Usuario::Debito> Aluno::searchDebito() {
     headers = curl_slist_append(headers, "Referer: https://pergamum.ufv.br/biblioteca_s/meu_pergamum/emp_debito.php");
     headers = curl_slist_append(headers, "Accept-Language: pt-BR,pt;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
     headers = curl_slist_append(headers, "Content-Type: application/x-www-form-urlencoded");
-
+    
     std::string cookie = "PHPSESSID=" + phpsessid;
     curl_easy_setopt(curl, CURLOPT_COOKIE, cookie.c_str());
-
+    
+    //parametros fixos 06/09/2024 a 06/09/2025
     std::string data = "rs=ajax_mostra_tabela&rst=&rsrnd=1757165872989&rsargs[]=06/09/2024&rsargs[]=06/09/2025";
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
 
@@ -281,15 +327,23 @@ std::vector<Usuario::Debito> Aluno::searchDebito() {
     CURLcode res = curl_easy_perform(curl);
 
     if (res == CURLE_OK) {
-        std::string response_clean = response;
-        response_clean = std::regex_replace(response_clean, std::regex("\\\\r\\\\n"), " "); 
-        response_clean = std::regex_replace(response_clean, std::regex("\\\\'"), "'");    
-        response_clean = std::regex_replace(response_clean, std::regex("&nbsp;"), " ");
 
+        //limpeza e processamento da resposta HTML
+        std::string response_clean = response;
+        response_clean = std::regex_replace(response_clean, std::regex("\\\\r\\\\n"), " ");  //remove newlines
+        response_clean = std::regex_replace(response_clean, std::regex("\\\\'"), "'");       //remove escapes
+        response_clean = std::regex_replace(response_clean, std::regex("&nbsp;"), " ");      //substitui espacos HTML
+
+        //regex para extrair nomes dos livros
         std::regex nome_regex("class='box_azul_left'>(.*?)</td>", std::regex::icase);
+
+        //regex para extrair valores das multas
         std::regex multa_regex("class='box_magenta_c'>(.*?)</td>", std::regex::icase);
+
+        //regex para remover tags HTML
         std::regex tag_re("<.*?>"); 
 
+        //extrai nomes
         std::vector<std::string> nomes_sujos;
         auto nomes_begin = std::sregex_iterator(response_clean.begin(), response_clean.end(), nome_regex);
         auto nomes_end = std::sregex_iterator();
@@ -297,6 +351,7 @@ std::vector<Usuario::Debito> Aluno::searchDebito() {
             nomes_sujos.push_back((*it)[1].str());
         }
 
+        //extrai valores das multas
         std::vector<std::string> multas;
         auto multas_begin = std::sregex_iterator(response_clean.begin(), response_clean.end(), multa_regex);
         auto multas_end = std::sregex_iterator();
@@ -304,62 +359,68 @@ std::vector<Usuario::Debito> Aluno::searchDebito() {
             multas.push_back((*it)[1].str());
         }
 
+        //remove cabecalhos das tabelas (primeiro elemento de cada vetor)
         if (!nomes_sujos.empty()) {
-            nomes_sujos.erase(nomes_sujos.begin());
+            nomes_sujos.erase(nomes_sujos.begin());  //remove "nome do material"
         }
         if (!multas.empty()) {
-            multas.erase(multas.begin());
+            multas.erase(multas.begin());         //remove valor do material R$
         }
 
+        //processa nomes - remove tags, limpa espacos, converte enconding
         for (const auto& nome_sujo : nomes_sujos) {
             std::string nome_sem_tags = std::regex_replace(nome_sujo, tag_re, "");
             std::string nome_limpo = trim2(nome_sem_tags);
             nome_limpo = iso_8859_1_to_utf8_2(nome_limpo);
-            resultados.push_back({nome_limpo, "0"});
+            resultados.push_back({nome_limpo, "0"});        //valor inicial "0" 
         }
 
+        //associa multa aos nomes correspondentes
         size_t counter = 0;
         for (const auto& preco : multas) {
             if (counter < resultados.size()) {
-                resultados[counter].debt = trim2(preco); 
+                resultados[counter].debt = trim2(preco);  //atualiza valor
             }
             counter++;
-        }
+        }    
 
+        //calcula total dos debitos
         double total_debt = 0.0;
-        std::regex remove_prefix("R\\$\\s*"); 
+        std::regex remove_prefix("R\\$\\s*");  //remove R$ dos valores
 
         for (const auto& d : resultados) {
             std::string numeric_str = d.debt;
             
-            numeric_str = std::regex_replace(numeric_str, remove_prefix, "");
+            numeric_str = std::regex_replace(numeric_str, remove_prefix, ""); 
             numeric_str = trim2(numeric_str); 
-            std::replace(numeric_str.begin(), numeric_str.end(), ',', '.');
+            std::replace(numeric_str.begin(), numeric_str.end(), ',', '.');     //converte para double
 
             try {
-                total_debt += std::stod(numeric_str);
+                total_debt += std::stod(numeric_str); //soma ao total
             } catch (const std::exception& e) {
             }
         }
 
+        //formata total no padrao brasileiro R$ X,XX
         std::stringstream ss;
         ss << std::fixed << std::setprecision(2) << total_debt;
         std::string total_str = ss.str();
         
-        std::replace(total_str.begin(), total_str.end(), '.', ',');
-        total_str = "R$ " + total_str;
+        std::replace(total_str.begin(), total_str.end(), '.', ','); //troca . por ,
+        total_str = "R$ " + total_str;    //adiciona "R$ "
 
+        //insere linha de total no inicio do vetor
         resultados.insert(resultados.begin(), {"Total", total_str});
    
     } else {
         std::cerr << "Erro na requisição: " << curl_easy_strerror(res) << std::endl;
     }
 
-    
+    //limpeza de recursos
     curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
 
-    return resultados;
+    return resultados;    //retorna vetor de debitos
 }
 
 
