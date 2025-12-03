@@ -72,6 +72,8 @@ O sistema busca tais objetivos:
 
 ## Arquitetura Geral
 
+O sistema foi feito com base nos ensinamentos de INF112 ao longo do período e proporciona diversos recursos, tais como:
+
 * Coleta de dados via engenharia reversa do Pergamum
 * Processamento interno das informações de usuários
 * Agrupamento automático por similaridade acadêmica
