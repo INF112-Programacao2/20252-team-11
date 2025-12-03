@@ -19,12 +19,12 @@ class Usuario{
         std::string senha;                       //senha do usuario
         std::string forum;                       //forum associado ao usuario  
         std::vector<std::string> interesses;      //historico de interesses
-        std::vector<std::string> livros;        //mudar para armazenar livros...
+        std::vector<std::string> livros;        //lista de livros
         float debito;                            //debito do usuario
         Usuario* amigos;                        //ponteiro para array de amigos
 
         int n_amigos;                            //contador de amigos
-        std::string emailInstitucional;          // e-mail da UFV
+        std::string emailInstitucional;          //e-mail da UFV
         std::string cookie_value;                //valor do cookie para cada sessao
 
     public: 
