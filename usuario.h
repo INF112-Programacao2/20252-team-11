@@ -12,8 +12,6 @@
 #include <algorithm>
 #include <sys/socket.h>
 
-#include "livro.h"
-
 
 class Usuario{
     protected:
@@ -31,6 +29,12 @@ class Usuario{
         std::string cookie_value;                //valor do cookie para cada sessao
 
     public: 
+
+        //estrutura do livro (nome e numero de chamada)
+        struct Livro {
+            std::string nome;
+            std::string numero_chamada;
+        };
 
         //estrutura do debito (nome associado ao debito e valor)
         struct Debito {
