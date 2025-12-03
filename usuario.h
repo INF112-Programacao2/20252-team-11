@@ -19,12 +19,12 @@ class Usuario{
         std::string senha;                       //senha do usuario
         std::string forum;                       //forum associado ao usuario  
         std::vector<std::string> interesses;      //historico de interesses
-        std::vector<std::string> livros;        //mudar para armazenar livros...
+        std::vector<std::string> livros;        //lista de livros
         float debito;                            //debito do usuario
         Usuario* amigos;                        //ponteiro para array de amigos
 
         int n_amigos;                            //contador de amigos
-        std::string emailInstitucional;          // e-mail da UFV
+        std::string emailInstitucional;          //e-mail da UFV
         std::string cookie_value;                //valor do cookie para cada sessao
 
     public: 
@@ -55,8 +55,7 @@ class Usuario{
         void setForum(std::string forum);
 
         //Funcionalidades
-        bool autenticar(std::string matricula,std::string senha);  // Autenticacao com matricula e senha (overload)
-        bool autenticar(std::string nome);                         // Autenticacao apenas com nome (overload)
+        bool virtual autenticar(std::string matricula,std::string senha);  // Autenticacao com matricula e senha (overload)
         void addAmigo(Usuario& amigo);                             // Adiciona amigo
         void virtual setInfo();                                    // Define informacoes do usuario (metodo virtual)
         std::vector<Livro> buscarLivros(std::string busca);       // Busca livros baseado em string de busca

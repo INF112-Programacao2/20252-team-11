@@ -23,6 +23,7 @@ class Professor : public Usuario {
 
         //define a informacao  
         void setInfo() override;
+        bool autenticar(std::string nome, std::string senha) override;
 };
 
 #endif

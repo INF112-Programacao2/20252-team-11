@@ -21,7 +21,7 @@ std::string iso_8859_1_to_utf8(const std::string &latin1) {
     return conv_utf8.to_bytes(wide);
 }
 
-// Callback para escrita de dados recebidos pelo cURL
+//Callback para escrita de dados recebidos pelo cURL
 //Concatena os dados recebidos em uma string
 static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     size_t total = size * nmemb;
@@ -86,7 +86,7 @@ string Usuario::getEmail() {
 
 
 //Adiciona um amigo ao array de amigos do usuario
-void Usuario::addAmigo(Usuario& amigo) {        // talvez implementar para banco de dados depois..
+void Usuario::addAmigo(Usuario& amigo) {       
     this->n_amigos;
     Usuario* amigos_swap = new Usuario[this->n_amigos+1];
     for (int i=0;i<this->n_amigos;i++) amigos_swap[i] = this->amigos[i];
@@ -155,7 +155,6 @@ std::string Usuario::setCookieValue() {
                         }
 
                         if (!parts.empty()) {
-                            //std::cout << parts.back() << std::endl; 
                             cookie_value = parts.back();    //ultimo campo eh o valor do cookie
                         }
                     }
@@ -295,11 +294,6 @@ bool Usuario::autenticar(std::string matricula, std::string senha)
         this->nome = iso_8859_1_to_utf8(nomes[1]);  //Converte de latin1 para UTF-8
     }    
 
-//    std::cout << "Nomes extraidos (" << nomes.size() << "):\n";
-//   for (size_t i = 0; i < nomes.size(); ++i) {
-//        std::cout << " [" << i << "] " << nomes[i] << "\n";
-//    }
-
     //Limpeza dos recursos cURL
     curl_slist_free_all(headers);
     curl_easy_cleanup(curl);
@@ -311,12 +305,6 @@ bool Usuario::autenticar(std::string matricula, std::string senha)
 
     // retorna true se NAO encontrar "Edi" no nome (indicando sucesso)
     return (!(nomes[1].find(chave_er)!=string::npos));
-}
-
-//Overload simplificado de autenticacao - define o nome
-bool Usuario::autenticar(std::string nome) {
-    this->nome = nome;
-    return true;
 }
 
 //===================================================================
@@ -428,8 +416,6 @@ std::vector<Usuario::Livro> Usuario::buscarLivros(std::string _nome) {
     } else {
         std::cerr << "Erro na requisição: " << curl_easy_strerror(res) << std::endl;
     }
-
-    //cout << response << endl;
 
     //Limpeza dos recursos indesejados
     curl_easy_cleanup(curl);

@@ -158,10 +158,13 @@ void InteracaoProfessor(Professor c) {
     //autenticacao simplificada para professores (nome)
     c.setCookieValue();
     std::cout << "Cookie de sessão: " << c.getCookie()<< std::endl;
-    string nome;
+    string nome, dep;
     cout << "Digite seu Nome: ";
     getline(cin, nome);
-    bool autenticou = c.autenticar(nome);
+    cout << "Digite a sigla do seu Departamento (ex: DMA, DPI): ";
+    cin.ignore();
+    getline(cin, dep);
+    bool autenticou = c.autenticar(nome, dep);
     if (autenticou) {
         c.setInfo(); //busca informacoes do professor
     }
@@ -198,7 +201,7 @@ void InteracaoProfessor(Professor c) {
 
         //OPCAO 2: VISUALIZAR PERFIL PESSOAL
         if(escolha==2){
-            cout << "---------------------------------------\n| Nome:\t\t" << c.getNome() << "\n" << "| Email: \t" << c.getEmail() << "\n| Orgao:\t"<< c.getOrgao() << "\n| Departamento:\t"<< c.getDep() << "\n| Telefone:\t\t" << c.getTelefone() << "\n" << "\n---------------------------------------\n";
+            cout << "---------------------------------------\n| Nome:\t\t" << c.getNome() << "\n" << "| Email: \t" << c.getEmail() << "\n| Orgao:\t"<< c.getOrgao() << "\n| Departamento:\t"<< c.getDep() << "\n| Telefone:\t" << c.getTelefone() << "\n" << "\n---------------------------------------\n";
         }
 
         //OPCAO 3: ENCERRAR
