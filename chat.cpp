@@ -5,7 +5,7 @@
 #include <iostream>
 
 //construtor que inicializa arrays dinamicos de capacidade 2
-Chat::Chat(){}
+Chat::Chat(Livro livro):livro(livro){}
 
 //destrutor - libera memoria alocada
 Chat::~Chat(){}
@@ -13,10 +13,6 @@ Chat::~Chat(){}
 //Retorna uma referencia ao livro
 Livro& Chat::getLivro() {
 	return livro;
-}
-
-void Chat::setLivro(const Livro& novoLivro) {
-livro = novoLivro; //usa operador de atribuicao
 }
 
 //retorna array de participantes
