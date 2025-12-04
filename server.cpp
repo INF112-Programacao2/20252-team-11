@@ -269,7 +269,7 @@ void Server::processa_fd(int &ready)
 
 						//ENVIA HISTORICO DE MENSAGENS DO BANCO DE DADOS	
 		                try{
-                            mostrar_antigas_msg(@, fd);
+                            mostrar_antigas_msg(biblioteca.getChat(clients.at(num_fd-1)->getChatId()).getLivro().getId(), fd_totais[num_fd-1].fd);
 		                }catch(std::exception& e){
 			                std::cerr << e.what() << std::endl;
 		                }
@@ -416,7 +416,7 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 		database.executarQuery("INSERT INTO mensagem (conteudo, numChamado) VALUES ('" + safeMsg + "','" + safeNumChamado + "'); ");
 		database.desconectar();
 		//envia para todos os clientes exceto o remetente
-		for (auto i : )
+		for (auto i : biblioteca.getChat(user->getChatId()).getParticipantes())
 		{
 			if (fd_totais[i.first].fd != fd)
 			{
