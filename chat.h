@@ -14,14 +14,13 @@ class Chat {
 
 	public:
 	//construtor e destrutor
-		Chat();
+		Chat(Livro livro);
 		~Chat();
 
 		std::pair<int, Usuario> getParticipante(int id);		//retorna array de participantes
 		void addParticipante(Usuario usuario, int id);	//adiciona participante
 
 		Livro& getLivro();
-		void setLivro(const Livro& novoLivro);
 };
 
 
