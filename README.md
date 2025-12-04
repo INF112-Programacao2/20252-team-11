@@ -215,6 +215,7 @@ Pressione Ctrl+C para encerrar o servidor
 **Componentes do Sistema:**
 
 Estrutura de Arquivos
+
 /
 ├── Makefile                  (Script de compilação)
 
