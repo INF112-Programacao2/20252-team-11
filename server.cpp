@@ -206,19 +206,31 @@ void Server::mostrar_antigas_msg(std::string num_chamada, int fd){
     
     std::vector<std::vector<std::string>> ret = database.executarQuery(query);
 
-    for(const auto& linha : ret){
+	std::string buffr = "FORUM DO LIVRO: " + std::to_string(num_chamada) + "\n";
+    std::cout << "carregando.";
+	for(const auto& linha : ret){
         std::string conteudo = linha[0];
 		std::string date = linha[1];
+		
+		conteudo.reserve(conteudo.size() + 1);
+    	date.reserve(date.size() + 1);
+
         if (conteudo.empty() || conteudo.back() != '~') conteudo.push_back('~');
     	if (date.empty() || date.back() != '~') date.push_back('~');
-    	envia_msg(date.c_str(), date.size(), fd);
-        envia_msg(conteudo.c_str(), conteudo.size(), fd);
+		
+		buffr.reserve(date.size() + conteudo.size());
+
+		buffr += date;
+		buffr += conteudo;
+		buffr += "\n";
+		std::cout << ".";
     }
-    
+	std::cout << std::endl;
+	
     database.desconectar();
-    
-    std::string msg = "Você está online digite quit para sair~~";
-    envia_msg(msg.c_str(), msg.size(), fd);
+
+    buffr += "Você está online, digite quit para sair~~";
+	envia_msg(buffer.c_str(), buffer.size(), fd);
 }
 
 void Server::processa_fd(int &ready)
