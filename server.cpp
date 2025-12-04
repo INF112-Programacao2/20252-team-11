@@ -368,9 +368,13 @@ void Server::receber_descritor(int index)
 
 		// armazena o livro
 		livros.push_back(livro);
-		Chat chat_geral(*livro);
-		biblioteca.addChat(chat_geral);
-		user->setchatId(biblioteca.getChats().size() - 1);
+		int chatId = biblioteca.findChat();
+		if (chatId == -1){
+			Chat chat_geral(*livro);
+			biblioteca.addChat(chat_geral);
+		}
+		user->setchatId(chatId);
+		biblioteca.getChat(chatId).addParticipante(user, index);
 		clients.insert({index, user});	//Armazena no mapa
 
 		delete[] msg;
@@ -417,23 +421,16 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 		database.executarQuery("INSERT INTO mensagem (conteudo, numChamado) VALUES ('" + safeMsg + "','" + safeNumChamado + "'); ");
 		database.desconectar();
 		//envia para todos os clientes exceto o remetente
+		std::cout << "@@" << user->getChatId() << ' ' << biblioteca.getChat(user->getChatId()).getLivro().getNome() << std::endl;
 		for (auto i : biblioteca.getChat(user->getChatId()).getParticipantes())
 		{
+			std::cout << '@' << i.first << std::endl;
 			if (fd_totais[i.first].fd != fd)
 			{
 				try
 				{
-					dataHora.push_back('\n');
 					envia_msg(dataHora.c_str(), dataHora.size(), fd_totais[i.first].fd);	//envia timestamps
 					envia_msg(msg.c_str(), strlen(msg.c_str()), fd_totais[i.first].fd);		//envia mensagens
-
-					//Armazena mensagem no banco de dados
-                    std::string safe = escapeSql(msg);
-					
-                    Database database;
-			        database.conectar();
-			        database.executarQuery("INSERT INTO mensagem (conteudo, idUsuario,idChat) VALUES ('" + safe + "'," + std::to_string(0) + "," +std::to_string(0) + "); ");
-					database.desconectar();
 				}
 				catch (std::exception &e)
 				{
