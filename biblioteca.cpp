@@ -76,7 +76,9 @@ int findChat(std::string s){
 		else{
 			return -1;
 		}
+	}
 
 }
+
 
 
