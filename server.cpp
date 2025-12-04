@@ -349,7 +349,11 @@ void Server::receber_descritor(int index)
 		for (count2 = count + 1; msg[count2] != '\7'; count2++)	//Encontra segundo delimitador
 			;
 		std::string nome_livro = std::string(msg).substr(count, count2);
-		std::string matricula = std::string(msg).substr(count2, std::string(msg).size());
+		int count3;
+		for (count3 = count2 + 1; msg[count3] != '\7'; count3++)
+			;
+		std::string matricula = std::string(msg).substr(count2, count3);
+		std::string n_chamada = std::string(msg).substr(count3, std::string(msg).size());
 
 		//Cria e configura objeto do cliente
 		Usuario *user = new Usuario;
@@ -357,8 +361,9 @@ void Server::receber_descritor(int index)
 		user->setMatricula(matricula);
 		clients.insert({index, user});	//Armazena no mapa
 
+
 		//Cria e armazena o objeto livro (relacionado ao usuario)
-		Livro *livro = new Livro(nome_livro, id);
+		Livro *livro = new Livro(nome_livro, n_chamada);
 
 		// armazena o livro
 		livros.push_back(livro);
