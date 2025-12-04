@@ -367,6 +367,8 @@ void Server::receber_descritor(int index)
 
 		// armazena o livro
 		livros.push_back(livro);
+		Chat chat_geral(*livro);
+		biblioteca.addChat(chat_geral);
 
 		delete[] msg;
 	} catch (std::runtime_error& e){
