@@ -11,8 +11,6 @@ class Chat {
 	private:
 
 		std::vector<std::pair<int, Usuario>> participantes;     // array dinamico de ponteiros para participantes
-		int num_participantes;       // numero atual de participantes
-		int size_participantes;      // capacidade do array participantes
 		Livro livro;
 
 	public:
@@ -29,6 +27,7 @@ class Chat {
 
 
 #endif
+
 
 
 
