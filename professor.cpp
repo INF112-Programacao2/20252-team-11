@@ -195,7 +195,7 @@ bool Professor::autenticar(string nome, string email) {
 }
 
 void limpar2() {
-    cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+    std::cout << "\033[2J\033[1;1H";
 }
 
 void Professor::InteracaoUsuario() {
