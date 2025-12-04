@@ -2,31 +2,31 @@
 #define CHAT_H
 
 #include "usuario.h"
-#include "livro.h"
+#include <vector>
+#include <utility>
 
 //classe chat
 class Chat {
 	private:
 
-		Usuario** participantes;     // array dinamico de ponteiros para participantes
-		int num_participantes;       // numero atual de participantes
-		int size_participantes;      // capacidade do array participantes
+		std::vector<std::pair<int, Usuario>> participantes;     // array dinamico de ponteiros para participantes
 		Livro livro;
 
 	public:
 	//construtor e destrutor
-		Chat();
+		Chat(Livro livro);
 		~Chat();
 
-		Usuario** getParticipantes();		//retorna array de participantes
-		void addParticipante(Usuario* usuario);	//adiciona participante
+		std::vector<std::pair<int, Usuario>>& Chat::getParticipante();  //retorna array de participantes
+		void addParticipante(Usuario usuario, int id);	//adiciona participante
 
 		Livro& getLivro();
-		void setLivro(const Livro& novoLivro);
 };
 
 
 #endif
+
+
 
 
 
