@@ -206,7 +206,7 @@ void Server::mostrar_antigas_msg(std::string num_chamada, int fd){
     
     std::vector<std::vector<std::string>> ret = database.executarQuery(query);
 
-	std::string buffr = "FORUM DO LIVRO: " + std::to_string(num_chamada) + "\n";
+	std::string buffr = "FORUM DO LIVRO: " + num_chamada + "\n";
     std::cout << "carregando.";
 	for(const auto& linha : ret){
         std::string conteudo = linha[0];
@@ -230,7 +230,7 @@ void Server::mostrar_antigas_msg(std::string num_chamada, int fd){
     database.desconectar();
 
     buffr += "Você está online, digite quit para sair~~";
-	envia_msg(buffer.c_str(), buffer.size(), fd);
+	envia_msg(buffr.c_str(), buffr.size(), fd);
 }
 
 void Server::processa_fd(int &ready)
