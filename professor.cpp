@@ -170,9 +170,11 @@ void Professor::setInfo() {
     this->departamento = campos[5];
 }
 
-bool Professor::autenticar(string nome, string depar) {
+bool Professor::autenticar(string nome, string email) {
     this->nome = nome;
+    this->emailInstitucional = email;
     this->setInfo();
+    this->setMatricula(this->getEmail());
     return true;
 }
 

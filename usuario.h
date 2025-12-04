@@ -22,11 +22,7 @@ class Usuario{
         std::string matricula;                   //matricula do usuario
         std::string senha;                       //senha do usuario
         int chatId;                                //chat 
-        std::vector<std::string> interesses;      //historico de interesses
-        std::vector<std::string> livros;        //lista de livros
         float debito;                            //debito do usuario
-        Usuario* amigos;                        //ponteiro para array de amigos
-
         int n_amigos;                            //contador de amigos
         std::string emailInstitucional;          //e-mail da UFV
         std::string cookie_value;                //valor do cookie para cada sessao
@@ -42,7 +38,6 @@ class Usuario{
         //Os gets retornam seus respectivos valores. getNome retorna nome, getMatricula retorn matricula, e assim sucessivamente...
         std::string getNome();
         std::string getMatricula();
-        std::vector<std::string> getInteresses();
         float getDebito();
         std::string getCookie();
         std::string getEmail();
@@ -56,8 +51,7 @@ class Usuario{
 
         //Funcionalidades
         bool virtual autenticar(std::string matricula,std::string senha);  // Autenticacao com matricula e senha (overload)
-        void addAmigo(Usuario& amigo);                             // Adiciona amigo
-        void virtual setInfo();                                    // Define informacoes do usuario (metodo virtual)
+        void virtual setInfo();                                            // Define informacoes do usuario (metodo virtual)
         std::vector<Livro> buscarLivros(std::string busca);       // Busca livros baseado em string de busca
         std::string setCookieValue();                             // Define e retorna valor do cookie
         void virtual InteracaoUsuario();                        // Fluxo interativo do usuario

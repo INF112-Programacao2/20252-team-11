@@ -24,7 +24,7 @@ class Professor : public Usuario {
 
         //define a informacao  
         void setInfo() override;
-        bool autenticar(std::string nome, std::string senha) override;
+        bool autenticar(std::string nome, std::string email) override;
         //interacao do professor
         void InteracaoUsuario() override;
 };

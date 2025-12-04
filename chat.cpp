@@ -2,6 +2,7 @@
 // Created by pedro on 11/11/2025.
 //
 #include "chat.h"
+#include <bits/stdc++.h>
 #include <iostream>
 
 //construtor que inicializa arrays dinamicos de capacidade 2
@@ -16,11 +17,15 @@ Livro& Chat::getLivro() {
 }
 
 //retorna array de participantes
-std::pair <int, Usuario> Chat::getParticipantes(){
-	return this->participantes;
+std::vector<std::pair<int, Usuario>>& Chat::getParticipante(){
+	return participantes;
 }
 
 //adiciona participante com redimensionamento automatico do array
 void Chat::addParticipante(Usuario usuario, int id){
 	participantes.push_back(std::make_pair(id, usuario));
 }
+
+
+
+

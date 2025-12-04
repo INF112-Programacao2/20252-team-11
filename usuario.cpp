@@ -68,9 +68,6 @@ string Usuario::getMatricula() {
     return this->matricula;
 }
 
-vector<string> Usuario::getInteresses() {
-    return this->interesses;
-}
 
 string Usuario::getCookie() {
     return this->cookie_value;
@@ -86,17 +83,6 @@ int Usuario::getChatId() {
 //===================================================================
 //METODOS DE COOKIE
 //===================================================================
-
-
-//Adiciona um amigo ao array de amigos do usuario
-void Usuario::addAmigo(Usuario& amigo) {       
-    this->n_amigos;
-    Usuario* amigos_swap = new Usuario[this->n_amigos+1];
-    for (int i=0;i<this->n_amigos;i++) amigos_swap[i] = this->amigos[i];
-    amigos_swap[this->n_amigos+1] = amigo;
-    delete[] this->amigos;
-    this->amigos = amigos_swap;
-}
 
 //Obtem um cookie de sessao do sistema pergamum
 //Faz uma requisicao inicial para capturar cookie de sessao
