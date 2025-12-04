@@ -15,6 +15,18 @@
 
 ---
 
+## Integrantes do Grupo 11
+
+| Nome                             | Matrícula |
+| -------------------------------- | --------- |
+| **Gabriel Spagnol Gomes**        | 120571    |
+| **Arthur Mendes Vilela**         | 120570    |
+| **Pedro Silva Francisco**        | 120554    |
+| **João Vitor Miranda Marcelino** | 113477    |
+| **Marco Thullyo São Severino**   | 120550    |
+
+---
+
 BETTER PERGAMUM
 
 O Better Pergamum é um sistema de biblioteca desenvolvido em C++ que replica funcionalidades do sistema Pergamum da UFV, com adição de recursos modernos como fóruns de discussão por livro, autenticação integrada e interface baseada em sockets. 
@@ -26,10 +38,10 @@ O sistema é composto por dois componentes principais:
 
 Pré-requisitos:
 Dependências manuais:
-# - g++ (compilador C++)
-# - libcurl4-openssl-dev
-# - libsqlite3-dev
-# - pthreads (incluído no glibc)
+**# - g++ (compilador C++)
+**# - libcurl4-openssl-dev
+**# - libsqlite3-dev
+**# - pthreads (incluído no glibc)
 
 O sistema funciona apenas no Linux, pois foi feito para tal.
 
@@ -101,9 +113,10 @@ Digite os termos para a pesquisa: [termo_de_busca]
 
 Primeiro resultado:
 ---------------------------------------
-| Nome:        [Título do Livro]
-| N.Chamada:   [Número de Chamada]
+| Nome: [Titulo do Livro]
+| N.Chamada: [Numero de Chamada]
 ---------------------------------------
+
 
 Deseja acessar o forum do livro?
 Se sim, digite 1, Caso contrário, digite qualquer outro número: _
@@ -254,19 +267,38 @@ O sistema foi baseado no Pergamum UFV (APIs públicas da Universidade Federal de
 
 Uso Acadêmico
 Este software é destinado para fins educacionais. 
+Distribuído sob a licença MIT. Sinta-se livre para utilizar e contribuir para o projeto.
 
 
-## Integrantes do Grupo 11
 
-| Nome                             | Matrícula |
-| -------------------------------- | --------- |
-| **Gabriel Spagnol Gomes**        | 120571    |
-| **Arthur Mendes Vilela**         | 120570    |
-| **Pedro Silva Francisco**        | 120554    |
-| **João Vitor Miranda Marcelino** | 113477    |
-| **Marco Thullyo São Severino**   | 120550    |
 
----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
