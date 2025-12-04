@@ -25,6 +25,7 @@
 | **João Vitor Miranda Marcelino** | 113477    |
 | **Marco Thullyo São Severino**   | 120550    |
 
+Uma versão mais legível desse texto está disponível na pasta "documentação"
 ---
 
 BETTER PERGAMUM
@@ -38,24 +39,29 @@ O sistema é composto por dois componentes principais:
 
 Pré-requisitos:
 Dependências manuais:
+
 **# - g++ (compilador C++)
 **# - libcurl4-openssl-dev
 **# - libsqlite3-dev
 **# - pthreads (incluído no glibc)
 
+
 O sistema funciona apenas no Linux, pois foi feito para tal.
 
 Instalação manual
+
 sudo apt-get update
 sudo apt-get install build-essential libcurl4-openssl-dev libsqlite3-dev
 
 Compilação:
+
 Compila servidor e cliente
 make all
 make clean (remove executáveis gerados)
 
 Método alternativo (sem Makefile):
 g++ server.cpp aluno.cpp main_server.cpp client.cpp usuario.cpp livro.cpp chat.cpp biblioteca.cpp mensagem/database.cpp -pthread -lcurl -lsqlite3 -o server; ./server
+
 g++ client.cpp main_client.cpp professor.cpp usuario.cpp livro.cpp aluno.cpp -pthread -lcurl -o client; ./client
 
 Execução:
@@ -105,17 +111,15 @@ Escolha a função você deseja executar:
 3 - Encerrar programa
 Resposta: _
 
-Busca de livros (digitando 1):
--------------
+Busca de livros(digitando 1):
 PESQUISA DE LIVROS:
--------------
+
 Digite os termos para a pesquisa: [termo_de_busca]
 
 Primeiro resultado:
----------------------------------------
+
 | Nome: [Titulo do Livro]
 | N.Chamada: [Numero de Chamada]
----------------------------------------
 
 
 Deseja acessar o forum do livro?
@@ -202,27 +206,35 @@ Classes Principais:
 Usuario (Classe Base)
     • Gerencia autenticação e dados básicos
     • Métodos para buscar livros e obter cookie de sessão
+    
 Aluno (Herda de Usuario)
     • Adiciona: curso, admissão, sexo, semestre, CPF
     • Método searchDebito() para consultar multas
+    
 Professor (Herda de Usuario)
     • Adiciona: órgão, departamento, telefone
     • Autenticação via nome e e-mail institucional
+    
 Livro
     • Armazena: nome e ID (número de chamada)
     • Objeto básico para representação de livros
+    
 Chat
     • Gerencia participantes de um fórum
     • Lista de pares (ID socket, Usuario)
+    
 Biblioteca
     • “Contêiner” para livros, usuários e chats
     • Métodos de busca e adição
+    
 Server
     • Multiplexação com poll()
     • Persistência de mensagens em SQLite
+    
 Client
     • Interface de linha de comando
     • Threads separadas para envio/recebimento
+
 
 
 Banco de Dados:
@@ -232,6 +244,7 @@ Operações
     • Inserção: Ao receber mensagem no chat
     • Consulta: Ao entrar no fórum (histórico)
     • Escape SQL: Função escapeSql() previne injeção
+    
 
 ⚠️ Tratamento de Erros:
 Exemplo de exceção lançada:
@@ -244,6 +257,7 @@ Recuperação de Erros
     2. Erro de autenticação: Retorna ao prompt de login
     3. Erro de servidor: Cliente é encerrado
     4. Timeout: Servidor usa timeout de 5 minutos no poll()
+    
 
 Logs
     • Console do servidor mostra todas as operações
