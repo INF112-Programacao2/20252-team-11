@@ -24,7 +24,7 @@ void Client::intercepta_msg(){
 			bytes_recv = recv(client_fd, msg, sizeof(msg), 0);
         	if (bytes_recv == 0)
         		throw std::runtime_error("Conversa encerrada");
-			if (bytes_recv < 0){
+			else if (bytes_recv < 0){
 				throw std::runtime_error("Error in recv()");
 			}
 		} catch (std::runtime_error& e){
@@ -114,7 +114,8 @@ void Client::connect_socket(std::string address, std::string port, std::string n
 		std::cerr << e.what() << std::endl;
 		this->close();
 	}
-	std::cout << "Conexao estabelecida!\n";
+	std::cout << "Conexao estabelecida!\n\n\n";
+	std::cout << "Bem-vindo ao fórum do livro: " << forum << "\n\n";
 
 	//ENVIO DE INFORMACOES INICIAIS AO SERVIDOR
 	std::string info = nome + '\7' + forum + '\7' + matricula + '\7' + num_chamada + '\0';
@@ -143,7 +144,7 @@ void Client::send_msg(){
 			msg = std::string(buff);
 		}
 		else{
-			msg = "[!] " + std::string(buff) + "~~"; //formata mensagem normal
+			msg = "[!] " + std::string(buff) + "~"; //formata mensagem normal
 		}
 
 		//se mensagem nao vazia, envia
