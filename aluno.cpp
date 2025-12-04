@@ -563,7 +563,7 @@ std::vector<Usuario::Debito> Aluno::searchDebito() {
 }
 
 void limpar() {
-    cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+    std::cout << "\033[2J\033[1;1H";
 }
 
 void Aluno :: InteracaoUsuario(){
