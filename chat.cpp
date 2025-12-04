@@ -26,11 +26,12 @@ void Chat::addParticipante(Usuario usuario, int id){
 	participantes.push_back(std::make_pair(id, usuario));
 }
 
-void Chat::removeParticipante(const std::string& matricula){
-    for (std::pair<int, Usuario> participante = participantes.begin(); participante != participantes.end(); ++participante) {
-        if (participante->second.getMatricula() == matricula) {
-            participantes.erase(participante);
-        }
-    }
+void Chat::removeParticipantes(std::string matricula){
+	for(int i = 0; i < participantes.size();){
+		if(participantes[i].second.getMatricula() == matricula){
+			if(participantes.begin() + i < participantes.size())
+				participantes.erase(participantes.begin() + i);
+		}else
+			i++;
+	}
 }
-
