@@ -28,10 +28,10 @@ void Chat::addParticipante(Usuario usuario, int id){
 
 void Chat::removeParticipantes(std::string matricula){
 	for(int i = 0; i < participantes.size();){
-		if(participantes[i].second.getMatricula() == matricula){
-			if(participantes.begin() + i < participantes.size())
-				participantes.erase(participantes.begin() + i);
-		}else
+		if(participantes[i].second.getMatricula() == matricula)
+			participantes.erase(participantes.begin() + i);
+		else
 			i++;
 	}
 }
+
