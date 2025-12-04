@@ -211,7 +211,7 @@ void Professor::InteracaoUsuario() {
             //opcao de se conectar ao servidor de chat
             cout <<"\n\nDeseja acessar o forum do livro?\nSe sim, digite 1,Caso contrario, digite qualquer outro número: ";
             cin>>escolha;
-            if(escolha="1"){
+            if(escolha=="1"){
                 string address = "127.0.0.1";
                 string port = "12345";
                 Client cliente;
