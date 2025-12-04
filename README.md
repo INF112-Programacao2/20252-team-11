@@ -77,6 +77,7 @@ g++ client.cpp main_client.cpp professor.cpp usuario.cpp livro.cpp aluno.cpp -pt
 (interface ativa será iniciada)
 
 ⚠️⚠️Atenção!⚠️⚠️
+
 O server precisa estar aberto para o client funcionar. O usuário pode abrir varios clients para interagir um com o outro
 
 ---
@@ -271,6 +272,7 @@ Operações
     
 
 **⚠️⚠️ Tratamento de Erros: ⚠️⚠️**
+
 Exemplo de exceção lançada:
 
 
