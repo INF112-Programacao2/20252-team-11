@@ -34,7 +34,6 @@ livro = novoLivro; //usa operador de atribuicao
 }
 
 //retorna array de participantes
-Usuario** Chat::getParticipantes(){
 std::vector<std::pair<int, Usuario>>& Chat::getParticipante(){
 	return participantes;
 }
@@ -66,5 +65,6 @@ void Chat::addParticipante(Usuario* usuario){
 void Chat::addParticipante(Usuario usuario, int id){
 	participantes.push_back(std::make_pair(id, usuario));
 }
+
 
 
