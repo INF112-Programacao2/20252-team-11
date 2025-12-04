@@ -37,7 +37,8 @@ O sistema é composto por dois componentes principais:
     • Servidor: Gerencia conexões, fóruns de discussão e armazenamento de mensagens.
     • Cliente: Interface para usuários (alunos e professores) acessarem funcionalidades da biblioteca.
 
-Pré-requisitos:
+**Pré-requisitos:**
+
 Dependências manuais:
 
 **# - g++ (compilador C++)
@@ -48,12 +49,12 @@ Dependências manuais:
 
 O sistema funciona apenas no Linux, pois foi feito para tal.
 
-Instalação manual
+**Instalação manual**
 
 sudo apt-get update
 sudo apt-get install build-essential libcurl4-openssl-dev libsqlite3-dev
 
-Compilação:
+**Compilação:**
 
 Compila servidor e cliente
 make all
@@ -64,7 +65,7 @@ g++ server.cpp aluno.cpp main_server.cpp client.cpp usuario.cpp livro.cpp chat.c
 
 g++ client.cpp main_client.cpp professor.cpp usuario.cpp livro.cpp aluno.cpp -pthread -lcurl -o client; ./client
 
-Execução:
+**Execução:**
 ./server
 (o servidor iniciará na porta 12345)
 
@@ -76,20 +77,20 @@ O server precisa estar aberto para o client funcionar. O usuário pode abrir var
 
 ---
 
-Breve tutorial de uso:
+**Breve tutorial de uso:**
 Para usuários (clientes)
 
-Execução:
+**Execução:**
 ./client
 
-Seleção do tipo de usuário:
+**Seleção do tipo de usuário:**
 -------SEJA BEM VINDO AO BETTER PERGAMUM-------
 Você é:
 1 - Aluno
 2 - Professor
 Resposta: _
 
-Autenticação:
+**Autenticação:**
 PARA ALUNOS:
 Digite sua matricula: [sua_matricula]
 Digite a sua senha da BBT: [sua_senha]
@@ -98,7 +99,7 @@ PARA PROFESSORES:
 Digite seu Nome: [nome_completo]
 Digite o seu email: [email_institucional]
 
-Menu dos alunos:
+**Menu dos alunos:**
 Escolha a função que você deseja executar:
 1 - Pesquisa de livros
 2 - Consultar o débito
@@ -106,14 +107,14 @@ Escolha a função que você deseja executar:
 4 - Encerrar programa
 Resposta: _
 
-Menu dos professores:
+**Menu dos professores:**
 Escolha a função você deseja executar:
 1 - Pesquisa de livros
 2 - Visualizar perfil
 3 - Encerrar programa
 Resposta: _
 
-Busca de livros(digitando 1):
+**Busca de livros(digitando 1):**
 PESQUISA DE LIVROS:
 
 Digite os termos para a pesquisa: [termo_de_busca]
@@ -131,23 +132,23 @@ Acesso ao fórum (chat) (pressionando 1 novamente): – cada livro possui seu pr
 
 Digite seu username para entrar no fórum: [seu_nickname]
 
-Exemplo de fórum:
+**Exemplo de fórum:**
 FORUM DO LIVRO: [Número de Chamada]
 [Data] [Nome do Usuário]: [Mensagem anterior]
 [Data] [Nome do Usuário]: [Mensagem anterior]
 ...
 Você está online, digite quit para sair~~
 
-Comandos no chat:
+**Comandos no chat:**
     • Digite normalmente para enviar mensagens
     • Use quit para sair do fórum
 
 Para administradores (servidor)
 
-Execução:
+**Execução:**
 ./server
 
-Mensagem:
+**Mensagem:**
 Estamos online na porta: 12345
 Esperando em poll()
 
@@ -157,12 +158,12 @@ Recebidos [X] bytes
 Inserido: [mensagem] no banco de dados
 Encerramento
 
-Encerramento:
+**Encerramento:**
 Pressione Ctrl+C para encerrar o servidor 
 
 ---
 
-Funcionalidades Principais
+**Funcionalidades Principais**
 1. Autenticação Integrada
     • Alunos: Matrícula + senha do Pergamum
     • Professores: Nome + email institucional (consulta via API UFV)
@@ -187,7 +188,7 @@ Funcionalidades Principais
     • Consulta de multas pendentes
     • Formatação em Reais (R$)
 
-Componentes do Sistema:
+**Componentes do Sistema:**
 Estrutura de Arquivos
 /
 ├── Makefile                  (Script de compilação)
@@ -207,7 +208,7 @@ Estrutura de Arquivos
 
 ---
 
-Classes Principais:
+**Classes Principais:**
 
 Usuario (Classe Base)
     • Gerencia autenticação e dados básicos
@@ -243,7 +244,7 @@ Client
 
 ---
 
-Banco de Dados:
+**Banco de Dados:**
 Localização
 O banco SQLite é criado automaticamente pelo código em mensagem/database.cpp.
 Operações
@@ -252,30 +253,30 @@ Operações
     • Escape SQL: Função escapeSql() previne injeção
     
 
-⚠️ Tratamento de Erros:
+**⚠️ Tratamento de Erros:**
 Exemplo de exceção lançada:
 
 class Saiu_do_chat : public std::runtime_error
 // Lançada quando usuário desconecta
 
-Recuperação de Erros
+**Recuperação de Erros:**
     1. Erro de conexão: Reconexão automática não implementada
     2. Erro de autenticação: Retorna ao prompt de login
     3. Erro de servidor: Cliente é encerrado
     4. Timeout: Servidor usa timeout de 5 minutos no poll()
     
 
-Logs
+**Logs:**
     • Console do servidor mostra todas as operações
     • Erros são escritos em std::cerr
 
 Notas de Desenvolvimento (dev notes):
 
-Dependências Externas
+**Dependências Externas**
     • cURL: Requisições HTTP para Pergamum e APIs UFV
     • SQLite3: Armazenamento persistente de mensagens
     • nlohmann/json: Parsing de respostas JSON 
-Codificação
+**Codificação**
     • C++: Utiliza features modernas
     • Polimorfismo: Usuario como classe base
     • RAII: Gerenciamento automático de recursos
@@ -283,10 +284,10 @@ Codificação
 
 ---
 
-Licença e Atribuições
+**Licença e Atribuições**
 O sistema foi baseado no Pergamum UFV (APIs públicas da Universidade Federal de Viçosa). Desenvolvido como projeto acadêmico
 
-Uso Acadêmico
+**Uso Acadêmico**
 Este software é destinado para fins educacionais. 
 Distribuído sob a licença MIT. Sinta-se livre para utilizar e contribuir para o projeto.
 
