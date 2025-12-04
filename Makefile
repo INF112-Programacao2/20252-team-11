@@ -12,7 +12,7 @@ BUSCA = busca
 DEMO = demo
 
 # Fontes
-CLIENT_SRCS = main_client.cpp client.cpp usuario.cpp aluno.cpp professor.cpp \
+CLIENT_SRCS =  client.cpp main_client.cpp usuario.cpp aluno.cpp professor.cpp \
               biblioteca.cpp livro.cpp chat.cpp
 SERVER_SRCS = main_server.cpp server.cpp usuario.cpp 
 
