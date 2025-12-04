@@ -585,11 +585,14 @@ void Aluno :: InteracaoUsuario(){
             string pesquisa;
             cin >> pesquisa;
             try {
+                cin.ignore();
+                //cin >> pesquisa;
+                getline(cin, pesquisa);
                 auto livros = buscarLivros(pesquisa);
-                cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].getNome() << " \n| N.Chamada:\t"<< livros[2].getId() << "\n---------------------------------------\n";
-
-                //oferece opcao de conectar ao servidor de char do livro
-                cout <<"\n\nDeseja acessar o forum do livro?\n\t->Se sim, digite 1.\t\t->Se não, digite qualquer outro número. \nResposta: ";
+                cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[0].getNome() << " \n| N.Chamada:\t"<< livros[0].getId() << "\n---------------------------------------\n";
+                
+                //opcao de se conectar ao servidor de chat
+                cout <<"\n\nDeseja acessar o forum do livro?\nSe sim, digite 1,Caso contrario, digite qualquer outro número: ";
                 cin>>escolha;
                 cin.ignore();
                 if(escolha=="1"){
@@ -601,7 +604,7 @@ void Aluno :: InteracaoUsuario(){
                     getline(cin, nome);
 
                     //conecta ao servidor de chat
-                    cliente.connect_socket(address, port, nome, livros[2].getNome(), matricula, livros[2].getId());
+                    cliente.connect_socket(address, port, nome, livros[0].getNome(), matricula, livros[0].getId());
                     cliente.run();
                     cliente.close();
                 }

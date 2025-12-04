@@ -204,7 +204,9 @@ void Professor::InteracaoUsuario() {
         if(escolha=="1"){
             cout << "\n\n-------------\nPESQUISA DE LIVROS:\n-------------\nDigite os termos para a pesquisa: ";
             string pesquisa;
-            cin >> pesquisa;
+            cin.ignore();
+            //cin >> pesquisa;
+            getline(cin, pesquisa);
             auto livros = buscarLivros(pesquisa);
             cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].getNome() << " \n| N.Chamada:\t"<< livros[2].getId() << "\n---------------------------------------\n";
             
