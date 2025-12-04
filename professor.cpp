@@ -196,12 +196,12 @@ void Professor::InteracaoUsuario() {
 
     //loop principal do menu p/ professores
     while(true){
-        int escolha;
+        std::string escolha;
         cout<<"Escolha a funcão você deseja executar:\n1 - Pesquisa de livros\n2 - Visualizar perfil\n3 - Encerrar programa\nResposta: ";
         cin>>escolha;
 
         //OPCAO 1: PESQUISA DE LIVROS
-        if(escolha==1){
+        if(escolha=="1"){
             cout << "\n\n-------------\nPESQUISA DE LIVROS:\n-------------\nDigite os termos para a pesquisa: ";
             string pesquisa;
             cin >> pesquisa;
@@ -211,7 +211,7 @@ void Professor::InteracaoUsuario() {
             //opcao de se conectar ao servidor de chat
             cout <<"\n\nDeseja acessar o forum do livro?\nSe sim, digite 1,Caso contrario, digite qualquer outro número: ";
             cin>>escolha;
-            if(escolha=1){
+            if(escolha="1"){
                 string address = "127.0.0.1";
                 string port = "12345";
                 Client cliente;
@@ -225,12 +225,12 @@ void Professor::InteracaoUsuario() {
         }
 
         //OPCAO 2: VISUALIZAR PERFIL PESSOAL
-        if(escolha==2){
+        if(escolha=="2"){
             cout << "---------------------------------------\n| Nome:\t\t" << getNome() << "\n" << "| Email: \t" << getEmail() << "\n| Orgao:\t"<< getOrgao() << "\n| Departamento:\t"<< getDep() << "\n| Telefone:\t" << getTelefone() << "\n" << "\n---------------------------------------\n";
         }
 
         //OPCAO 3: ENCERRAR
-        if(escolha==3){
+        if(escolha=="3"){
             exit(0);
         }
     }
