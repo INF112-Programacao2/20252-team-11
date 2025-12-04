@@ -315,6 +315,7 @@ void Server::processa_fd(int &ready)
 		{
 			if (fd_totais[i].fd == -1)	//Encontra slot vazio
 			{
+				biblioteca.getChat(clients[i]->getChatId()).removerParticipante(clients.at(i)->getMatricula());
 				//Desloca elementos para preencher espacos
 				for (int j = i; j + 1 < num_fd; j++)
 				{

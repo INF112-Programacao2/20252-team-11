@@ -16,16 +16,8 @@ Livro& Chat::getLivro() {
 }
 
 //retorna array de participantes
-std::pair <int, Usuario> Chat::getParticipante(int id){
-	try{
-		if (id < 0 || id > participantes.size()){
-			throw std::exception();
-		}
-	} catch (std::exception &e){
-		std::cerr << "Id invalido";
-		exit(-1);
-	}
-	return participantes[id];
+std::pair <int, Usuario> Chat::getParticipantes(){
+	return this->participantes;
 }
 
 //adiciona participante com redimensionamento automatico do array
