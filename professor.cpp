@@ -40,64 +40,78 @@ string Professor::getTelefone() {
 //Converte aspas simples para aspas duplas para facilitar
 //Extrai campos especificos de um objeto JSON contido na string
 vector<string> parseServidor(string texto)
-{
-    for (char &c : texto)
-        if (c == '\'') c = '"';
+    {try {
+        {
+        for (char &c : texto)
+            if (c == '\'') c = '"';
 
-    //Encontra o objeto JSON dentro do texto
-    size_t inicio = texto.find("{");
-    size_t fim = texto.find("}");
-    if (inicio == string::npos || fim == string::npos)
-        return {};    //Retorna vetor vazio se nao encontrar objeto JSON
+        //Encontra o objeto JSON dentro do texto
+        size_t inicio = texto.find("{");
+        size_t fim = texto.find("}");
+        if (inicio == string::npos || fim == string::npos)
+            return {};    //Retorna vetor vazio se nao encontrar objeto JSON
 
-    //extrai apenas a parte do objeto JSON
-    string obj = texto.substr(inicio, fim - inicio + 1);
+        //extrai apenas a parte do objeto JSON
+        string obj = texto.substr(inicio, fim - inicio + 1);
 
-    //funcao que extrai valor de um campo especifico do JSON
-    //procura por padrao "chave" : "valor"
-    auto getField = [&](string key) -> string {
-        string search = "\"" + key + "\":";
-        size_t pos = obj.find(search);
-        if (pos == string::npos) return "";
+        //funcao que extrai valor de um campo especifico do JSON
+        //procura por padrao "chave" : "valor"
+        auto getField = [&](string key) -> string {
+            string search = "\"" + key + "\":";
+            size_t pos = obj.find(search);
+            if (pos == string::npos) return "";
 
-        pos += search.size();
+            pos += search.size();
 
-        //Pula espacos em branco
-        while (pos < obj.size() && (obj[pos] == ' ')) pos++;
+            //Pula espacos em branco
+            while (pos < obj.size() && (obj[pos] == ' ')) pos++;
 
-        //Verifica se o valor esta entre aspas
-        if (obj[pos] != '"') return "";
+            //Verifica se o valor esta entre aspas
+            if (obj[pos] != '"') return "";
 
-        pos++;    //avana para o primeiro caractere do valor
+            pos++;    //avana para o primeiro caractere do valor
 
-        //encontra o fechamento das aspas
-        size_t end = obj.find("\"", pos);
-        if (end == string::npos) return "";
+            //encontra o fechamento das aspas
+            size_t end = obj.find("\"", pos);
+            if (end == string::npos) return "";
 
-        //retorna o valor entre aspas
-        return obj.substr(pos, end - pos);
-    };
+            //retorna o valor entre aspas
+            return obj.substr(pos, end - pos);
+        };
 
-    //rxtrai os campos especificos necessarios para a classe Professor
-    vector<string> resultado = {
-        getField("NomeServidor"),
-        getField("Email"),
-        getField("Orgao"),
-        getField("RamalServidor"),
-        getField("Cargo"),
-        getField("LotacaoDescricaoCat")
-    };
+        
+
+        //rxtrai os campos especificos necessarios para a classe Professor
+        vector<string> resultado = {
+            getField("NomeServidor"),
+            getField("Email"),
+            getField("Orgao"),
+            getField("RamalServidor"),
+            getField("Cargo"),
+            getField("LotacaoDescricaoCat")
+        };
 
 
-    return resultado;
-}
+        return resultado;
+        }
+    }
+    catch (exception& e) {
+        cerr << "Erro ao parsear resposta do servidor: " << e.what() << endl;
+        exit(1);
+    }}
+
 
 //METODO SETINFO
 
 //Obtem informacoes do professor do sistema da UFV
 //Faz requisicao para API interna da universidade e parseia resposta
-void Professor::setInfo() {
 
+Professor::Professor():
+    departamento("None")
+{}
+
+void Professor::setInfo() {
+try {
     CURLcode ret;
     CURL *hnd;
     struct curl_slist *headers = NULL;
@@ -156,69 +170,102 @@ void Professor::setInfo() {
 
     //parseia a resposta e extrai campos relevantes
     vector<string> campos = parseServidor(response);
+    if (campos.empty()) {
+        throw runtime_error("Resposta do servidor invalida ou campos nao encontrados.");
+    }
 
     //atualiza atributos do objeto Professor com os dados obtidos
     this->nome = campos[0];
     this->emailInstitucional = campos[1];
     this->orgao = campos[2];
     this->telefone = campos[3];
-    this->departamento = campos[5];
+    this->departamento = campos[5];}
+    catch (exception& e) {
+        cerr << "Erro ao obter informacoes do professor: " << e.what() << endl;
+        exit(1);
+    }
+}
+
+bool Professor::autenticar(string nome, string email) {
+    this->nome = nome;
+    this->emailInstitucional = email;
+    this->setInfo();
+    this->setMatricula(this->getEmail());
+    return true;
+}
+
+void limpar2() {
+    cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 
 void Professor::InteracaoUsuario() {
     //Implementacao do fluxo interativo para professor
     //autenticacao simplificada para professores (nome)
-    setCookieValue();
+    try {setCookieValue();
     std::cout << "Cookie de sessão: " << getCookie()<< std::endl;
-    string nome, dep;
-    cout << "Digite seu Nome: ";
-    getline(cin, nome);
-    cout << "Digite a sigla do seu Departamento (ex: DMA, DPI): ";
-    cin.ignore();
-    getline(cin, dep);
-    bool autenticou = autenticar(nome, dep);
-    if (autenticou) {
-        setInfo(); //busca informacoes do professor
+    string nome, mail;
+    while (true){
+        cout << "Digite seu Nome: ";
+        getline(cin, nome);
+        cout << "Digite o seu email: ";
+        cin.ignore();
+        getline(cin, mail);
+        bool autenticou = autenticar(nome, mail);
+        if (autenticou) {
+            setInfo(); //busca informacoes do professor
+            break;
+        }
     }
 
     //loop principal do menu p/ professores
     while(true){
-        int escolha;
+        std::string escolha;
         cout<<"Escolha a funcão você deseja executar:\n1 - Pesquisa de livros\n2 - Visualizar perfil\n3 - Encerrar programa\nResposta: ";
         cin>>escolha;
 
         //OPCAO 1: PESQUISA DE LIVROS
-        if(escolha==1){
+        if(escolha=="1"){
+            limpar2();
             cout << "\n\n-------------\nPESQUISA DE LIVROS:\n-------------\nDigite os termos para a pesquisa: ";
             string pesquisa;
-            cin >> pesquisa;
+            cin.ignore();
+            //cin >> pesquisa;
+            getline(cin, pesquisa);
             auto livros = buscarLivros(pesquisa);
-            cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].getNome() << " \n| N.Chamada:\t"<< livros[2].getId() << "\n---------------------------------------\n";
+            cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[0].getNome() << " \n| N.Chamada:\t"<< livros[0].getId() << "\n---------------------------------------\n";
             
             //opcao de se conectar ao servidor de chat
             cout <<"\n\nDeseja acessar o forum do livro?\nSe sim, digite 1,Caso contrario, digite qualquer outro número: ";
             cin>>escolha;
-            if(escolha=1){
+            cin.ignore();
+            if(escolha=="1"){
                 string address = "127.0.0.1";
                 string port = "12345";
                 Client cliente;
                 string nome;
-                cout << "Digite o nome do cliente: ";
+                cout << "Digite seu username para entrar no fórum: ";
                 getline(cin, nome);
-                cliente.connect_socket(address, port, nome, "Abelardo", "123");
+                limpar2();
+                cliente.connect_socket(address, port, nome, livros[0].getNome(), this->getDep(), livros[0].getId());
                 cliente.run();
                 cliente.close();
                 }
         }
 
         //OPCAO 2: VISUALIZAR PERFIL PESSOAL
-        if(escolha==2){
+        if(escolha=="2"){
+            limpar2();
             cout << "---------------------------------------\n| Nome:\t\t" << getNome() << "\n" << "| Email: \t" << getEmail() << "\n| Orgao:\t"<< getOrgao() << "\n| Departamento:\t"<< getDep() << "\n| Telefone:\t" << getTelefone() << "\n" << "\n---------------------------------------\n";
         }
 
         //OPCAO 3: ENCERRAR
-        if(escolha==3){
+        if(escolha=="3"){
             exit(0);
         }
+    }
+    }
+    catch (exception& e) {
+        cerr << "Erro na interação do usuário: " << e.what() << endl;
+        exit(1);
     }
 }
