@@ -2,6 +2,10 @@
 // Created by pedro on 13/11/2025.
 //
 #include "server.h"
+#include <ctime>
+#include <cstdlib>
+#include <sstream>
+#include <iomanip>
 
 //===============================================
 //CLASSE DE EXCECAO	
@@ -380,9 +384,13 @@ void Server::receber_descritor(int index)
 }
 
 //Retorna string com data e hora atual no formato "YYYY-MM-DD HH:MM:SS"
-std::string getCurrentDateTime() {
-    auto t = std::time(nullptr);
-    auto now = std::localtime(&t);
+std::string getCurrentDateTimeBRT() {
+    setenv("TZ", "America/Sao_Paulo", 1);
+    tzset();
+
+    std::time_t t = std::time(nullptr);
+    std::tm* now = std::localtime(&t);
+
     std::ostringstream oss;
     oss << std::put_time(now, "%Y-%m-%d %H:%M:%S");
     return oss.str();
