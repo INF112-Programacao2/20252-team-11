@@ -17,7 +17,7 @@ Livro& Chat::getLivro() {
 }
 
 //retorna array de participantes
-std::vector<std::pair<int, Usuario>>& Chat::getParticipante(){
+std::vector<std::pair<int, Usuario>> Chat::getParticipantes(){
 	return participantes;
 }
 
@@ -33,3 +33,4 @@ void Chat::removeParticipante(const std::string& matricula){
         }
     }
 }
+
