@@ -19,9 +19,6 @@ class Professor : public Usuario {
         std::string getDep();
         std::string getTelefone();
 
-        //adiciona o forum
-        void addForum();
-
         //define a informacao  
         void setInfo() override;
         bool autenticar(std::string nome, std::string email) override;
