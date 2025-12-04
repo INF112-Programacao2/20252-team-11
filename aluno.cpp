@@ -615,8 +615,9 @@ void Aluno :: InteracaoUsuario(){
                     string port = "12345";
                     Client cliente;
                     string nome;
-                    cout << "Digite o nome do cliente: ";
+                    cout << "Digite seu username para entrar no fórum: ";
                     getline(cin, nome);
+                    limpar();
 
                     //conecta ao servidor de chat
                     cliente.connect_socket(address, port, nome, livros[0].getNome(), matricula, livros[0].getId());
