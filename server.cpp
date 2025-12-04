@@ -411,7 +411,7 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 
 	//formata mensagem : "[Nome] mensagem"
 	std::string msg = '[' + user->getNome() + "] " + conteudo.substr(4);
-	std::string dataHora = getCurrentDateTime();
+	std::string dataHora = getCurrentDateTimeBRT();
 
 	//CASO 1:MENSAGEM DE BROADCAST
 	if (prefixo.compare("[!] ") == 0)
