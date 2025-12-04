@@ -110,14 +110,6 @@ $(SERVER): $(SERVER_SRCS)
 	@echo " Compilando servidor..."
 	@$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) 2>&1 | grep -E "(error|Error|ERROR)" || echo " ✓ Servidor compilado com sucesso"
 
-$(BUSCA): $(BUSCA_SRCS)
-	@echo " Compilando busca de livros..."
-	@$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) 2>&1 | grep -E "(error|Error|ERROR)" || echo " ✓ Busca compilada com sucesso"
-
-$(DEMO): $(DEMO_SRCS)
-	@echo " Compilando demonstração..."
-	@$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) 2>&1 | grep -E "(error|Error|ERROR)" || echo " ✓ Demo compilada com sucesso"
-
 # ==============================================
 # LIMPEZA
 # ==============================================
