@@ -61,3 +61,8 @@ void Biblioteca::addChat(Chat chat)
             _livros.push_back(novoLivro);    //adiciona novo livro
         }   
     }
+
+
+std::vector<Chat> Biblioteca::getChats() {
+    return this->_chats;
+}

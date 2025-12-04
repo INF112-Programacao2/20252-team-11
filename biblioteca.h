@@ -26,6 +26,7 @@ class Biblioteca {
     std::vector<Livro*> getLivros() const;
     std::vector<Usuario*> getUsuarios() const;
 	Chat getChat(int id) const;
+    std::vector<Chat> getChats();
 
     //Metodos que adicionam elementos - usuario e livro
     void addUsuario(Usuario* novoUsuario);
