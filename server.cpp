@@ -449,7 +449,7 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
     	Database database;
     	database.conectar();
 		std::cout << "Inserido: " << safeMsg << std::endl;
-    	database.executarQuery("INSERT INTO mensagem (conteudo, numChamado) VALUES ('" + safeMsg + "','" + safeNumChamado + "'); ");
+		database.executarQuery("INSERT INTO mensagem (conteudo, numChamado, data) VALUES ('" + safeMsg + "','" + safeNumChamado + "','" +  getCurrentDateTimeBRT() +"'); ");
     	database.desconectar();
 
         Chat& chat = biblioteca.getChat(user->getChatId());
