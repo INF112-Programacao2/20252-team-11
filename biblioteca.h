@@ -26,14 +26,14 @@ class Biblioteca {
     //Getters - retornam copias do vetor de livros (getLivros) e do vetor de usuarios (getUsuarios)
     std::vector<Livro*> getLivros() const;
     std::vector<Usuario*> getUsuarios() const;
-	Chat getChat(int id) const;
+	Chat& getChat(int id);
     std::vector<Chat> getChats();
 	int findChat(std::string s);
 
     //Metodos que adicionam elementos - usuario e livro
     void addUsuario(Usuario* novoUsuario);
     void addLivro(Livro* livro);
-    void addChat(Chat chat);
+    int addChat(Chat chat);
 };
 
 
