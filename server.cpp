@@ -359,7 +359,7 @@ void Server::receber_descritor(int index)
 		Usuario *user = new Usuario;
 		user->setNome(nome);
 		user->setMatricula(matricula);
-		clients.insert({index, user});	//Armazena no mapa
+
 
 
 		//Cria e armazena o objeto livro (relacionado ao usuario)
@@ -369,6 +369,8 @@ void Server::receber_descritor(int index)
 		livros.push_back(livro);
 		Chat chat_geral(*livro);
 		biblioteca.addChat(chat_geral);
+		user->setchatId(biblioteca.getChats().size() - 1);
+		clients.insert({index, user});	//Armazena no mapa
 
 		delete[] msg;
 	} catch (std::runtime_error& e){
