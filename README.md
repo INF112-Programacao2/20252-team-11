@@ -42,10 +42,10 @@ O sistema é composto por dois componentes principais:
 
 Dependências manuais:
 
-**# - g++ (compilador C++)
-**# - libcurl4-openssl-dev
-**# - libsqlite3-dev
-**# - pthreads (incluído no glibc)
+- g++ (compilador C++)
+- libcurl4-openssl-dev
+- libsqlite3-dev
+- pthreads (incluído no glibc)
 
 
 O sistema funciona apenas no Linux, pois foi feito para tal.
