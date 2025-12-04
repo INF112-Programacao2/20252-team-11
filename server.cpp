@@ -365,8 +365,6 @@ void Server::receber_descritor(int index)
 		user->setNome(nome);
 		user->setMatricula(matricula);
 
-
-
 		//Cria e armazena o objeto livro (relacionado ao usuario)
 		Livro *livro = new Livro(nome_livro, n_chamada);
 
