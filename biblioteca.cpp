@@ -21,12 +21,13 @@ Biblioteca::~Biblioteca() {}
 //Implementa padrao de array redimensionavel
 void Biblioteca::addChat(Chat chat)
 {
-	_chats.push_back(chat);
+	_chats.push_back(chat); //adiciona uma copia do chat no vector
 }
 
     //os gets retornam copias do vetor livros e usuarios respectivamente
+	//return _livros, por exemplo, cria uma copia completa do vector que contem os mesmos ponteiros
     std::vector<Livro*> Biblioteca::getLivros() const {
-        return _livros;
+        return _livros; 
     }
 
     std::vector<Usuario*> Biblioteca::getUsuarios() const {
@@ -38,11 +39,12 @@ void Biblioteca::addChat(Chat chat)
 	}
 
     //adiciona usuario a bilblioteca, evitando duplicatas por matricula
+	//verifica se nao eh ponteiro nulo e procura se usuario ja existe
     void Biblioteca::addUsuario(Usuario* novoUsuario) {
         if (novoUsuario != nullptr){
             for (Usuario* u : _usuarios) {
                 if (u->getMatricula() == novoUsuario->getMatricula()) {
-                    return; 
+                    return;  //se encontrar, sai sem adicionar
                 }
             }
             _usuarios.push_back(novoUsuario);    //adiciona novo usuario
@@ -51,7 +53,7 @@ void Biblioteca::addChat(Chat chat)
 
  //adiciona livro a bilblioteca, evitando duplicatas por ID
     void Biblioteca::addLivro(Livro* novoLivro) {
-        if (novoLivro != nullptr){
+        if (novoLivro != nullptr){ //mesma verificacao de ponteiro, ve se nao eh ponteiro nulo (ponteiro que nao aponta pra nenhum objeto valido)
             for(Livro* l : _livros){
                 if(l->getId()==novoLivro->getId()){
                     return;
@@ -66,3 +68,4 @@ void Biblioteca::addChat(Chat chat)
 std::vector<Chat> Biblioteca::getChats() {
     return this->_chats;
 }
+
