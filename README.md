@@ -157,7 +157,6 @@ Você está online, digite quit para sair~~
 
 
 **Comandos no chat:**
-
     • Digite normalmente para enviar mensagens
     • Use quit para sair do fórum
 
@@ -218,18 +217,31 @@ Pressione Ctrl+C para encerrar o servidor
 Estrutura de Arquivos
 /
 ├── Makefile                  (Script de compilação)
+
 ├── server.cpp/.h             (Servidor principal)
+
 ├── client.cpp/.h             (Cliente principal)
+
 ├── usuario.cpp/.h            (Classe base Usuario)
+
 ├── aluno.cpp/.h              (Classe Aluno)
+
 ├── professor.cpp/.h         (Classe Professor)
+
 ├── livro.cpp/.h             (Classe Livro)
+
 ├── chat.cpp/.h               (Classe Chat)
+
 ├── biblioteca.cpp/.h         (Classe Biblioteca)
+
 ├── mensagem/
+
 │   └── database.cpp/.hpp     (Banco de dados SQLite)
+
 ├── main_server.cpp           (Ponto de entrada do servidor)
+
 ├── main_client.cpp           (Ponto de entrada do cliente)
+
 └── README.md                (Documentação)
 
 
@@ -239,36 +251,44 @@ Estrutura de Arquivos
 **Classes Principais:**
 
 Usuario (Classe Base)
-    • Gerencia autenticação e dados básicos
-    • Métodos para buscar livros e obter cookie de sessão
+
+- Gerencia autenticação e dados básicos
+- Métodos para buscar livros e obter cookie de sessão
     
 Aluno (Herda de Usuario)
-    • Adiciona: curso, admissão, sexo, semestre, CPF
-    • Método searchDebito() para consultar multas
+
+- Adiciona: curso, admissão, sexo, semestre, CPF
+- Método searchDebito() para consultar multas
     
 Professor (Herda de Usuario)
-    • Adiciona: órgão, departamento, telefone
-    • Autenticação via nome e e-mail institucional
+
+- Adiciona: órgão, departamento, telefone
+- Autenticação via nome e e-mail institucional
     
 Livro
-    • Armazena: nome e ID (número de chamada)
-    • Objeto básico para representação de livros
+
+- Armazena: nome e ID (número de chamada)
+- Objeto básico para representação de livros
     
 Chat
-    • Gerencia participantes de um fórum
-    • Lista de pares (ID socket, Usuario)
+
+- Gerencia participantes de um fórum
+- Lista de pares (ID socket, Usuario)
     
 Biblioteca
-    • “Contêiner” para livros, usuários e chats
-    • Métodos de busca e adição
+
+- “Contêiner” para livros, usuários e chats
+- Métodos de busca e adição
     
 Server
-    • Multiplexação com poll()
-    • Persistência de mensagens em SQLite
+
+- Multiplexação com poll()
+- Persistência de mensagens em SQLite
     
 Client
-    • Interface de linha de comando
-    • Threads separadas para envio/recebimento
+
+- Interface de linha de comando
+- Threads separadas para envio/recebimento
 
 
 ---
@@ -278,10 +298,11 @@ Client
 
 Localização
 O banco SQLite é criado automaticamente pelo código em mensagem/database.cpp.
-Operações
-    • Inserção: Ao receber mensagem no chat
-    • Consulta: Ao entrar no fórum (histórico)
-    • Escape SQL: Função escapeSql() previne injeção
+
+Operações:
+- Inserção: Ao receber mensagem no chat
+- Consulta: Ao entrar no fórum (histórico)
+- Escape SQL: Função escapeSql() previne injeção
     
 
 **⚠️⚠️ Tratamento de Erros: ⚠️⚠️**
