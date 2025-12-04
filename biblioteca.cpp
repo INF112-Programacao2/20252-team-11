@@ -19,24 +19,13 @@ Biblioteca::~Biblioteca() {}
 
 //Adiciona um novo chat ao servidor com realocacao dinamica do array
 //Implementa padrao de array redimensionavel
-void Biblioteca::addChat(Chat chat)
+int Biblioteca::addChat(Chat chat)
 {
-	_chats.push_back(chat); //adiciona uma copia do chat no vector
+    _chats.push_back(chat);
+    
+    // Retorna o índice do elemento que acabamos de inserir
+    return _chats.size() - 1; 
 }
-
-    //os gets retornam copias do vetor livros e usuarios respectivamente
-	//return _livros, por exemplo, cria uma copia completa do vector que contem os mesmos ponteiros
-    std::vector<Livro*> Biblioteca::getLivros() const {
-        return _livros; 
-    }
-
-    std::vector<Usuario*> Biblioteca::getUsuarios() const {
-        return _usuarios;
-	}
-
-	Chat Biblioteca::getChat(int id) const {
-	    return _chats[id];
-	}
 
     //adiciona usuario a bilblioteca, evitando duplicatas por matricula
 	//verifica se nao eh ponteiro nulo e procura se usuario ja existe
@@ -65,9 +54,13 @@ void Biblioteca::addChat(Chat chat)
     }
 
 
-std::vector<Chat> Biblioteca::getChats() {
-    return this->_chats;
+Chat& Biblioteca::getChat(int id) {
+    if (id < 0 || id >= _chats.size()){
+        throw std::out_of_range("Chat id invalido");
+    }
+    return _chats[id];
 }
+
 int Biblioteca::findChat(std::string s){
 	for(int i=0;i<_chats.size();i++){
 		if(_chats[i].getLivro().getNome() == s){
