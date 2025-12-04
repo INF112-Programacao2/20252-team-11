@@ -183,13 +183,13 @@ void Professor::InteracaoUsuario() {
     //autenticacao simplificada para professores (nome)
     setCookieValue();
     std::cout << "Cookie de sessão: " << getCookie()<< std::endl;
-    string nome, dep;
+    string nome, mail;
     cout << "Digite seu Nome: ";
     getline(cin, nome);
-    cout << "Digite a sigla do seu Departamento (ex: DMA, DPI): ";
+    cout << "Digite o seu email: ";
     cin.ignore();
-    getline(cin, dep);
-    bool autenticou = autenticar(nome, dep);
+    getline(cin, mail);
+    bool autenticou = autenticar(nome, mail);
     if (autenticou) {
         setInfo(); //busca informacoes do professor
     }
