@@ -591,35 +591,29 @@ void Aluno :: InteracaoUsuario(){
         if (escolha=="1"){
             cout << "\n\n-------------\nPESQUISA DE LIVROS:\n-------------\nDigite os termos para a pesquisa: ";
             string pesquisa;
-            cin >> pesquisa;
+            cin.ignore();
+            //cin >> pesquisa;
+            getline(cin, pesquisa);
             try {
-                cin.ignore();
-                //cin >> pesquisa;
-                getline(cin, pesquisa);
                 limpar();
-                try {
-                    auto livros = buscarLivros(pesquisa);                
-                    cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[0].getNome() << " \n| N.Chamada:\t"<< livros[0].getId() << "\n---------------------------------------\n";
-                    cout <<"\n\nDeseja acessar o forum do livro?\nSe sim, digite 1,Caso contrario, digite qualquer outro número: ";
-                    cin>>escolha;
-                    cin.ignore();
-                    //opcao de se conectar ao servidor de chat
-                    if(escolha=="1"){
-                        string address = "127.0.0.1";
-                        string port = "12345";
-                        Client cliente;
-                        string nome;
-                        cout << "Digite o nome do cliente: ";
-                        getline(cin, nome);
+                auto livros = buscarLivros(pesquisa);                
+                cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[0].getNome() << " \n| N.Chamada:\t"<< livros[0].getId() << "\n---------------------------------------\n";
+                cout <<"\n\nDeseja acessar o forum do livro?\nSe sim, digite 1,Caso contrario, digite qualquer outro número: ";
+                cin>>escolha;
+                cin.ignore();
+                //opcao de se conectar ao servidor de chat
+                if(escolha=="1"){
+                    string address = "127.0.0.1";
+                    string port = "12345";
+                    Client cliente;
+                    string nome;
+                    cout << "Digite o nome do cliente: ";
+                    getline(cin, nome);
 
-                        //conecta ao servidor de chat
-                        cliente.connect_socket(address, port, nome, livros[0].getNome(), matricula, livros[0].getId());
-                        cliente.run();
-                        cliente.close();
-                    }
-                }
-                catch (exception& e) {
-                    cerr << e.what() << endl;
+                    //conecta ao servidor de chat
+                    cliente.connect_socket(address, port, nome, livros[0].getNome(), matricula, livros[0].getId());
+                    cliente.run();
+                    cliente.close();
                 }
                             
             }
