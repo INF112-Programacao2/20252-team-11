@@ -404,13 +404,21 @@ void Aluno::setInfo() {
     curl_slist_free_all(headers);
 
     //Obtem informacoes academicas da API UV 
-    vector<string> info_nova = parse_pessoa_json(search_personal(this->nome));
-
-    //dados
-    this->curso = info_nova[0];
-    this->admissao = info_nova[1];
-    this->sexo = info_nova[3];
-    this->sem = info_nova[2];
+    try{
+        vector<string> info_nova = parse_pessoa_json(search_personal(this->nome));
+        if (info_nova.empty()) {
+            throw runtime_error("Nenhuma informacao academica encontrada para o aluno: " + this->nome);
+        }
+        
+         //dados
+         this->curso = info_nova[0];
+        this->admissao = info_nova[1];
+        this->sexo = info_nova[3];
+        this->sem = info_nova[2];  
+    } catch (exception& e) {
+        cerr << "Erro ao obter informacoes academicas: " << e.what() << endl;
+        exit(-1);
+    }
 }
 
 //======================================
@@ -555,7 +563,7 @@ std::vector<Usuario::Debito> Aluno::searchDebito() {
 }
 
 void limpar() {
-    cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+    std::cout << "\033[2J\033[1;1H";
 }
 
 void Aluno :: InteracaoUsuario(){
@@ -607,8 +615,9 @@ void Aluno :: InteracaoUsuario(){
                     string port = "12345";
                     Client cliente;
                     string nome;
-                    cout << "Digite o nome do cliente: ";
+                    cout << "Digite seu username para entrar no fórum: ";
                     getline(cin, nome);
+                    limpar();
 
                     //conecta ao servidor de chat
                     cliente.connect_socket(address, port, nome, livros[0].getNome(), matricula, livros[0].getId());

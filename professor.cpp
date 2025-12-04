@@ -40,57 +40,66 @@ string Professor::getTelefone() {
 //Converte aspas simples para aspas duplas para facilitar
 //Extrai campos especificos de um objeto JSON contido na string
 vector<string> parseServidor(string texto)
-{
-    for (char &c : texto)
-        if (c == '\'') c = '"';
+    {try {
+        {
+        for (char &c : texto)
+            if (c == '\'') c = '"';
 
-    //Encontra o objeto JSON dentro do texto
-    size_t inicio = texto.find("{");
-    size_t fim = texto.find("}");
-    if (inicio == string::npos || fim == string::npos)
-        return {};    //Retorna vetor vazio se nao encontrar objeto JSON
+        //Encontra o objeto JSON dentro do texto
+        size_t inicio = texto.find("{");
+        size_t fim = texto.find("}");
+        if (inicio == string::npos || fim == string::npos)
+            return {};    //Retorna vetor vazio se nao encontrar objeto JSON
 
-    //extrai apenas a parte do objeto JSON
-    string obj = texto.substr(inicio, fim - inicio + 1);
+        //extrai apenas a parte do objeto JSON
+        string obj = texto.substr(inicio, fim - inicio + 1);
 
-    //funcao que extrai valor de um campo especifico do JSON
-    //procura por padrao "chave" : "valor"
-    auto getField = [&](string key) -> string {
-        string search = "\"" + key + "\":";
-        size_t pos = obj.find(search);
-        if (pos == string::npos) return "";
+        //funcao que extrai valor de um campo especifico do JSON
+        //procura por padrao "chave" : "valor"
+        auto getField = [&](string key) -> string {
+            string search = "\"" + key + "\":";
+            size_t pos = obj.find(search);
+            if (pos == string::npos) return "";
 
-        pos += search.size();
+            pos += search.size();
 
-        //Pula espacos em branco
-        while (pos < obj.size() && (obj[pos] == ' ')) pos++;
+            //Pula espacos em branco
+            while (pos < obj.size() && (obj[pos] == ' ')) pos++;
 
-        //Verifica se o valor esta entre aspas
-        if (obj[pos] != '"') return "";
+            //Verifica se o valor esta entre aspas
+            if (obj[pos] != '"') return "";
 
-        pos++;    //avana para o primeiro caractere do valor
+            pos++;    //avana para o primeiro caractere do valor
 
-        //encontra o fechamento das aspas
-        size_t end = obj.find("\"", pos);
-        if (end == string::npos) return "";
+            //encontra o fechamento das aspas
+            size_t end = obj.find("\"", pos);
+            if (end == string::npos) return "";
 
-        //retorna o valor entre aspas
-        return obj.substr(pos, end - pos);
-    };
+            //retorna o valor entre aspas
+            return obj.substr(pos, end - pos);
+        };
 
-    //rxtrai os campos especificos necessarios para a classe Professor
-    vector<string> resultado = {
-        getField("NomeServidor"),
-        getField("Email"),
-        getField("Orgao"),
-        getField("RamalServidor"),
-        getField("Cargo"),
-        getField("LotacaoDescricaoCat")
-    };
+        
+
+        //rxtrai os campos especificos necessarios para a classe Professor
+        vector<string> resultado = {
+            getField("NomeServidor"),
+            getField("Email"),
+            getField("Orgao"),
+            getField("RamalServidor"),
+            getField("Cargo"),
+            getField("LotacaoDescricaoCat")
+        };
 
 
-    return resultado;
-}
+        return resultado;
+        }
+    }
+    catch (exception& e) {
+        cerr << "Erro ao parsear resposta do servidor: " << e.what() << endl;
+        exit(1);
+    }}
+
 
 //METODO SETINFO
 
@@ -102,7 +111,7 @@ Professor::Professor():
 {}
 
 void Professor::setInfo() {
-
+try {
     CURLcode ret;
     CURL *hnd;
     struct curl_slist *headers = NULL;
@@ -161,13 +170,20 @@ void Professor::setInfo() {
 
     //parseia a resposta e extrai campos relevantes
     vector<string> campos = parseServidor(response);
+    if (campos.empty()) {
+        throw runtime_error("Resposta do servidor invalida ou campos nao encontrados.");
+    }
 
     //atualiza atributos do objeto Professor com os dados obtidos
     this->nome = campos[0];
     this->emailInstitucional = campos[1];
     this->orgao = campos[2];
     this->telefone = campos[3];
-    this->departamento = campos[5];
+    this->departamento = campos[5];}
+    catch (exception& e) {
+        cerr << "Erro ao obter informacoes do professor: " << e.what() << endl;
+        exit(1);
+    }
 }
 
 bool Professor::autenticar(string nome, string email) {
@@ -179,13 +195,13 @@ bool Professor::autenticar(string nome, string email) {
 }
 
 void limpar2() {
-    cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+    std::cout << "\033[2J\033[1;1H";
 }
 
 void Professor::InteracaoUsuario() {
     //Implementacao do fluxo interativo para professor
     //autenticacao simplificada para professores (nome)
-    setCookieValue();
+    try {setCookieValue();
     std::cout << "Cookie de sessão: " << getCookie()<< std::endl;
     string nome, mail;
     while (true){
@@ -245,5 +261,10 @@ void Professor::InteracaoUsuario() {
         if(escolha=="3"){
             exit(0);
         }
+    }
+    }
+    catch (exception& e) {
+        cerr << "Erro na interação do usuário: " << e.what() << endl;
+        exit(1);
     }
 }
