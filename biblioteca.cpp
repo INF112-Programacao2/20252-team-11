@@ -68,4 +68,14 @@ void Biblioteca::addChat(Chat chat)
 std::vector<Chat> Biblioteca::getChats() {
     return this->_chats;
 }
+int findChat(std::string){
+	for(int i=0;i<_chats.size();i++){
+		if(i.getlivro().getnome() == string){
+			return i; 
+		}
+		else{
+			return -1;
+		}
+
+}
 
