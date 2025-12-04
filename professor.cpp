@@ -178,20 +178,27 @@ bool Professor::autenticar(string nome, string email) {
     return true;
 }
 
+void limpar() {
+    cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+}
+
 void Professor::InteracaoUsuario() {
     //Implementacao do fluxo interativo para professor
     //autenticacao simplificada para professores (nome)
     setCookieValue();
     std::cout << "Cookie de sessão: " << getCookie()<< std::endl;
     string nome, mail;
-    cout << "Digite seu Nome: ";
-    getline(cin, nome);
-    cout << "Digite o seu email: ";
-    cin.ignore();
-    getline(cin, mail);
-    bool autenticou = autenticar(nome, mail);
-    if (autenticou) {
-        setInfo(); //busca informacoes do professor
+    while (true){
+        cout << "Digite seu Nome: ";
+        getline(cin, nome);
+        cout << "Digite o seu email: ";
+        cin.ignore();
+        getline(cin, mail);
+        bool autenticou = autenticar(nome, mail);
+        if (autenticou) {
+            setInfo(); //busca informacoes do professor
+            break;
+        }
     }
 
     //loop principal do menu p/ professores
@@ -202,13 +209,14 @@ void Professor::InteracaoUsuario() {
 
         //OPCAO 1: PESQUISA DE LIVROS
         if(escolha=="1"){
+            limpar();
             cout << "\n\n-------------\nPESQUISA DE LIVROS:\n-------------\nDigite os termos para a pesquisa: ";
             string pesquisa;
             cin.ignore();
             //cin >> pesquisa;
             getline(cin, pesquisa);
             auto livros = buscarLivros(pesquisa);
-            cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].getNome() << " \n| N.Chamada:\t"<< livros[2].getId() << "\n---------------------------------------\n";
+            cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[0].getNome() << " \n| N.Chamada:\t"<< livros[0].getId() << "\n---------------------------------------\n";
             
             //opcao de se conectar ao servidor de chat
             cout <<"\n\nDeseja acessar o forum do livro?\nSe sim, digite 1,Caso contrario, digite qualquer outro número: ";
@@ -221,7 +229,7 @@ void Professor::InteracaoUsuario() {
                 string nome;
                 cout << "Digite o nome do cliente: ";
                 getline(cin, nome);
-                cliente.connect_socket(address, port, nome, livros[2].getNome(), this->getDep(), livros[2].getId());
+                cliente.connect_socket(address, port, nome, livros[0].getNome(), this->getDep(), livros[0].getId());
                 cliente.run();
                 cliente.close();
                 }
@@ -229,6 +237,7 @@ void Professor::InteracaoUsuario() {
 
         //OPCAO 2: VISUALIZAR PERFIL PESSOAL
         if(escolha=="2"){
+            limpar();
             cout << "---------------------------------------\n| Nome:\t\t" << getNome() << "\n" << "| Email: \t" << getEmail() << "\n| Orgao:\t"<< getOrgao() << "\n| Departamento:\t"<< getDep() << "\n| Telefone:\t" << getTelefone() << "\n" << "\n---------------------------------------\n";
         }
 
