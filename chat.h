@@ -19,12 +19,13 @@ class Chat {
 
 		std::vector<std::pair<int, Usuario>> Chat::getParticipantes();		//retorna array de participantes
 		void addParticipante(Usuario usuario, int id);	//adiciona participante
-		void removeParticipante(std::string matricula);
+		void removeParticipantes(std::string matricula);
 		Livro& getLivro();
 };
 
 
 #endif
+
 
 
 
