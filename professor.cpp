@@ -178,7 +178,7 @@ bool Professor::autenticar(string nome, string email) {
     return true;
 }
 
-void limpar() {
+void limpar2() {
     cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 
@@ -209,7 +209,7 @@ void Professor::InteracaoUsuario() {
 
         //OPCAO 1: PESQUISA DE LIVROS
         if(escolha=="1"){
-            limpar();
+            limpar2();
             cout << "\n\n-------------\nPESQUISA DE LIVROS:\n-------------\nDigite os termos para a pesquisa: ";
             string pesquisa;
             cin.ignore();
@@ -237,7 +237,7 @@ void Professor::InteracaoUsuario() {
 
         //OPCAO 2: VISUALIZAR PERFIL PESSOAL
         if(escolha=="2"){
-            limpar();
+            limpar2();
             cout << "---------------------------------------\n| Nome:\t\t" << getNome() << "\n" << "| Email: \t" << getEmail() << "\n| Orgao:\t"<< getOrgao() << "\n| Departamento:\t"<< getDep() << "\n| Telefone:\t" << getTelefone() << "\n" << "\n---------------------------------------\n";
         }
 
