@@ -26,6 +26,10 @@ void Chat::addParticipante(Usuario usuario, int id){
 	participantes.push_back(std::make_pair(id, usuario));
 }
 
-
-
-
+void Chat::removeParticipante(const std::string& matricula){
+    for (std::pair<int, Usuario> participante = participantes.begin(); participante != participantes.end(); ++participante) {
+        if (participante->second.getMatricula() == matricula) {
+            participantes.erase(participante);
+        }
+    }
+}
