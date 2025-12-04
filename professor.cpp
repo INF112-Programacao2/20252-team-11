@@ -165,6 +165,12 @@ void Professor::setInfo() {
     this->departamento = campos[5];
 }
 
+bool Professor::autenticar(string nome, string depar) {
+    this->nome = nome;
+    this->setInfo();
+    return true;
+}
+
 void Professor::InteracaoUsuario() {
     //Implementacao do fluxo interativo para professor
     //autenticacao simplificada para professores (nome)
