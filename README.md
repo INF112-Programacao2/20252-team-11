@@ -74,6 +74,8 @@ Execução:
 ⚠️ Atenção!
 O server precisa estar aberto para o client funcionar. O usuário pode abrir varios clients para interagir um com o outro
 
+---
+
 Breve tutorial de uso:
 Para usuários (clientes)
 
@@ -158,6 +160,8 @@ Encerramento
 Encerramento:
 Pressione Ctrl+C para encerrar o servidor 
 
+---
+
 Funcionalidades Principais
 1. Autenticação Integrada
     • Alunos: Matrícula + senha do Pergamum
@@ -201,6 +205,8 @@ Estrutura de Arquivos
 ├── main_client.cpp           (Ponto de entrada do cliente)
 └── README.md                (Documentação)
 
+---
+
 Classes Principais:
 
 Usuario (Classe Base)
@@ -235,7 +241,7 @@ Client
     • Interface de linha de comando
     • Threads separadas para envio/recebimento
 
-
+---
 
 Banco de Dados:
 Localização
@@ -275,6 +281,7 @@ Codificação
     • RAII: Gerenciamento automático de recursos
     • Multithreading: Comunicação assíncrona cliente/servidor
 
+---
 
 Licença e Atribuições
 O sistema foi baseado no Pergamum UFV (APIs públicas da Universidade Federal de Viçosa). Desenvolvido como projeto acadêmico
