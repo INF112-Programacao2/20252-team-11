@@ -36,6 +36,7 @@ O sistema foi feito como trabalho final da disciplina INF112, ministrada pelo pr
 O sistema é composto por dois componentes principais:
     • Servidor: Gerencia conexões, fóruns de discussão e armazenamento de mensagens.
     • Cliente: Interface para usuários (alunos e professores) acessarem funcionalidades da biblioteca.
+    
 
 **Pré-requisitos:**
 
@@ -49,10 +50,12 @@ Dependências manuais:
 
 O sistema funciona apenas no Linux, pois foi feito para tal.
 
+
 **Instalação manual**
 
 sudo apt-get update
 sudo apt-get install build-essential libcurl4-openssl-dev libsqlite3-dev
+
 
 **Compilação:**
 
@@ -64,6 +67,7 @@ Método alternativo (sem Makefile):
 g++ server.cpp aluno.cpp main_server.cpp client.cpp usuario.cpp livro.cpp chat.cpp biblioteca.cpp mensagem/database.cpp -pthread -lcurl -lsqlite3 -o server; ./server
 
 g++ client.cpp main_client.cpp professor.cpp usuario.cpp livro.cpp aluno.cpp -pthread -lcurl -o client; ./client
+
 
 **Execução:**
 ./server
@@ -90,14 +94,17 @@ Você é:
 2 - Professor
 Resposta: _
 
+
 **Autenticação:**
 PARA ALUNOS:
 Digite sua matricula: [sua_matricula]
 Digite a sua senha da BBT: [sua_senha]
 
+
 PARA PROFESSORES:
 Digite seu Nome: [nome_completo]
 Digite o seu email: [email_institucional]
+
 
 **Menu dos alunos:**
 Escolha a função que você deseja executar:
@@ -107,12 +114,14 @@ Escolha a função que você deseja executar:
 4 - Encerrar programa
 Resposta: _
 
+
 **Menu dos professores:**
 Escolha a função você deseja executar:
 1 - Pesquisa de livros
 2 - Visualizar perfil
 3 - Encerrar programa
 Resposta: _
+
 
 **Busca de livros(digitando 1):**
 PESQUISA DE LIVROS:
@@ -124,13 +133,13 @@ Primeiro resultado:
 | Nome: [Titulo do Livro]
 | N.Chamada: [Numero de Chamada]
 
-
 Deseja acessar o forum do livro?
 Se sim, digite 1, Caso contrário, digite qualquer outro número: _
 
 Acesso ao fórum (chat) (pressionando 1 novamente): – cada livro possui seu próprio chat, um espaço de convívio e compartilhamento de conhecimento acerca do livro
 
 Digite seu username para entrar no fórum: [seu_nickname]
+
 
 **Exemplo de fórum:**
 FORUM DO LIVRO: [Número de Chamada]
@@ -139,11 +148,13 @@ FORUM DO LIVRO: [Número de Chamada]
 ...
 Você está online, digite quit para sair~~
 
+
 **Comandos no chat:**
     • Digite normalmente para enviar mensagens
     • Use quit para sair do fórum
 
 Para administradores (servidor)
+
 
 **Execução:**
 ./server
@@ -160,6 +171,7 @@ Encerramento
 
 **Encerramento:**
 Pressione Ctrl+C para encerrar o servidor 
+
 
 ---
 
@@ -188,6 +200,7 @@ Pressione Ctrl+C para encerrar o servidor
     • Consulta de multas pendentes
     • Formatação em Reais (R$)
 
+
 **Componentes do Sistema:**
 Estrutura de Arquivos
 /
@@ -206,7 +219,9 @@ Estrutura de Arquivos
 ├── main_client.cpp           (Ponto de entrada do cliente)
 └── README.md                (Documentação)
 
+
 ---
+
 
 **Classes Principais:**
 
@@ -242,7 +257,9 @@ Client
     • Interface de linha de comando
     • Threads separadas para envio/recebimento
 
+
 ---
+
 
 **Banco de Dados:**
 Localização
@@ -256,8 +273,10 @@ Operações
 **⚠️ Tratamento de Erros:**
 Exemplo de exceção lançada:
 
+
 class Saiu_do_chat : public std::runtime_error
 // Lançada quando usuário desconecta
+
 
 **Recuperação de Erros:**
     1. Erro de conexão: Reconexão automática não implementada
@@ -270,22 +289,29 @@ class Saiu_do_chat : public std::runtime_error
     • Console do servidor mostra todas as operações
     • Erros são escritos em std::cerr
 
+
 Notas de Desenvolvimento (dev notes):
+
 
 **Dependências Externas**
     • cURL: Requisições HTTP para Pergamum e APIs UFV
     • SQLite3: Armazenamento persistente de mensagens
     • nlohmann/json: Parsing de respostas JSON 
+
+  
 **Codificação**
     • C++: Utiliza features modernas
     • Polimorfismo: Usuario como classe base
     • RAII: Gerenciamento automático de recursos
     • Multithreading: Comunicação assíncrona cliente/servidor
 
+
 ---
+
 
 **Licença e Atribuições**
 O sistema foi baseado no Pergamum UFV (APIs públicas da Universidade Federal de Viçosa). Desenvolvido como projeto acadêmico
+
 
 **Uso Acadêmico**
 Este software é destinado para fins educacionais. 
