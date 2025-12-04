@@ -412,7 +412,7 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 		database.executarQuery("INSERT INTO mensagem (conteudo, numChamado) VALUES ('" + safeMsg + "','" + safeNumChamado + "'); ");
 		database.desconectar();
 		//envia para todos os clientes exceto o remetente
-		for (auto i : clients)
+		for (auto i : )
 		{
 			if (fd_totais[i.first].fd != fd)
 			{

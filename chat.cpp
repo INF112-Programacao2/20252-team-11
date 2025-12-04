@@ -32,6 +32,3 @@ std::pair <int, Usuario> Chat::getParticipante(int id){
 void Chat::addParticipante(Usuario usuario, int id){
 	participantes.push_back(std::make_pair(id, usuario));
 }
-
-
-
