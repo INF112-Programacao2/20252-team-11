@@ -17,6 +17,7 @@ class Biblioteca {
     std::vector<Usuario*> _usuarios;
 	std::vector<Chat> _chats;
 
+
     public:
     //Construtor e destrutor
     Biblioteca();
@@ -27,6 +28,7 @@ class Biblioteca {
     std::vector<Usuario*> getUsuarios() const;
 	Chat getChat(int id) const;
     std::vector<Chat> getChats();
+	bool findChat(std::string);
 
     //Metodos que adicionam elementos - usuario e livro
     void addUsuario(Usuario* novoUsuario);
@@ -37,4 +39,5 @@ class Biblioteca {
 
 
 #endif
+
 
