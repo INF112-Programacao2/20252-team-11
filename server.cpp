@@ -361,23 +361,23 @@ void Server::receber_descritor(int index)
 		std::string n_chamada = std::string(msg).substr(count3, std::string(msg).size());
 
 		//Cria e configura objeto do cliente
-		Usuario *user = new Usuario;
-		user->setNome(nome);
-		user->setMatricula(matricula);
+		Usuario user;
+		user.setNome(nome);
+		user.setMatricula(matricula);
 
 		//Cria e armazena o objeto livro (relacionado ao usuario)
-		Livro *livro = new Livro(nome_livro, n_chamada);
+		Livro livro = Livro(nome_livro, n_chamada);
 
 		// armazena o livro
-		livros.push_back(livro);
-		int chatId = biblioteca.findChat();
+		livros.push_back(&livro);
+		int chatId = biblioteca.findChat(livro.getNome());
 		if (chatId == -1){
-			Chat chat_geral(*livro);
+			Chat chat_geral(livro);
 			biblioteca.addChat(chat_geral);
 		}
-		user->setchatId(chatId);
+		user.setchatId(chatId);
 		biblioteca.getChat(chatId).addParticipante(user, index);
-		clients.insert({index, user});	//Armazena no mapa
+		clients.insert({index, &user});	//Armazena no mapa
 
 		delete[] msg;
 	} catch (std::runtime_error& e){
