@@ -196,31 +196,28 @@ void Server::run()
 //Aceita novas conexoes ou processa mensagens de clientes existentes
 
 void Server::mostrar_antigas_msg(std::string num_chamada, int fd){
-    // Idealmente, use uma conexão persistente da classe, mas vamos corrigir o crash localmente:
+	std::cout << "Número de chamada: " << num_chamada << std::endl;
     Database database;
     database.conectar();
 
-    // 1. Segurança: Escape da string
     std::string safeCallNum = escapeSql(num_chamada);
 
-    // 2. Query Segura
     std::string query = "SELECT conteudo, data FROM mensagem WHERE numChamado = '" + safeCallNum + "';";
     
     std::vector<std::vector<std::string>> ret = database.executarQuery(query);
-    
-    // 3. Performance: Iteração por referência (const auto&)
-    for(const auto& linha : ret){
-        // Copia conteudo para adicionar o til
-        std::string conteudo = linha[0];
-        if (conteudo.empty() || conteudo.back() != '~') conteudo.push_back('~');
 
+    for(const auto& linha : ret){
+        std::string conteudo = linha[0];
+		std::string date = linha[1];
+        if (conteudo.empty() || conteudo.back() != '~') conteudo.push_back('~');
+    	if (date.empty() || date.back() != '~') date.push_back('~');
+    	envia_msg(date.c_str(), date.size(), fd);
         envia_msg(conteudo.c_str(), conteudo.size(), fd);
-        envia_msg(linha[1].c_str(), linha[1].size(), fd);
     }
     
     database.desconectar();
     
-    std::string msg = "Você está online~~";
+    std::string msg = "Você está online digite quit para sair~~";
     envia_msg(msg.c_str(), msg.size(), fd);
 }
 
@@ -287,8 +284,9 @@ void Server::processa_fd(int &ready)
 
 						//ENVIA HISTORICO DE MENSAGENS DO BANCO DE DADOS	
 		                try{
-                            mostrar_antigas_msg(biblioteca.getChat(clients.at(i)->getChatId()).getLivro().getId(), fd_totais[num_fd-1].fd);
-		                }catch(std::exception& e){
+							std::cout << "Mensagens antigas\n";
+		                	mostrar_antigas_msg(biblioteca.getChat(clients.at(num_fd - 1)->getChatId()).getLivro().getId(), fd_totais[num_fd-1].fd);
+						}catch(std::exception& e){
 			                std::cerr << e.what() << std::endl;
 		                }
 					} while (cli != -1);	//Continua aceitando ate nao haver mais conexoes
@@ -358,16 +356,13 @@ void Server::receber_descritor(int index)
 {
     try
     {
-        int fd = fd_totais[index].fd;
-        
-        // CORREÇÃO 1: Usando vetor para gerenciamento automático de memória
-        // em vez de ponteiros raw que vazam
-        char* raw_msg = processa_msg(index);
-        if (raw_msg == nullptr) return; // Se falhou no recv
-        std::string msg_str(raw_msg); // Converte para string segura
-        delete[] raw_msg; // Limpa o buffer retornado por processa_msg
+       // int fd = fd_totais[index].fd;
 
-        // Parsing manual (mantido sua lógica, mas blindado)
+        char* raw_msg = processa_msg(index);
+        if (raw_msg == nullptr) return;
+        std::string msg_str(raw_msg);
+        delete[] raw_msg;
+
         size_t p1 = msg_str.find('\7');
         size_t p2 = msg_str.find('\7', p1 + 1);
         size_t p3 = msg_str.find('\7', p2 + 1);
@@ -381,31 +376,25 @@ void Server::receber_descritor(int index)
         std::string matricula = msg_str.substr(p2 + 1, p3 - (p2 + 1));
         std::string n_chamada = msg_str.substr(p3 + 1);
 
-        // CORREÇÃO 2: ALOCAÇÃO DINÂMICA (HEAP)
-        // Usuario* user = new Usuario(); -> Isso garante que o objeto sobreviva ao fim da função
         Usuario* user = new Usuario(); 
         user->setNome(nome);
         user->setMatricula(matricula);
 
-        // O mesmo para o livro, se sua lista armazena ponteiros
-        // OBS: Cuidado para não alocar duplicado se o livro já existe
         Livro* livro = new Livro(nome_livro, n_chamada);
         livros.push_back(livro); 
 
         int chatId = biblioteca.findChat(livro->getNome());
         
         // Lógica de criação de chat
-        if (chatId == -1){ // Corrigido de < 0 para == -1 (padrão)
-            Chat chat_geral(*livro); // Passa o objeto desreferenciado
-            chatId = biblioteca.addChat(chat_geral); // Assume que addChat retorna o ID novo
+        if (chatId == -1){
+            Chat chat_geral(*livro);
+            chatId = biblioteca.addChat(chat_geral);
         }
         
         user->setchatId(chatId);
-        
-        // Aqui usamos a função segura criada anteriormente
+
         biblioteca.getChat(chatId).addParticipante(*user, index);
-        
-        // CORREÇÃO CRÍTICA: Guardando o ponteiro alocado no HEAP
+
         clients.insert({index, user}); 
 
         std::cout << "Cliente " << nome << " registrado no indice " << index << "\n";
@@ -432,30 +421,37 @@ std::string getCurrentDateTimeBRT() {
 //interpreta e processa mensagens recebidas dos clientes
 void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 {
-    // SEGURANÇA: Impede leitura de buffer inválido
+
     if (bytes <= 0) return;
 
-    // SEGURANÇA: Construtor com tamanho explícito. Não confie no \0
     std::string conteudo(buff, bytes);
 
     if (!conteudo.empty() && conteudo.back() == '\n'){
         conteudo.pop_back();
     }
 
-    // Verifica tamanho mínimo para evitar crash no substr(4)
     if (conteudo.size() < 4) return;
 
     std::string prefixo = conteudo.substr(0, 4);
 
     if (prefixo == "[!] ")
-    {   
-        // ... (Lógica do Banco de Dados segura igual mostrei antes) ...
-        // ... (EscapeSQL aqui também!) ...
+    {
+    	//envia para todos os clientes exceto o remetente
 
         std::string msgBody = conteudo.substr(4);
         std::string msgFinal = '[' + user->getNome() + "] " + msgBody;
-        
-        // ENVIO SEGURO
+		std::string date = getCurrentDateTimeBRT() + "~\0";
+
+    	//Armazena mensagem no banco de dados
+    	std::string safeMsg = escapeSql(msgFinal);
+    	std::string safeNumChamado = escapeSql(biblioteca.getChat(user->getChatId()).getLivro().getId());
+
+    	Database database;
+    	database.conectar();
+		std::cout << "Inserido: " << safeMsg << std::endl;
+    	database.executarQuery("INSERT INTO mensagem (conteudo, numChamado) VALUES ('" + safeMsg + "','" + safeNumChamado + "'); ");
+    	database.desconectar();
+
         Chat& chat = biblioteca.getChat(user->getChatId());
         
         for (auto const& par : chat.getParticipantes())
@@ -468,11 +464,10 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
             if (fd_totais[id_participante].fd != fd)
             {
                 try {
-                    // Envie msgFinal, não 'msg' (que pode estar vazia ou errada no seu codigo original)
+					envia_msg(date.c_str(), date.size(), fd_totais[id_participante].fd);
                     envia_msg(msgFinal.c_str(), msgFinal.size(), fd_totais[id_participante].fd);
                 } catch (std::exception &e) {
                     std::cerr << "Falha ao enviar para " << id_participante << "\n";
-                    // NÃO CHAME this->close() AQUI!
                 }
             }
         }
@@ -492,18 +487,16 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 char *Server::processa_msg(int index)
 {
     int fd = fd_totais[index].fd;
-    
-    // Aloca buffer APENAS para leitura inicial
+
     char *buffer = new char[BUFFSIZE];
-    
-    // Zera memória para segurança
+
     memset(buffer, 0, BUFFSIZE);
 
     int bytes_recv = recv(fd, buffer, BUFFSIZE, 0);
 
     if (bytes_recv <= 0)
     {
-        delete[] buffer; // Limpa antes de sair
+        delete[] buffer;
         if (bytes_recv == 0) {
             throw Saiu_do_chat(clients[index]->getNome(), " desconectou.");
         } else {
@@ -513,12 +506,8 @@ char *Server::processa_msg(int index)
             throw std::runtime_error("Erro no recv");
         }
     }
+     std::cout << "Recebidos " << bytes_recv << " bytes\n";
 
-    // Se chegou aqui, temos dados.
-    // Log para debug
-    // std::cout << "Recebidos " << bytes_recv << " bytes\n";
-
-    // Retorna o buffer preenchido. O chamador (run) deve fazer delete[]
     return buffer; 
 }
 
