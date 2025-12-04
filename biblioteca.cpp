@@ -70,15 +70,14 @@ std::vector<Chat> Biblioteca::getChats() {
 }
 int findChat(std::string s){
 	for(int i=0;i<_chats.size();i++){
-		if(i.getlivro().getnome() == s){
+		if(_chats[i].getlivro().getnome() == s){
 			return i; 
 		}
-		else{
-			return -1;
-		}
 	}
-
+	return -1;
+	
 }
+
 
 
 
