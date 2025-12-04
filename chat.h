@@ -17,7 +17,7 @@ class Chat {
 		Chat(Livro livro);
 		~Chat();
 
-		std::vector<std::pair<int, Usuario>>& Chat::getParticipante();		//retorna array de participantes
+		std::vector<std::pair<int, Usuario>> Chat::getParticipantes();		//retorna array de participantes
 		void addParticipante(Usuario usuario, int id);	//adiciona participante
 		void removeParticipante(std::string matricula);
 		Livro& getLivro();
@@ -25,6 +25,7 @@ class Chat {
 
 
 #endif
+
 
 
 
