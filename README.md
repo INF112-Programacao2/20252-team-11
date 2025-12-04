@@ -89,6 +89,7 @@ Para usuários (clientes)
 ./client
 
 **Seleção do tipo de usuário:**
+
 -------SEJA BEM VINDO AO BETTER PERGAMUM-------
 Você é:
 1 - Aluno
@@ -97,6 +98,7 @@ Resposta: _
 
 
 **Autenticação:**
+
 PARA ALUNOS:
 Digite sua matricula: [sua_matricula]
 Digite a sua senha da BBT: [sua_senha]
@@ -108,6 +110,7 @@ Digite o seu email: [email_institucional]
 
 
 **Menu dos alunos:**
+
 Escolha a função que você deseja executar:
 1 - Pesquisa de livros
 2 - Consultar o débito
@@ -117,6 +120,7 @@ Resposta: _
 
 
 **Menu dos professores:**
+
 Escolha a função você deseja executar:
 1 - Pesquisa de livros
 2 - Visualizar perfil
@@ -125,6 +129,7 @@ Resposta: _
 
 
 **Busca de livros(digitando 1):**
+
 PESQUISA DE LIVROS:
 
 Digite os termos para a pesquisa: [termo_de_busca]
@@ -143,6 +148,7 @@ Digite seu username para entrar no fórum: [seu_nickname]
 
 
 **Exemplo de fórum:**
+
 FORUM DO LIVRO: [Número de Chamada]
 [Data] [Nome do Usuário]: [Mensagem anterior]
 [Data] [Nome do Usuário]: [Mensagem anterior]
@@ -151,6 +157,7 @@ Você está online, digite quit para sair~~
 
 
 **Comandos no chat:**
+
     • Digite normalmente para enviar mensagens
     • Use quit para sair do fórum
 
@@ -158,9 +165,11 @@ Para administradores (servidor)
 
 
 **Execução:**
+
 ./server
 
 **Mensagem:**
+
 Estamos online na porta: 12345
 Esperando em poll()
 
@@ -171,12 +180,14 @@ Inserido: [mensagem] no banco de dados
 Encerramento
 
 **Encerramento:**
+
 Pressione Ctrl+C para encerrar o servidor 
 
 
 ---
 
 **Funcionalidades Principais**
+
 1. Autenticação Integrada
     • Alunos: Matrícula + senha do Pergamum
     • Professores: Nome + email institucional (consulta via API UFV)
@@ -203,6 +214,7 @@ Pressione Ctrl+C para encerrar o servidor
 
 
 **Componentes do Sistema:**
+
 Estrutura de Arquivos
 /
 ├── Makefile                  (Script de compilação)
@@ -263,6 +275,7 @@ Client
 
 
 **Banco de Dados:**
+
 Localização
 O banco SQLite é criado automaticamente pelo código em mensagem/database.cpp.
 Operações
@@ -312,10 +325,12 @@ Notas de Desenvolvimento (dev notes):
 
 
 **Licença e Atribuições**
+
 O sistema foi baseado no Pergamum UFV (APIs públicas da Universidade Federal de Viçosa). Desenvolvido como projeto acadêmico
 
 
 **Uso Acadêmico**
+
 Este software é destinado para fins educacionais. 
 Distribuído sob a licença MIT. Sinta-se livre para utilizar e contribuir para o projeto.
 
