@@ -575,12 +575,12 @@ void Aluno :: InteracaoUsuario(){
 
     //Loop principal do menu para alunos
     while(true){  
-        int escolha;
+        std::string escolha;
         cout<<"Escolha a função que você deseja executar:\n1 - Pesquisa de livros\n2 - Consultar o débito\n3 - Visualizar perfil\n4 - Encerrar programa\nResposta: ";
         cin>>escolha;
 
         //OPCAO 1: PESQUISA DE LIVROS(com opcao de acessar o forum)
-        if (escolha==1){
+        if (escolha=="1"){
             cout << "\n\n-------------\nPESQUISA DE LIVROS:\n-------------\nDigite os termos para a pesquisa: ";
             string pesquisa;
             cin >> pesquisa;
@@ -589,9 +589,9 @@ void Aluno :: InteracaoUsuario(){
                 cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].getNome() << " \n| N.Chamada:\t"<< livros[2].getId() << "\n---------------------------------------\n";
 
                 //oferece opcao de conectar ao servidor de char do livro
-                cout <<"\n\nDeseja acessar o forum do livro?\n\t->Se sim, digite 1.\t\t->Se não, digite qualquer outro número. ";
+                cout <<"\n\nDeseja acessar o forum do livro?\n\t->Se sim, digite 1.\t\t->Se não, digite qualquer outro número. \nResposta";
                 cin>>escolha;
-                if(escolha=1){
+                if(escolha=="1"){
                     string address = "127.0.0.1";
                     string port = "12345";
                     Client cliente;
@@ -611,7 +611,7 @@ void Aluno :: InteracaoUsuario(){
         }
 
         //OPCAO 2: CONSULTA DE DEBITOS
-        if(escolha==2){
+        if(escolha=="2"){
             //busca debitos do aluno no sistema
             auto debitos = searchDebito();
 
@@ -624,13 +624,13 @@ void Aluno :: InteracaoUsuario(){
             cout << "---------------------------------------\n";
         }
         //OPCAO 3: VISUALIZAR PERFIL COMPLETO
-        if(escolha==3){
+        if(escolha=="3"){
             //exibe todas as informacoes do aluno
             cout << "---------------------------------------\n| Nome:\t\t" << getNome() << "\n" << "| Email: \t" << getEmail() <<"\n| CPF:\t\t" << getCPF() << "\n| Curso:\t"<< getCurso() << "\n| Admissão:\t"<< getAdmissao() << "/" << getSem() << "\n| Sexo:\t\t" << getSexo() << "\n---------------------------------------\n";
 
         }
         //OPCAO 4: ENCERRAR PROGRAMA
-        if (escolha==4){
+        if (escolha=="4"){
             exit(0);
         }
 
