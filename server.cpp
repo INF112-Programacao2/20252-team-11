@@ -12,7 +12,8 @@
 Server::Server(int my_port) : num_fd(1),my_port(my_port) {}
 
 
-Server::~Server() {}
+Server::~Server() {
+}
 
 //===============================================
 //FUNCAO AUXILIAR: ESCAPE DE STRING PARA SQL
@@ -347,24 +348,20 @@ void Server::receber_descritor(int index)
 		int count2;
 		for (count2 = count + 1; msg[count2] != '\7'; count2++)	//Encontra segundo delimitador
 			;
-		std::string forum = std::string(msg).substr(count, count2);
+		std::string nome_livro = std::string(msg).substr(count, count2);
 		std::string matricula = std::string(msg).substr(count2, std::string(msg).size());
 
 		//Cria e configura objeto do cliente
-		Usuario *user = new Client;
+		Usuario *user = new Usuario;
 		user->setNome(nome);
 		user->setMatricula(matricula);
-        user->setForum(forum);
 		clients.insert({index, user});	//Armazena no mapa
 
 		//Cria e armazena o objeto livro (relacionado ao usuario)
-		Livro *livro = new Livro(user, forum, id);
+		Livro *livro = new Livro(nome_livro, id);
 
 		// armazena o livro
 		livros.push_back(livro);
-
-		// registra o leitor atual
-		livro->registrarLeitorAtual(); 	//registra o usuario como leitor
 
 		delete[] msg;
 	} catch (std::runtime_error& e){
@@ -403,7 +400,7 @@ void Server::interpreta_msg(const char *buff, int bytes, Usuario *user, int fd)
 	{	
 		//Armazena mensagem no banco de dados
         std::string safeMsg = escapeSql(msg);
-		std::string safeNumChamado = escapeSql(user->getChat().getLivro().getId());
+		std::string safeNumChamado = escapeSql(biblioteca.getChat(user->getChatId()).getLivro().getId());
 
         Database database;
 		database.conectar();

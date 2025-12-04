@@ -13,6 +13,7 @@ class Professor : public Usuario {
         std::string telefone;
     
     public:
+        Professor();
         //gets que retornam dados especificos
         std::string getOrgao();
         std::string getDep();

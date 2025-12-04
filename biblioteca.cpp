@@ -9,31 +9,9 @@
 
 //Inicializa o servidor com configuracoes basicas
 //Cria array inicial para chats com capacidade 2
-Biblioteca::Biblioteca() : size_chats(2), num_chats(0),
-{
-	chats = new Chat*[size_chats];		//Alocacao dinamica do array de chats
-}
+Biblioteca::Biblioteca(){}
 
-
-Biblioteca::~Biblioteca() {
-
-	 for (Chat* chat : _chats) {
-        delete chat;
-    }
-	
-    //libera memoria de todos os livros
-    //limpa os vetores
-    _usuarios.clear();
-}
-
-
-
-//Retorna ponteiro para array de chatd
-Chat **Biblioteca::get_chats()
-{
-	return chats;
-}
-
+Biblioteca::~Biblioteca() {}
 
 //===============================================
 //ADICAO DE CHATS
@@ -41,27 +19,9 @@ Chat **Biblioteca::get_chats()
 
 //Adiciona um novo chat ao servidor com realocacao dinamica do array
 //Implementa padrao de array redimensionavel
-void Biblioteca::add_chat(Chat *chat)
+void Biblioteca::addChat(Chat chat)
 {
-	if (num_chats >= size_chats)
-	{
-		Chat **aux = new Chat *[size_chats];
-		for (int i = 0; i < size_chats; i++)
-		{
-			aux[i] = chats[i];	//copia ponteiros
-		}
-		delete[] chats;		//liber array antigo
-
-		//Aloca novo array com dobro de capacidade		
-		chats = new Chat *[size_chats * 2];
-		for (int i = 0; i < size_chats; i++)
-		{
-			chats[i] = aux[i];	//restaura ponteiros
-		}
-		delete [] aux;		//libera array temporario
-		size_chats *= 2;	//atualiza capacidade
-	}
-	chats[num_chats++] = chat; //adiciona novo chat
+	_chats.push_back(chat);
 }
 
     //os gets retornam copias do vetor livros e usuarios respectivamente
@@ -73,8 +33,8 @@ void Biblioteca::add_chat(Chat *chat)
         return _usuarios;
 	}
 
-	std::vector<Chat*>Biblioteca::getChat() const {
-	return _chats;
+	Chat Biblioteca::getChat(int id) const {
+	    return _chats[id];
 	}
 
     //adiciona usuario a bilblioteca, evitando duplicatas por matricula
@@ -101,18 +61,3 @@ void Biblioteca::add_chat(Chat *chat)
             _livros.push_back(novoLivro);    //adiciona novo livro
         }   
     }
-
-
-	Chat* Biblioteca::getChat(int posicao) {
-		if (posicao < 0 || posicao >= (int)_chats.size()) {
-			return nullptr;
-		}
-		return _chats[posicao]
-	}
-
-
-
-
-
-
-

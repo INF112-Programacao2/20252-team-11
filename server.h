@@ -22,9 +22,10 @@
 #include <algorithm>
 #include "livro.h"
 #include "mensagem/database.hpp"
-#include "forum.h"
+#include "usuario.h"
 #include <ctime>
 #include <sstream>
+#include "biblioteca.h"
 
 //Classe server
 class Server {
@@ -40,6 +41,7 @@ class Server {
 		//Gerenciamento de clientes e dados
 		std::map <int, Usuario*> clients;
 		std::vector<Livro*> livros;
+		Biblioteca biblioteca;
 
 	public:
 		//Constutor e destrutor
@@ -58,7 +60,7 @@ class Server {
 		void envia_msg(const char* buff, int bytes, int fd);	//envia mensagem para cliente
 		void receber_descritor(int index);						//aceita nova conexao de cliente
 		void interpreta_msg(const char* buff, int bytes, Usuario* user, int fd);	//interpreta e processa mensagem recebida
-		void mostra_antigas_msg(std::string num_chamada, int fd);
+		void mostrar_antigas_msg(std::string num_chamada, int fd);
         void close();	//fecha os ervidor
 };
 

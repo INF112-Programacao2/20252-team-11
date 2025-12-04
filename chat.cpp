@@ -20,7 +20,7 @@ livro = novoLivro; //usa operador de atribuicao
 }
 
 //retorna array de participantes
-std::pair <int, Usuario> Chat::getParticipantes(int id){
+std::pair <int, Usuario> Chat::getParticipante(int id){
 	try{
 		if (id < 0 || id > participantes.size()){
 			throw std::exception();
@@ -34,7 +34,7 @@ std::pair <int, Usuario> Chat::getParticipantes(int id){
 
 //adiciona participante com redimensionamento automatico do array
 void Chat::addParticipante(Usuario usuario, int id){
-	participantes.push_back(make_pair{id, usuario});
+	participantes.push_back(std::make_pair(id, usuario));
 }
 
 

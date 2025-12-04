@@ -23,8 +23,6 @@ class Client{
 		std::string port;		//porta do servidor
 		sockaddr_in serv_addr; 	//estrutura de endereco do servidor
 		addrinfo hints, *res;	//resolucao de DNS
-
-	protected:
 		int client_fd;           // Descritor do socket cliente
 		std::thread t_send;      // Thread para envio de mensagens
 		std::thread t_recv;      // Thread para recebimento de mensagens

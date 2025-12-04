@@ -600,7 +600,7 @@ void Aluno :: InteracaoUsuario(){
                     getline(cin, nome);
 
                     //conecta ao servidor de chat
-                    cliente.connect_socket(address, port, nome, "Abelardo", "123");
+                    cliente.connect_socket(address, port, nome, livros[2].getNome(), matricula, livros[2].getId());
                     cliente.run();
                     cliente.close();
                 }

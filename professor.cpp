@@ -96,6 +96,11 @@ vector<string> parseServidor(string texto)
 
 //Obtem informacoes do professor do sistema da UFV
 //Faz requisicao para API interna da universidade e parseia resposta
+
+Professor::Professor():
+    departamento("None")
+{}
+
 void Professor::setInfo() {
 
     CURLcode ret;
@@ -211,7 +216,7 @@ void Professor::InteracaoUsuario() {
                 string nome;
                 cout << "Digite o nome do cliente: ";
                 getline(cin, nome);
-                cliente.connect_socket(address, port, nome, "Abelardo", "123");
+                cliente.connect_socket(address, port, nome, livros[2].getNome(), this->getDep(), livros[2].getId());
                 cliente.run();
                 cliente.close();
                 }

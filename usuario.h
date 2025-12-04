@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <bits/stdc++.h>
+#include <iostream>
 #include <curl/curl.h>
 #include <sstream>
 #include <regex>
@@ -11,7 +11,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <sys/socket.h>
-class Client{}; // Forward declaration
+#include "client.h"
 
 #include "livro.h"
 

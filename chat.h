@@ -2,7 +2,6 @@
 #define CHAT_H
 
 #include "usuario.h"
-#include "livro.h"
 #include <vector>
 #include <utility>
 

@@ -1,5 +1,4 @@
 #include <iostream>                      //ADD TRY CATCH
-#include "usuario.h"
 #include "aluno.h"
 #include "professor.h"
 #include <string>
@@ -43,4 +42,3 @@ int main() {
     delete user;
     return 0;
 }
-
