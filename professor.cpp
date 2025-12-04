@@ -4,6 +4,7 @@
 #include <curl/curl.h>
 #include <string>
 #include <iostream>
+#include <cstdlib> 
 using namespace std;
 
 //FUNCOES AUXILIARES
@@ -187,15 +188,20 @@ try {
 }
 
 bool Professor::autenticar(string nome, string email) {
+    Professor a;
+    a.setNome(nome);
+    a.setInfo();
     this->nome = nome;
     this->emailInstitucional = email;
-    this->setInfo();
+    if (this->getEmail() != a.getEmail()) {
+        return false;
+    }
     this->setMatricula(this->getEmail());
     return true;
 }
 
 void limpar2() {
-    std::cout << "\033[2J\033[1;1H";
+    system("clear");
 }
 
 void Professor::InteracaoUsuario() {
@@ -204,11 +210,19 @@ void Professor::InteracaoUsuario() {
     try {setCookieValue();
     std::cout << "Cookie de sessão: " << getCookie()<< std::endl;
     string nome, mail;
+    bool primeiraVez = true;
     while (true){
+        if (!primeiraVez) {
+            cout << "Informações erradas!\n";
+        }
+        else {
+            primeiraVez = false;
+        }
+        limpar2();
         cout << "Digite seu Nome: ";
         getline(cin, nome);
         cout << "Digite o seu email: ";
-        cin.ignore();
+        //cin.ignore();
         getline(cin, mail);
         bool autenticou = autenticar(nome, mail);
         if (autenticou) {
