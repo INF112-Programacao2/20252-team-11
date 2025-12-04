@@ -589,7 +589,7 @@ void Aluno :: InteracaoUsuario(){
                 cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[2].getNome() << " \n| N.Chamada:\t"<< livros[2].getId() << "\n---------------------------------------\n";
 
                 //oferece opcao de conectar ao servidor de char do livro
-                cout <<"\n\nDeseja acessar o forum do livro?\n\t->Se sim, digite 1.\t\t->Se não, digite qualquer outro número. \nResposta";
+                cout <<"\n\nDeseja acessar o forum do livro?\n\t->Se sim, digite 1.\t\t->Se não, digite qualquer outro número. \nResposta: ";
                 cin>>escolha;
                 cin.ignore();
                 if(escolha=="1"){
