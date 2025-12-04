@@ -553,24 +553,31 @@ std::vector<Usuario::Debito> Aluno::searchDebito() {
 
     return resultados;    //retorna vetor de debitos
 }
-void Aluno :: InteracaoUsuario(){
 
+void limpar() {
+    cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+}
+
+void Aluno :: InteracaoUsuario(){
     //configuracao inicial parecida com usuario
     setCookieValue();
     std::cout << "Cookie de sessão: " << getCookie()<< std::endl;
     string matricula, senha;
-    cout << "Digite sua matricula: ";
-    cin >> matricula;
-    cout << "Digite a sua senha da BBT: ";
-    cin >> senha;
+    while (true){    
+        cout << "Digite sua matricula: ";
+        cin >> matricula;
+        cout << "Digite a sua senha da BBT: ";
+        cin >> senha;
 
-    bool autenticou = autenticar(matricula, senha);
+        bool autenticou = autenticar(matricula, senha);
 
-    if (autenticou) {
-        setInfo();    //obtem informacoes especificas de aluno
+        if (autenticou) {
+            setInfo();    //obtem informacoes especificas de aluno
+            break;
+        }
+        else 
+            cout << "Matrícula ou senha inválida!\n";
     }
-    else 
-        cout << "Matrícula ou senha inválida!\n";
 
 
     //Loop principal do menu para alunos
@@ -578,6 +585,7 @@ void Aluno :: InteracaoUsuario(){
         std::string escolha;
         cout<<"Escolha a função que você deseja executar:\n1 - Pesquisa de livros\n2 - Consultar o débito\n3 - Visualizar perfil\n4 - Encerrar programa\nResposta: ";
         cin>>escolha;
+        limpar();
 
         //OPCAO 1: PESQUISA DE LIVROS(com opcao de acessar o forum)
         if (escolha=="1"){
@@ -588,26 +596,32 @@ void Aluno :: InteracaoUsuario(){
                 cin.ignore();
                 //cin >> pesquisa;
                 getline(cin, pesquisa);
-                auto livros = buscarLivros(pesquisa);
-                cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[0].getNome() << " \n| N.Chamada:\t"<< livros[0].getId() << "\n---------------------------------------\n";
-                
-                //opcao de se conectar ao servidor de chat
-                cout <<"\n\nDeseja acessar o forum do livro?\nSe sim, digite 1,Caso contrario, digite qualquer outro número: ";
-                cin>>escolha;
-                cin.ignore();
-                if(escolha=="1"){
-                    string address = "127.0.0.1";
-                    string port = "12345";
-                    Client cliente;
-                    string nome;
-                    cout << "Digite o nome do cliente: ";
-                    getline(cin, nome);
+                limpar();
+                try {
+                    auto livros = buscarLivros(pesquisa);                
+                    cout << "Primeiro resultado:\n---------------------------------------\n| Nome:\t\t" << livros[0].getNome() << " \n| N.Chamada:\t"<< livros[0].getId() << "\n---------------------------------------\n";
+                    cout <<"\n\nDeseja acessar o forum do livro?\nSe sim, digite 1,Caso contrario, digite qualquer outro número: ";
+                    cin>>escolha;
+                    cin.ignore();
+                    //opcao de se conectar ao servidor de chat
+                    if(escolha=="1"){
+                        string address = "127.0.0.1";
+                        string port = "12345";
+                        Client cliente;
+                        string nome;
+                        cout << "Digite o nome do cliente: ";
+                        getline(cin, nome);
 
-                    //conecta ao servidor de chat
-                    cliente.connect_socket(address, port, nome, livros[0].getNome(), matricula, livros[0].getId());
-                    cliente.run();
-                    cliente.close();
+                        //conecta ao servidor de chat
+                        cliente.connect_socket(address, port, nome, livros[0].getNome(), matricula, livros[0].getId());
+                        cliente.run();
+                        cliente.close();
+                    }
                 }
+                catch (exception& e) {
+                    cerr << e.what() << endl;
+                }
+                            
             }
             catch (exception&  e) {
                 cerr << e.what() << endl;;
@@ -617,13 +631,16 @@ void Aluno :: InteracaoUsuario(){
         //OPCAO 2: CONSULTA DE DEBITOS
         if(escolha=="2"){
             //busca debitos do aluno no sistema
+            limpar();
             auto debitos = searchDebito();
 
             cout << "\n\nDÉBITOS DO USUÁRIO:\nTotal de debitos no momento: " << debitos[0].debt << "\n\nHISTÓRICO DE DÉBITOS:\n---------------------------------------\n";
 
             //lista todos os debitos
+            bool counter = false;
             for (Usuario::Debito debito : debitos) {
-                cout << "| Debt:\t" << debito.nome << "\n|\tValor:\t" << debito.debt << "\n";
+                if (!counter) {counter=true;}
+                else cout << "| Debt:\t\t" << debito.nome << "\n| Valor:\t\t" << debito.debt << "\n";
             }
             cout << "---------------------------------------\n";
         }
