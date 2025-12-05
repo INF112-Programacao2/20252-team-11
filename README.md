@@ -81,7 +81,7 @@ g++ server.cpp aluno.cpp main_server.cpp client.cpp usuario.cpp livro.cpp chat.c
 
 
 g++ client.cpp main_client.cpp professor.cpp usuario.cpp livro.cpp aluno.cpp -pthread -lcurl -o client; ./client
-
+<br>
 
 **Execução:** <br>
 ./server
@@ -90,7 +90,7 @@ g++ client.cpp main_client.cpp professor.cpp usuario.cpp livro.cpp aluno.cpp -pt
 
 ./client 
 (interface ativa será iniciada)
-
+<br>
 ⚠️⚠️Atenção!⚠️⚠️
 
 O server precisa estar aberto para o client funcionar. O usuário pode abrir varios clients para interagir um com o outro
@@ -101,10 +101,10 @@ O server precisa estar aberto para o client funcionar. O usuário pode abrir var
 
 **Breve tutorial de uso:** <br>
 Para usuários (clientes)
-
+<br>
 **Execução:** <br>
 ./client
-
+<br>
 **Seleção do tipo de usuário:** <br>
 
 -------SEJA BEM VINDO AO BETTER PERGAMUM-------
@@ -123,14 +123,14 @@ Resposta: _
 
 PARA ALUNOS: <br>
 Digite sua matricula: [sua_matricula]
-
+<br>
 Digite a sua senha da BBT: [sua_senha]
 <br>
 PARA PROFESSORES: <br>
 Digite seu Nome: [nome_completo]
-
+<br>
 Digite o seu email: [email_institucional]
-
+<br>
 
 **Menu dos alunos:**
 
@@ -147,6 +147,7 @@ Escolha a função que você deseja executar:
 Resposta: _
 
 <br>
+
 **Menu dos professores:**
 
 Escolha a função você deseja executar:
@@ -158,7 +159,7 @@ Escolha a função você deseja executar:
 3 - Encerrar programa
 
 Resposta: _
-
+<br>
 
 ---
 
@@ -175,16 +176,16 @@ Primeiro resultado:
 
 | N.Chamada: [Numero de Chamada]
 
-
+<br>
 Deseja acessar o forum do livro?
 
 Se sim, digite 1, Caso contrário, digite qualquer outro número: _
-
+<br>
 
 Acesso ao fórum (chat) (pressionando 1 novamente): – cada livro possui seu próprio chat, um espaço de convívio e compartilhamento de conhecimento acerca do livro
 
 Digite seu username para entrar no fórum: [seu_nickname]
-
+<br>
 
 **Exemplo de fórum:** <br>
 
@@ -210,11 +211,11 @@ Para administradores (servidor)
 
 **Execução:** <br>
 
-./server
+./server <br>
 
 **Mensagem:** <br>
 
-Estamos online na porta: 12345
+Estamos online na porta: 12345 <br>
 
 Esperando em poll()
 
@@ -242,26 +243,26 @@ Pressione Ctrl+C para encerrar o servidor
 1. Autenticação Integrada
     • Alunos: Matrícula + senha do Pergamum
     • Professores: Nome + email institucional (consulta via API UFV)
-    • Cookies de sessão: Gerenciamento automático de sessões
+    • Cookies de sessão: Gerenciamento automático de sessões <br>
 
 2. Busca de Livros
     • Consulta em tempo real ao catálogo Pergamum
     • Exibição de número de chamada
-    • Conversão automática de codificação (ISO-8859-1 para UTF-8)
+    • Conversão automática de codificação (ISO-8859-1 para UTF-8) <br>
 
 3. Fóruns por Livro
     • Chat em tempo real para cada livro
     • Histórico de mensagens
-    • Identificação por número de chamada
+    • Identificação por número de chamada <br>
 
 4. Gestão de Perfil
     • Alunos: Curso, admissão, CPF, email, débitos
     • Professores: Órgão, departamento, telefone, e-mail
-    • Informações obtidas automaticamente das APIs da UFV
+    • Informações obtidas automaticamente das APIs da UFV <br>
 
 5. Sistema de Débitos (Apenas Alunos – pressionando 2 no menu)
     • Consulta de multas pendentes
-    • Formatação em Reais (R$)
+    • Formatação em Reais (R$) <br>
 
 
 ---
@@ -298,7 +299,7 @@ Estrutura de Arquivos
 
 ├── main_client.cpp           (Ponto de entrada do cliente)
 
-└── README.md                (Documentação)
+└── README.md                (Documentação) <br>
 
 
 ---
@@ -309,42 +310,42 @@ Estrutura de Arquivos
 Usuario (Classe Base)
 
 - Gerencia autenticação e dados básicos
-- Métodos para buscar livros e obter cookie de sessão
+- Métodos para buscar livros e obter cookie de sessão <br>
     
 Aluno (Herda de Usuario)
 
 - Adiciona: curso, admissão, sexo, semestre, CPF
-- Método searchDebito() para consultar multas
+- Método searchDebito() para consultar multas <br>
     
 Professor (Herda de Usuario)
 
 - Adiciona: órgão, departamento, telefone
-- Autenticação via nome e e-mail institucional
+- Autenticação via nome e e-mail institucional <br>
     
 Livro
 
 - Armazena: nome e ID (número de chamada)
-- Objeto básico para representação de livros
+- Objeto básico para representação de livros <br>
     
 Chat
 
 - Gerencia participantes de um fórum
-- Lista de pares (ID socket, Usuario)
+- Lista de pares (ID socket, Usuario) <br>
     
 Biblioteca
 
 - “Contêiner” para livros, usuários e chats
-- Métodos de busca e adição
+- Métodos de busca e adição <br>
     
 Server
 
 - Multiplexação com poll()
-- Persistência de mensagens em SQLite
+- Persistência de mensagens em SQLite <br>
     
 Client
 
 - Interface de linha de comando
-- Threads separadas para envio/recebimento
+- Threads separadas para envio/recebimento <br>
 
 
 ---
@@ -353,15 +354,15 @@ Client
 **Banco de Dados:** <br>
 
 Localização
-O banco SQLite é criado automaticamente pelo código em mensagem/database.cpp.
+O banco SQLite é criado automaticamente pelo código em mensagem/database.cpp. <br>
 
 Operações:
 - Inserção: Ao receber mensagem no chat
 - Consulta: Ao entrar no fórum (histórico)
-- Escape SQL: Função escapeSql() previne injeção
+- Escape SQL: Função escapeSql() previne injeção <br>
     
 
-**⚠️⚠️ Tratamento de Erros: ⚠️⚠️**
+**⚠️⚠️ Tratamento de Erros: ⚠️⚠️** <br>
 
 Exemplo de exceção lançada:
 
@@ -385,20 +386,20 @@ class Saiu_do_chat : public std::runtime_error
 ---
 
 
-Notas de Desenvolvimento (dev notes):
+Notas de Desenvolvimento (dev notes): <br>
 
 
 **Dependências Externas** <br>
     • cURL: Requisições HTTP para Pergamum e APIs UFV
     • SQLite3: Armazenamento persistente de mensagens
-    • nlohmann/json: Parsing de respostas JSON 
+    • nlohmann/json: Parsing de respostas JSON  <br>
 
   
 **Codificação** <br>
     • C++: Utiliza features modernas
     • Polimorfismo: Usuario como classe base
     • RAII: Gerenciamento automático de recursos
-    • Multithreading: Comunicação assíncrona cliente/servidor
+    • Multithreading: Comunicação assíncrona cliente/servidor <br>
 
 
 ---
@@ -406,13 +407,13 @@ Notas de Desenvolvimento (dev notes):
 
 **Licença e Atribuições** <br>
 
-O sistema foi baseado no Pergamum UFV (APIs públicas da Universidade Federal de Viçosa). Desenvolvido como projeto acadêmico
+O sistema foi baseado no Pergamum UFV (APIs públicas da Universidade Federal de Viçosa). Desenvolvido como projeto acadêmico <br>
 
 
 **Uso Acadêmico** <br>
 
 Este software é destinado para fins educacionais. 
-Distribuído sob a licença MIT. Sinta-se livre para utilizar e contribuir para o projeto.
+Distribuído sob a licença MIT. Sinta-se livre para utilizar e contribuir para o projeto. <br>
 
 
 
