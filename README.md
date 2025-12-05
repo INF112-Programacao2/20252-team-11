@@ -110,9 +110,9 @@ Resposta: _
 
 ---
 
-**Autenticação:**
+**Autenticação:** <br>
 
-PARA ALUNOS:
+PARA ALUNOS: <br>
 Digite sua matricula: [sua_matricula]
 
 Digite a sua senha da BBT: [sua_senha]
