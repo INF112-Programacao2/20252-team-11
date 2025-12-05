@@ -27,9 +27,9 @@
 
 Uma versão mais legível desse texto está disponível na pasta "documentação"
 
-<br>
+
 ---
-<br>
+
 
 **BETTER PERGAMUM** <br>
 
@@ -42,9 +42,9 @@ O sistema é composto por dois componentes principais: <br>
 - Servidor: Gerencia conexões, fóruns de discussão e armazenamento de mensagens.
 - Cliente: Interface para usuários (alunos e professores) acessarem funcionalidades da biblioteca.
 
-<br>
+
 ---
-<br>
+
 
 **Pré-requisitos:** 
 
@@ -58,9 +58,9 @@ Dependências manuais:
 
 O sistema funciona apenas no Linux, pois foi feito para tal.
 
-<br>
+
 ---
-<br>
+
 
 **Instalação manual** <br>
 
@@ -95,9 +95,9 @@ g++ client.cpp main_client.cpp professor.cpp usuario.cpp livro.cpp aluno.cpp -pt
 
 O server precisa estar aberto para o client funcionar. O usuário pode abrir varios clients para interagir um com o outro
 
-<br>
+
 ---
-<br>
+
 
 **Breve tutorial de uso:** <br>
 Para usuários (clientes)
@@ -131,7 +131,7 @@ Digite seu Nome: [nome_completo]
 
 Digite o seu email: [email_institucional]
 
-<br>
+
 **Menu dos alunos:**
 
 Escolha a função que você deseja executar:
@@ -159,9 +159,10 @@ Escolha a função você deseja executar:
 
 Resposta: _
 
-<br>
+
 ---
-<br>
+
+
 **Busca de livros(digitando 1):**
 
 PESQUISA DE LIVROS: <br>
@@ -232,9 +233,9 @@ Encerramento
 
 Pressione Ctrl+C para encerrar o servidor 
 
-<br>
+
 ---
-<br>
+
 
 **Funcionalidades Principais** <br>
 
@@ -262,9 +263,9 @@ Pressione Ctrl+C para encerrar o servidor
     • Consulta de multas pendentes
     • Formatação em Reais (R$)
 
-<br>
+
 ---
-<br>
+
 
 **Componentes do Sistema:** <br>
 
@@ -345,9 +346,8 @@ Client
 - Interface de linha de comando
 - Threads separadas para envio/recebimento
 
-<br>
+
 ---
-<br>
 
 
 **Banco de Dados:** <br>
@@ -381,9 +381,9 @@ class Saiu_do_chat : public std::runtime_error
     • Console do servidor mostra todas as operações
     • Erros são escritos em std::cerr
 
-<br>
+
 ---
-<br>
+
 
 Notas de Desenvolvimento (dev notes):
 
@@ -400,9 +400,9 @@ Notas de Desenvolvimento (dev notes):
     • RAII: Gerenciamento automático de recursos
     • Multithreading: Comunicação assíncrona cliente/servidor
 
-<br>
+
 ---
-<br>
+
 
 **Licença e Atribuições** <br>
 
