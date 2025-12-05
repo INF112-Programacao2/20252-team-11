@@ -359,8 +359,8 @@ O banco SQLite é criado automaticamente pelo código em mensagem/database.cpp. 
 Operações:
 - Inserção: Ao receber mensagem no chat
 - Consulta: Ao entrar no fórum (histórico)
-- Escape SQL: Função escapeSql() previne injeção <br>
-    
+- Escape SQL: Função escapeSql() previne injeção
+<br>  
 
 **⚠️⚠️ Tratamento de Erros: ⚠️⚠️** <br>
 
