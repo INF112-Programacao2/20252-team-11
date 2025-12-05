@@ -371,16 +371,19 @@ class Saiu_do_chat : public std::runtime_error
 // Lançada quando usuário desconecta
 
 
-**Recuperação de Erros:** <br>
-    1. Erro de conexão: Reconexão automática não implementada
-    2. Erro de autenticação: Retorna ao prompt de login
-    3. Erro de servidor: Cliente é encerrado
-    4. Timeout: Servidor usa timeout de 5 minutos no poll()
+**Recuperação de Erros:**
+- Erro de conexão: Reconexão automática não implementada
+    
+- Erro de autenticação: Retorna ao prompt de login
+    
+- Erro de servidor: Cliente é encerrado
+    
+- Timeout: Servidor usa timeout de 5 minutos no poll()
     
 
 **Logs:** <br>
-    • Console do servidor mostra todas as operações
-    • Erros são escritos em std::cerr
+- Console do servidor mostra todas as operações
+- Erros são escritos em std::cerr
 
 
 ---
