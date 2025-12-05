@@ -26,22 +26,27 @@
 | **Marco Thullyo São Severino**   | 120550    |
 
 Uma versão mais legível desse texto está disponível na pasta "documentação"
+
+<br>
 ---
+<br>
 
-**BETTER PERGAMUM**
+**BETTER PERGAMUM** <br>
 
-O Better Pergamum é um sistema de biblioteca desenvolvido em C++ que replica funcionalidades do sistema Pergamum da UFV, com adição de recursos modernos como fóruns de discussão por livro, autenticação integrada e interface baseada em sockets. 
+O Better Pergamum é um sistema de biblioteca desenvolvido em C++ que replica funcionalidades do sistema Pergamum da UFV, com adição de recursos modernos como fóruns de discussão por livro, autenticação integrada e interface baseada em sockets.  <br>
 O sistema foi feito como trabalho final da disciplina INF112, ministrada pelo professor Julio Cesar Soares dos Reis, no curso Ciências da Computação da Universidade Federal de Viçosa.
 
 
-O sistema é composto por dois componentes principais:
+O sistema é composto por dois componentes principais: <br>
 
 - Servidor: Gerencia conexões, fóruns de discussão e armazenamento de mensagens.
 - Cliente: Interface para usuários (alunos e professores) acessarem funcionalidades da biblioteca.
 
+<br>
 ---
+<br>
 
-**Pré-requisitos:**
+**Pré-requisitos:** 
 
 Dependências manuais:
 
@@ -53,22 +58,24 @@ Dependências manuais:
 
 O sistema funciona apenas no Linux, pois foi feito para tal.
 
+<br>
 ---
+<br>
 
-**Instalação manual**
+**Instalação manual** <br>
 
 sudo apt-get update
 sudo apt-get install build-essential libcurl4-openssl-dev libsqlite3-dev
 
 
-**Compilação:**
+**Compilação:** <br>
 
 Compila servidor e cliente
 
 make all
 make clean (remove executáveis gerados)
 
-Método alternativo (sem Makefile):
+Método alternativo (sem Makefile): <br>
 
 g++ server.cpp aluno.cpp main_server.cpp client.cpp usuario.cpp livro.cpp chat.cpp biblioteca.cpp mensagem/database.cpp -pthread -lcurl -lsqlite3 -o server; ./server
 
@@ -76,27 +83,29 @@ g++ server.cpp aluno.cpp main_server.cpp client.cpp usuario.cpp livro.cpp chat.c
 g++ client.cpp main_client.cpp professor.cpp usuario.cpp livro.cpp aluno.cpp -pthread -lcurl -o client; ./client
 
 
-**Execução:**
+**Execução:** <br>
 ./server
 (o servidor iniciará na porta 12345)
 
 
-./client
+./client 
 (interface ativa será iniciada)
 
 ⚠️⚠️Atenção!⚠️⚠️
 
 O server precisa estar aberto para o client funcionar. O usuário pode abrir varios clients para interagir um com o outro
 
+<br>
 ---
+<br>
 
-**Breve tutorial de uso:**
+**Breve tutorial de uso:** <br>
 Para usuários (clientes)
 
-**Execução:**
+**Execução:** <br>
 ./client
 
-**Seleção do tipo de usuário:**
+**Seleção do tipo de usuário:** <br>
 
 -------SEJA BEM VINDO AO BETTER PERGAMUM-------
 
@@ -116,14 +125,13 @@ PARA ALUNOS: <br>
 Digite sua matricula: [sua_matricula]
 
 Digite a sua senha da BBT: [sua_senha]
-
-
-PARA PROFESSORES:
+<br>
+PARA PROFESSORES: <br>
 Digite seu Nome: [nome_completo]
 
 Digite o seu email: [email_institucional]
 
-
+<br>
 **Menu dos alunos:**
 
 Escolha a função que você deseja executar:
@@ -138,7 +146,7 @@ Escolha a função que você deseja executar:
 
 Resposta: _
 
-
+<br>
 **Menu dos professores:**
 
 Escolha a função você deseja executar:
@@ -151,11 +159,12 @@ Escolha a função você deseja executar:
 
 Resposta: _
 
+<br>
 ---
-
+<br>
 **Busca de livros(digitando 1):**
 
-PESQUISA DE LIVROS:
+PESQUISA DE LIVROS: <br>
 
 Digite os termos para a pesquisa: [termo_de_busca]
 
@@ -176,7 +185,7 @@ Acesso ao fórum (chat) (pressionando 1 novamente): – cada livro possui seu pr
 Digite seu username para entrar no fórum: [seu_nickname]
 
 
-**Exemplo de fórum:**
+**Exemplo de fórum:** <br>
 
 FORUM DO LIVRO: [Número de Chamada]
 
@@ -189,7 +198,7 @@ FORUM DO LIVRO: [Número de Chamada]
 Você está online, digite quit para sair~~
 
 
-**Comandos no chat:**
+**Comandos no chat:** <br>
     • Digite normalmente para enviar mensagens
     • Use quit para sair do fórum
 
@@ -198,11 +207,11 @@ Você está online, digite quit para sair~~
 Para administradores (servidor)
 
 
-**Execução:**
+**Execução:** <br>
 
 ./server
 
-**Mensagem:**
+**Mensagem:** <br>
 
 Estamos online na porta: 12345
 
@@ -219,14 +228,15 @@ Inserido: [mensagem] no banco de dados
 Encerramento
 
 
-**Encerramento:**
+**Encerramento:** <br>
 
 Pressione Ctrl+C para encerrar o servidor 
 
-
+<br>
 ---
+<br>
 
-**Funcionalidades Principais**
+**Funcionalidades Principais** <br>
 
 1. Autenticação Integrada
     • Alunos: Matrícula + senha do Pergamum
@@ -252,9 +262,11 @@ Pressione Ctrl+C para encerrar o servidor
     • Consulta de multas pendentes
     • Formatação em Reais (R$)
 
+<br>
 ---
+<br>
 
-**Componentes do Sistema:**
+**Componentes do Sistema:** <br>
 
 Estrutura de Arquivos
 
@@ -291,7 +303,7 @@ Estrutura de Arquivos
 ---
 
 
-**Classes Principais:**
+**Classes Principais:** <br>
 
 Usuario (Classe Base)
 
@@ -333,11 +345,12 @@ Client
 - Interface de linha de comando
 - Threads separadas para envio/recebimento
 
-
+<br>
 ---
+<br>
 
 
-**Banco de Dados:**
+**Banco de Dados:** <br>
 
 Localização
 O banco SQLite é criado automaticamente pelo código em mensagem/database.cpp.
@@ -357,44 +370,46 @@ class Saiu_do_chat : public std::runtime_error
 // Lançada quando usuário desconecta
 
 
-**Recuperação de Erros:**
+**Recuperação de Erros:** <br>
     1. Erro de conexão: Reconexão automática não implementada
     2. Erro de autenticação: Retorna ao prompt de login
     3. Erro de servidor: Cliente é encerrado
     4. Timeout: Servidor usa timeout de 5 minutos no poll()
     
 
-**Logs:**
+**Logs:** <br>
     • Console do servidor mostra todas as operações
     • Erros são escritos em std::cerr
 
+<br>
 ---
+<br>
 
 Notas de Desenvolvimento (dev notes):
 
 
-**Dependências Externas**
+**Dependências Externas** <br>
     • cURL: Requisições HTTP para Pergamum e APIs UFV
     • SQLite3: Armazenamento persistente de mensagens
     • nlohmann/json: Parsing de respostas JSON 
 
   
-**Codificação**
+**Codificação** <br>
     • C++: Utiliza features modernas
     • Polimorfismo: Usuario como classe base
     • RAII: Gerenciamento automático de recursos
     • Multithreading: Comunicação assíncrona cliente/servidor
 
-
+<br>
 ---
+<br>
 
-
-**Licença e Atribuições**
+**Licença e Atribuições** <br>
 
 O sistema foi baseado no Pergamum UFV (APIs públicas da Universidade Federal de Viçosa). Desenvolvido como projeto acadêmico
 
 
-**Uso Acadêmico**
+**Uso Acadêmico** <br>
 
 Este software é destinado para fins educacionais. 
 Distribuído sob a licença MIT. Sinta-se livre para utilizar e contribuir para o projeto.
