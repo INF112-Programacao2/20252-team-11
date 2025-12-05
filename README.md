@@ -25,7 +25,7 @@
 | **João Vitor Miranda Marcelino** | 113477    |
 | **Marco Thullyo São Severino**   | 120550    |
 
-Uma versão mais legível desse texto está disponível na pasta "documentação"
+**Uma versão mais legível desse texto está disponível na pasta "documentação"**
 
 
 ---
@@ -89,8 +89,8 @@ g++ client.cpp main_client.cpp professor.cpp usuario.cpp livro.cpp aluno.cpp -pt
 
 
 ./client 
-(interface ativa será iniciada)
-<br>
+(interface ativa será iniciada) <br>
+
 ⚠️⚠️Atenção!⚠️⚠️
 
 O server precisa estar aberto para o client funcionar. O usuário pode abrir varios clients para interagir um com o outro
