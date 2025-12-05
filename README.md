@@ -38,7 +38,8 @@ O sistema é composto por dois componentes principais:
 
 - Servidor: Gerencia conexões, fóruns de discussão e armazenamento de mensagens.
 - Cliente: Interface para usuários (alunos e professores) acessarem funcionalidades da biblioteca.
-    
+
+---
 
 **Pré-requisitos:**
 
@@ -52,6 +53,7 @@ Dependências manuais:
 
 O sistema funciona apenas no Linux, pois foi feito para tal.
 
+---
 
 **Instalação manual**
 
@@ -86,7 +88,6 @@ g++ client.cpp main_client.cpp professor.cpp usuario.cpp livro.cpp aluno.cpp -pt
 
 O server precisa estar aberto para o client funcionar. O usuário pode abrir varios clients para interagir um com o outro
 
-
 ---
 
 **Breve tutorial de uso:**
@@ -103,6 +104,7 @@ Você é:
 2 - Professor
 Resposta: _
 
+---
 
 **Autenticação:**
 
@@ -134,6 +136,7 @@ Escolha a função você deseja executar:
 3 - Encerrar programa
 Resposta: _
 
+---
 
 **Busca de livros(digitando 1):**
 
@@ -170,6 +173,8 @@ Você está online, digite quit para sair~~
     • Digite normalmente para enviar mensagens
     • Use quit para sair do fórum
 
+---
+
 Para administradores (servidor)
 
 
@@ -187,6 +192,7 @@ Cliente [Nome] registrado no indice 1
 Recebidos [X] bytes
 Inserido: [mensagem] no banco de dados
 Encerramento
+
 
 **Encerramento:**
 
@@ -221,6 +227,7 @@ Pressione Ctrl+C para encerrar o servidor
     • Consulta de multas pendentes
     • Formatação em Reais (R$)
 
+---
 
 **Componentes do Sistema:**
 
@@ -336,6 +343,7 @@ class Saiu_do_chat : public std::runtime_error
     • Console do servidor mostra todas as operações
     • Erros são escritos em std::cerr
 
+---
 
 Notas de Desenvolvimento (dev notes):
 
