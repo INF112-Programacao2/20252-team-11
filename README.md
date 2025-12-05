@@ -99,9 +99,13 @@ Para usuários (clientes)
 **Seleção do tipo de usuário:**
 
 -------SEJA BEM VINDO AO BETTER PERGAMUM-------
+
 Você é:
+
 1 - Aluno
+
 2 - Professor
+
 Resposta: _
 
 ---
@@ -110,30 +114,41 @@ Resposta: _
 
 PARA ALUNOS:
 Digite sua matricula: [sua_matricula]
+
 Digite a sua senha da BBT: [sua_senha]
 
 
 PARA PROFESSORES:
 Digite seu Nome: [nome_completo]
+
 Digite o seu email: [email_institucional]
 
 
 **Menu dos alunos:**
 
 Escolha a função que você deseja executar:
+
 1 - Pesquisa de livros
+
 2 - Consultar o débito
+
 3 - Visualizar perfil
+
 4 - Encerrar programa
+
 Resposta: _
 
 
 **Menu dos professores:**
 
 Escolha a função você deseja executar:
+
 1 - Pesquisa de livros
+
 2 - Visualizar perfil
+
 3 - Encerrar programa
+
 Resposta: _
 
 ---
@@ -147,6 +162,7 @@ Digite os termos para a pesquisa: [termo_de_busca]
 Primeiro resultado:
 
 | Nome: [Titulo do Livro]
+
 | N.Chamada: [Numero de Chamada]
 
 
@@ -163,9 +179,13 @@ Digite seu username para entrar no fórum: [seu_nickname]
 **Exemplo de fórum:**
 
 FORUM DO LIVRO: [Número de Chamada]
+
 [Data] [Nome do Usuário]: [Mensagem anterior]
+
 [Data] [Nome do Usuário]: [Mensagem anterior]
+
 ...
+
 Você está online, digite quit para sair~~
 
 
@@ -185,12 +205,17 @@ Para administradores (servidor)
 **Mensagem:**
 
 Estamos online na porta: 12345
+
 Esperando em poll()
 
 Nova conexão, file descriptor 1
+
 Cliente [Nome] registrado no indice 1
+
 Recebidos [X] bytes
+
 Inserido: [mensagem] no banco de dados
+
 Encerramento
 
 
