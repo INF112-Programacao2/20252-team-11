@@ -28,14 +28,16 @@
 Uma versão mais legível desse texto está disponível na pasta "documentação"
 ---
 
-BETTER PERGAMUM
+**BETTER PERGAMUM**
 
 O Better Pergamum é um sistema de biblioteca desenvolvido em C++ que replica funcionalidades do sistema Pergamum da UFV, com adição de recursos modernos como fóruns de discussão por livro, autenticação integrada e interface baseada em sockets. 
-O sistema foi feito como trabalho final da disciplina INF112, ministrada pelo professor Julio Cesar Soares dos Reis, no curso Ciências da Computação da Universidade Federal de Viçosa
+O sistema foi feito como trabalho final da disciplina INF112, ministrada pelo professor Julio Cesar Soares dos Reis, no curso Ciências da Computação da Universidade Federal de Viçosa.
+
 
 O sistema é composto por dois componentes principais:
-    • Servidor: Gerencia conexões, fóruns de discussão e armazenamento de mensagens.
-    • Cliente: Interface para usuários (alunos e professores) acessarem funcionalidades da biblioteca.
+
+- Servidor: Gerencia conexões, fóruns de discussão e armazenamento de mensagens.
+- Cliente: Interface para usuários (alunos e professores) acessarem funcionalidades da biblioteca.
     
 
 **Pré-requisitos:**
@@ -60,11 +62,14 @@ sudo apt-get install build-essential libcurl4-openssl-dev libsqlite3-dev
 **Compilação:**
 
 Compila servidor e cliente
+
 make all
 make clean (remove executáveis gerados)
 
 Método alternativo (sem Makefile):
+
 g++ server.cpp aluno.cpp main_server.cpp client.cpp usuario.cpp livro.cpp chat.cpp biblioteca.cpp mensagem/database.cpp -pthread -lcurl -lsqlite3 -o server; ./server
+
 
 g++ client.cpp main_client.cpp professor.cpp usuario.cpp livro.cpp aluno.cpp -pthread -lcurl -o client; ./client
 
@@ -73,12 +78,14 @@ g++ client.cpp main_client.cpp professor.cpp usuario.cpp livro.cpp aluno.cpp -pt
 ./server
 (o servidor iniciará na porta 12345)
 
+
 ./client
 (interface ativa será iniciada)
 
 ⚠️⚠️Atenção!⚠️⚠️
 
 O server precisa estar aberto para o client funcionar. O usuário pode abrir varios clients para interagir um com o outro
+
 
 ---
 
@@ -139,8 +146,11 @@ Primeiro resultado:
 | Nome: [Titulo do Livro]
 | N.Chamada: [Numero de Chamada]
 
+
 Deseja acessar o forum do livro?
+
 Se sim, digite 1, Caso contrário, digite qualquer outro número: _
+
 
 Acesso ao fórum (chat) (pressionando 1 novamente): – cada livro possui seu próprio chat, um espaço de convívio e compartilhamento de conhecimento acerca do livro
 
